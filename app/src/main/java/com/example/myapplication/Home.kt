@@ -78,7 +78,6 @@ import java.time.Month
 import java.time.Year
 import java.time.format.DateTimeFormatter
 
-
 // USER INFO SECTION
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable

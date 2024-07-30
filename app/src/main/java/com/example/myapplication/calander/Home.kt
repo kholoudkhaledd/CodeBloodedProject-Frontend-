@@ -27,10 +27,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.KeyboardArrowRight
-//import androidx.compose.material.icons.filled.ArrowBackIosNew
-//import androidx.compose.material.icons.filled.ArrowDropDown
-//import androidx.compose.material.icons.filled.ArrowForward
-//import androidx.compose.material.icons.filled.ArrowForwardIos
+
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Divider
@@ -446,7 +443,6 @@ fun getCurrentDate(): String {
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun Finallayout() {
-
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -460,7 +456,7 @@ fun Finallayout() {
             modifier = Modifier
                 .background(Color.Transparent)
                 .fillMaxWidth()
-                .padding(top = 5.dp) // Ensure no padding
+                .padding(top=20.dp) // Ensure no padding
 
         ) {
             UserInfo("Kholoud")
@@ -672,15 +668,4 @@ fun RequestsSection() {
 }
 
 
-@RequiresApi(Build.VERSION_CODES.O)
-@Preview(showBackground = true)
-@Composable
-fun SimplifiedCalendarPreview() {
 
-    Box(modifier = Modifier
-        .fillMaxSize()
-        .background(Color.White)) {
-        CalendarViewScreen()
-
-    }
-}

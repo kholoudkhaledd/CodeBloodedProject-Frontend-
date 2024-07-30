@@ -17,6 +17,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.example.myapplication.ui.theme.MyApplicationTheme
 import com.example.myapplication.notifications.ui.theme.NotificationScreen
+import com.example.yourapp.ui.MyRequestsPage
+import com.example.yourapp.ui.Request
+import com.example.yourapp.ui.RequestStatus
 
 class MainActivity : ComponentActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
@@ -26,7 +29,14 @@ class MainActivity : ComponentActivity() {
         setContent {
             MyApplicationTheme {
 //         Finallayout()
-                NotificationScreen()
+                //NotificationScreen()
+
+                val sampleRequests = listOf(
+                    Request("8m ago", "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec fringilla quam eu faci", RequestStatus.PENDING),
+                    Request("10 days ago", "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec fringilla quam eu faci", RequestStatus.APPROVED),
+                    Request("15 days ago", "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec fringilla quam eu faci", RequestStatus.DENIED)
+                )
+                MyRequestsPage(requests = sampleRequests)
 
             }
         }

@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import com.example.myapplication.ui.theme.MyApplicationTheme
 import com.example.myapplication.notifications.ui.theme.NotificationScreen
 import androidx.compose.foundation.layout.*
+
 import androidx.compose.material.*
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Icon
@@ -53,8 +54,7 @@ fun NavigationBar() {
     Scaffold(
         bottomBar = {
             BottomAppBar(
-                modifier =
-   Modifier.background(Color.White)
+                modifier = Modifier.background(Color.White).height(56.dp)
             ) {
                 // Home button
                 IconButton(
@@ -64,7 +64,7 @@ fun NavigationBar() {
                             popUpTo(Screens.Home.screen) { inclusive = true }
                         }
                     },
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(0.5f)
                 ) {
                     val icon = if (selectedScreen.value == Screens.Home.screen) painterResource(id = R.drawable.calandergreen) else painterResource(id = R.drawable.calandergray)
                     Icon(
@@ -81,7 +81,7 @@ fun NavigationBar() {
                             popUpTo(Screens.Notification.screen) { inclusive = true }
                         }
                     },
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(0.5f)
                 ) {
                     val icon = if (selectedScreen.value == Screens.Notification.screen) painterResource(id = R.drawable.notifygreen) else painterResource(id = R.drawable.notifygray)
                     Icon(
@@ -98,7 +98,7 @@ fun NavigationBar() {
                             popUpTo(Screens.Chatbot.screen) { inclusive = true }
                         }
                     },
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(0.5f)
                 ) {
                     val icon = if (selectedScreen.value == Screens.Chatbot.screen) painterResource(id = R.drawable.chatggreen) else painterResource(id = R.drawable.chatgray)
                     Icon(
@@ -115,7 +115,7 @@ fun NavigationBar() {
                             popUpTo(Screens.Requests.screen) { inclusive = true }
                         }
                     },
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(0.5f)
                 ) {
                     val icon = if (selectedScreen.value == Screens.Requests.screen) painterResource(id = R.drawable.requestgreen) else painterResource(id = R.drawable.requestgray)
                     Icon(

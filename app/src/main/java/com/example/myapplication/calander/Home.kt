@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.paddingFrom
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
@@ -73,7 +74,7 @@ fun UserInfo(name:String) {
 
     Column(
         modifier = Modifier
-            .padding(16.dp)
+            .padding(5.dp)
             .fillMaxWidth()
 
     ) {
@@ -87,16 +88,21 @@ fun UserInfo(name:String) {
                 text = "Welcome Back",
                 color = Color.Gray,
                 modifier = Modifier.align(Alignment.CenterVertically)
+                    //.padding(bottom=1.dp, top = 1.dp)
+
+
+
             )
             Text(
 
                 text = " $currentDay  $currentDayName",
                 color = Color.Gray,
                 modifier = Modifier.align(Alignment.CenterVertically)
+                   // .padding(top=1.dp, bottom = 1.dp)
             )
         }
 
-        Spacer(modifier = Modifier.height(8.dp)) // Spacer between rows
+        //Spacer(modifier = Modifier.height(8.dp)) // Spacer between rows
 
         // Second row
         Row(
@@ -307,7 +313,7 @@ fun CustomCalendar(
                 }
             }
         }
-        Spacer(modifier = Modifier.height(8.dp)) // Adjusted height for smaller spacing
+        Spacer(modifier = Modifier.height(5.dp)) // Adjusted height for smaller spacing
     }
 }
 
@@ -325,6 +331,7 @@ fun CalendarViewScreen() {
         modifier = Modifier
             .background(GrayD)
 
+
     ) {
         val currentMonthAndYear = "${currentMonth.name} $currentYear"
 
@@ -339,7 +346,7 @@ fun CalendarViewScreen() {
                 Text(
                     text = "Working from home/office schedule",
                     fontSize = 18.sp,
-                    modifier = Modifier.padding(vertical = 15.dp, horizontal = 12.dp)
+                    modifier = Modifier.padding(vertical = 8.dp, horizontal = 12.dp)
                 )
 
             }

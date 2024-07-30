@@ -1,4 +1,4 @@
-package com.example.myapplication
+package com.example.myapplication.notifications.ui.theme
 
 
 import androidx.compose.foundation.background
@@ -31,6 +31,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.myapplication.R
 
 
 @Composable
@@ -90,7 +91,7 @@ fun NotificationCard(
             contentDescription = null,
             tint = Color.Unspecified, // Try removing tint to see if it affects visibility
             modifier = Modifier
-                .size(40.dp)
+                .size(45.dp)
                 .background(stripeColor, shape = CircleShape)
                 .padding(8.dp)
         )

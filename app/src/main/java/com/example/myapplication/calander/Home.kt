@@ -1,7 +1,6 @@
-package com.example.myapplication
+package com.example.myapplication.calander
 
 
-import android.annotation.SuppressLint
 import android.os.Build
 
 import androidx.annotation.RequiresApi
@@ -23,12 +22,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.KeyboardArrowRight
 //import androidx.compose.material.icons.filled.ArrowBackIosNew
@@ -40,15 +36,9 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -57,21 +47,17 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.viewinterop.AndroidView
+import com.example.myapplication.R
 import com.example.myapplication.ui.theme.Darkblue
 import com.example.myapplication.ui.theme.GrayD
 import com.example.myapplication.ui.theme.GreenJC
-
-import com.example.myapplication.ui.theme.MyApplicationTheme
 
 import java.time.LocalDate
 import java.time.Month
@@ -151,7 +137,7 @@ fun Indication(){
         Spacer(modifier = Modifier.width(20.dp))
         Text(
             text = "From Office",
-            fontSize = 20.sp,
+            fontSize = 18.sp,
 
         )
         Spacer(modifier = Modifier.width(35.dp))
@@ -163,7 +149,7 @@ fun Indication(){
         Spacer(modifier = Modifier.width(4.dp))
         Text(
             text = "From Home",
-            fontSize = 20.sp
+            fontSize = 18.sp
         )
     }
 }
@@ -244,7 +230,7 @@ fun Displayifhomeoroffice( place: String) {
     ) {
         Text(
             text = "Today you are working from $place",
-            fontSize = 15.sp,
+            fontSize = 16.sp,
             modifier = Modifier
                 .padding(vertical = 5.dp, horizontal = 10.dp) // Add padding around the text inside the Surface
         )
@@ -304,7 +290,7 @@ fun CustomCalendar(
                             modifier = Modifier
                                 .weight(1f)
                                 .aspectRatio(1f) // Ensures each cell is square
-                                .padding(1.dp) // Adjust padding to make boxes smaller
+                                .padding(horizontal = 1.dp) // Adjust padding to make boxes smaller
                                 .clickable { onDateSelected(dateString) },
                             contentAlignment = Alignment.Center
                         ) {
@@ -557,7 +543,7 @@ fun RequestsSection() {
             Text(
                 text = "Schedule change requests",
                 fontWeight = FontWeight.SemiBold,
-                fontSize = 20.sp,
+                fontSize = 18.sp,
                 modifier = Modifier.padding(vertical = 10.dp, horizontal = 10.dp)
             )
 
@@ -565,9 +551,9 @@ fun RequestsSection() {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = 5.dp, horizontal = 10.dp)
+                    .padding(vertical = 10.dp, horizontal = 10.dp)
                     .wrapContentSize(Alignment.TopStart)
-                    .clip(RoundedCornerShape(30.dp))
+                    .clip(RoundedCornerShape(10.dp))
 
             ) {
                 Box(
@@ -618,9 +604,9 @@ fun RequestsSection() {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = 5.dp, horizontal = 10.dp)
+                    .padding(vertical = 10.dp, horizontal = 10.dp)
                     .wrapContentSize(Alignment.TopStart)
-                    .clip(RoundedCornerShape(30.dp))
+                    .clip(RoundedCornerShape(10.dp))
 
             ) {
                 Box(
@@ -676,7 +662,7 @@ fun RequestsSection() {
                     colors = ButtonDefaults.buttonColors(Color.LightGray),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(vertical = 5.dp, horizontal = 10.dp)
+                        .padding(vertical = 10.dp, horizontal = 10.dp)
                 ) {
                     Text("Submit")
                 }

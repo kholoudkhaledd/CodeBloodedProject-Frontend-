@@ -151,7 +151,8 @@ fun Indication(){
         Spacer(modifier = Modifier.width(20.dp))
         Text(
             text = "From Office",
-            fontSize = 20.sp
+            fontSize = 20.sp,
+
         )
         Spacer(modifier = Modifier.width(35.dp))
         Box(
@@ -243,7 +244,7 @@ fun Displayifhomeoroffice( place: String) {
     ) {
         Text(
             text = "Today you are working from $place",
-            fontSize = 20.sp,
+            fontSize = 15.sp,
             modifier = Modifier
                 .padding(vertical = 5.dp, horizontal = 10.dp) // Add padding around the text inside the Surface
         )
@@ -354,7 +355,7 @@ fun CalendarViewScreen() {
             Box(modifier = Modifier.background(Color.White).fillMaxWidth()) {
                 Text(
                     text = "Working from home/office schedule",
-                    fontSize = 20.sp,
+                    fontSize = 18.sp,
                     modifier = Modifier.padding(vertical = 15.dp, horizontal = 12.dp)
                 )
 

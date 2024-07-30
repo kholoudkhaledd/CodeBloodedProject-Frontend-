@@ -20,19 +20,20 @@ fun NotificationScreen() {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(20.dp)
+//            .padding(20.dp)
             .background(Color.White)
+            .statusBarsPadding()
     ) {
         Text(
             text = "Notifications",
             fontSize = 24.sp,
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
-                .padding(bottom = 16.dp, top = 16.dp)
+                .padding(bottom = 20.dp, top = 20.dp)
         )
         NotificationCard(
             backgroundColor = Color(0xFFE8F5E9),
-            stripeColor = Color(0xFF4CAF50),
+            stripeColor = Color(0xFF19C588),
             icon = R.drawable.icon_check,
             text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec fringilla quam eu facilisis mollis."
         )
@@ -57,34 +58,26 @@ fun NotificationCard(
         modifier = Modifier
             .fillMaxWidth()
             .background(backgroundColor)
-            .padding(16.dp)
             .height(IntrinsicSize.Min)
     ) {
         Box(
             modifier = Modifier
-                .width(8.dp)
+                .width(4.dp)
                 .fillMaxHeight()
                 .background(stripeColor)
         )
         Spacer(modifier = Modifier.width(16.dp))
-        Box(
-            modifier = Modifier
-                .size(45.dp)
-                .background(stripeColor, shape = CircleShape)
-                .align(Alignment.CenterVertically),
-            contentAlignment = Alignment.Center
-        ) {
             Icon(
                 painter = painterResource(id = icon),
                 contentDescription = null,
                 tint = Color.Unspecified,
                 modifier = Modifier
-                    .size(24.dp)
-                    .align(Alignment.Center)
+                    .size(40.dp)
+                    .align(Alignment.CenterVertically)
 
 
             )
-        }
+
         Spacer(modifier = Modifier.width(16.dp))
         Text(
             text = text,
@@ -92,6 +85,7 @@ fun NotificationCard(
             color = Color.Black,
             modifier = Modifier
                 .align(Alignment.CenterVertically)
+                .padding(10.dp)
         )
     }
 }

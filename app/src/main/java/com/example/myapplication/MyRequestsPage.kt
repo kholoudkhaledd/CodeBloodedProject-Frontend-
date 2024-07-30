@@ -30,39 +30,47 @@ fun MyRequestsPage(requests: List<Request>) {
         modifier = Modifier
             .fillMaxSize()
             .background(Color(0xFFF5F5F5))
-            .padding(16.dp),
+            .statusBarsPadding(),
+
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Card(
-            shape = RoundedCornerShape(16.dp),
+            shape = RoundedCornerShape(40.dp),
             modifier = Modifier
                 .fillMaxWidth()
                 .background(Color.Transparent),
+            colors = CardDefaults.cardColors(containerColor = Color.White),
 
-            colors = CardDefaults.cardColors(containerColor = Color.White)
+
         ) {
             Column(
-                modifier = Modifier.padding(16.dp)
+                modifier = Modifier
+                    .padding(16.dp)
                     .fillMaxWidth(),
-                horizontalAlignment = Alignment.CenterHorizontally
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
             ) {
                 Text(
                     text = "My Requests",
                     fontSize = 24.sp,
                     fontWeight = FontWeight.Bold,
-                    modifier = Modifier.padding(bottom = 16.dp)
+                    modifier = Modifier
+                        .padding(bottom = 10.dp)
+                        .padding(top = 10.dp)
                 )
                 Divider(
-                    modifier =
-                    Modifier.padding(vertical = 8.dp)
+                    modifier = Modifier
+                        .padding(vertical = 8.dp)
                         .alpha(0.5f)
                 )
 
                 requestList.forEachIndexed { index, request ->
                     if (index > 0) {
-                        Divider(modifier =
-                        Modifier.padding(vertical = 8.dp)
-                            .alpha(0.5f))
+                        Divider(
+                            modifier = Modifier
+                                .padding(vertical = 8.dp)
+                                .alpha(0.5f)
+                        )
                     }
                     RequestItem(
                         request = request,
@@ -129,11 +137,7 @@ fun StatusBox(text: String, backgroundColor: Color) {
     Box(
         modifier = Modifier
             .background(backgroundColor, shape = RoundedCornerShape(10.dp))
-            .padding(horizontal = 14.dp, vertical = 8.dp)
-            .width(76.dp)
-            .height(19.dp)
-            .fillMaxSize()
-            .fillMaxWidth(),
+            .padding(horizontal = 14.dp, vertical = 8.dp),
         contentAlignment = Alignment.Center
     ) {
         Text(text = text, color = Color.White, fontSize = 18.sp)

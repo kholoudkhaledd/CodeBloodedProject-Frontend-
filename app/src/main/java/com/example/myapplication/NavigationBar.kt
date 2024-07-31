@@ -67,13 +67,7 @@ fun CustomBottomNavigationBar(
 
         )
 
-        // Notifications button
-        BarIcon(
-            selected = selectedScreen == Screens.Notification.screen,
-            iconId = if (selectedScreen == Screens.Notification.screen) R.drawable.notifygreen else R.drawable.notifygray,
-            contentDescription = "Notifications",
-            onClick = { onScreenSelected(Screens.Notification.screen) }
-        )
+
 
         // Chatbot button
         BarIcon(
@@ -90,6 +84,15 @@ fun CustomBottomNavigationBar(
             contentDescription = "Requests",
             onClick = { onScreenSelected(Screens.Requests.screen) }
         )
+
+        // Notifications button
+        BarIcon(
+            selected = selectedScreen == Screens.Notification.screen,
+            iconId = if (selectedScreen == Screens.Notification.screen) R.drawable.notifygreen else R.drawable.notifygray,
+            contentDescription = "Notifications",
+            onClick = { onScreenSelected(Screens.Notification.screen) }
+        )
+
     }
 }
 

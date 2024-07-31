@@ -25,6 +25,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.*
 import com.example.myapplication.calander.Finallayout
+import com.example.myapplication.ui.theme.ChatScreenPreview
 import com.example.myapplication.ui.theme.GreenJC
 import com.example.yourapp.ui.MyRequestsPage
 import com.example.yourapp.ui.Request
@@ -122,7 +123,7 @@ fun NavigationScreen() {
         ) {
             composable(Screens.Home.screen) { Finallayout() }
             composable(Screens.Notification.screen) { NotificationScreen() }
-            composable(Screens.Chatbot.screen) { Chatbot() }
+            composable(Screens.Chatbot.screen) { ChatScreenPreview() }
             composable(Screens.Requests.screen) {   val sampleRequests = listOf(
                 Request("8m ago", "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec fringilla quam eu faci", RequestStatus.PENDING),
                 Request("10 days ago", "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec fringilla quam eu faci", RequestStatus.APPROVED),

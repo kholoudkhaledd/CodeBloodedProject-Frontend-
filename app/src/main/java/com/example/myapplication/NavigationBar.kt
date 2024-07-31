@@ -25,10 +25,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import androidx.navigation.compose.*
 import com.example.myapplication.Screens
 import com.example.myapplication.calander.Finallayout
+import com.example.yourapp.ui.MyRequestsPage
+import com.example.yourapp.ui.Request
+import com.example.yourapp.ui.RequestStatus
 
 class MainActivity : ComponentActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
@@ -73,23 +75,7 @@ fun NavigationBar() {
                         modifier = Modifier.size(28.dp)
                     )
                 }
-                // Notifications button
-                IconButton(
-                    onClick = {
-                        selectedScreen.value = Screens.Notification.screen
-                        navController.navigate(Screens.Notification.screen) {
-                            popUpTo(Screens.Notification.screen) { inclusive = true }
-                        }
-                    },
-                    modifier = Modifier.weight(0.5f)
-                ) {
-                    val icon = if (selectedScreen.value == Screens.Notification.screen) painterResource(id = R.drawable.notifygreen) else painterResource(id = R.drawable.notifygray)
-                    Icon(
-                        painter = icon,
-                        contentDescription = "Notifications",
-                        modifier = Modifier.size(28.dp)
-                    )
-                }
+
                 // Chatbot button
                 IconButton(
                     onClick = {
@@ -124,6 +110,24 @@ fun NavigationBar() {
                         modifier = Modifier.size(28.dp)
                     )
                 }
+
+                // Notifications button
+                IconButton(
+                    onClick = {
+                        selectedScreen.value = Screens.Notification.screen
+                        navController.navigate(Screens.Notification.screen) {
+                            popUpTo(Screens.Notification.screen) { inclusive = true }
+                        }
+                    },
+                    modifier = Modifier.weight(0.5f)
+                ) {
+                    val icon = if (selectedScreen.value == Screens.Notification.screen) painterResource(id = R.drawable.notifygreen) else painterResource(id = R.drawable.notifygray)
+                    Icon(
+                        painter = icon,
+                        contentDescription = "Notifications",
+                        modifier = Modifier.size(28.dp)
+                    )
+                }
             }
         }
     ) { paddingValues ->
@@ -135,7 +139,12 @@ fun NavigationBar() {
             composable(Screens.Home.screen) { Finallayout() }
             composable(Screens.Notification.screen) { NotificationScreen() }
             composable(Screens.Chatbot.screen) { Chatbot() }
-            composable(Screens.Requests.screen) { Requests() }
+            composable(Screens.Requests.screen) { val sampleRequests = listOf(
+                Request("8m ago", "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec fringilla quam eu faci", RequestStatus.PENDING),
+                Request("10 days ago", "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec fringilla quam eu faci", RequestStatus.APPROVED),
+                Request("15 days ago", "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec fringilla quam eu faci", RequestStatus.DENIED)
+            )
+                MyRequestsPage(requests = sampleRequests) }
         }
     }
 }

@@ -7,27 +7,25 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 
 import androidx.compose.runtime.Composable
 
 import com.example.myapplication.ui.theme.MyApplicationTheme
 import com.example.myapplication.notifications.ui.theme.NotificationScreen
 import androidx.compose.foundation.layout.*
-
-import androidx.compose.material.*
-import androidx.compose.material3.BottomAppBar
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.*
-import com.example.myapplication.Screens
 import com.example.myapplication.calander.Finallayout
+import com.example.myapplication.ui.theme.GreenJC
 import com.example.yourapp.ui.MyRequestsPage
 import com.example.yourapp.ui.Request
 import com.example.yourapp.ui.RequestStatus
@@ -39,96 +37,79 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             MyApplicationTheme {
-//
-                NavigationBar()
-//                Finallayout()
+                NavigationScreen()
             }
         }
     }
 
 }
+
+@Composable
+fun CustomBottomNavigationBar(
+    selectedScreen: String,
+    onScreenSelected: (String) -> Unit
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(Color.White)
+            .padding(horizontal = 16.dp)
+            .height(56.dp), // Height of the bottom bar
+        horizontalArrangement = Arrangement.SpaceAround, // Distribute space evenly
+        verticalAlignment = Alignment.CenterVertically // Center icons vertically
+    ) {
+        // Home button
+        BarIcon(
+            selected = selectedScreen == Screens.Home.screen,
+            iconId = if (selectedScreen == Screens.Home.screen) R.drawable.calandergreen else R.drawable.calandergray,
+            contentDescription = "Home",
+            onClick = { onScreenSelected(Screens.Home.screen) }
+
+        )
+
+        // Notifications button
+        BarIcon(
+            selected = selectedScreen == Screens.Notification.screen,
+            iconId = if (selectedScreen == Screens.Notification.screen) R.drawable.notifygreen else R.drawable.notifygray,
+            contentDescription = "Notifications",
+            onClick = { onScreenSelected(Screens.Notification.screen) }
+        )
+
+        // Chatbot button
+        BarIcon(
+            selected = selectedScreen == Screens.Chatbot.screen,
+            iconId = if (selectedScreen == Screens.Chatbot.screen) R.drawable.chatggreen else R.drawable.chatgray,
+            contentDescription = "Chatbot",
+            onClick = { onScreenSelected(Screens.Chatbot.screen) }
+        )
+
+        // Requests button
+        BarIcon(
+            selected = selectedScreen == Screens.Requests.screen,
+            iconId = if (selectedScreen == Screens.Requests.screen) R.drawable.requestgreen else R.drawable.requestgray,
+            contentDescription = "Requests",
+            onClick = { onScreenSelected(Screens.Requests.screen) }
+        )
+    }
+}
+
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun NavigationBar() {
+fun NavigationScreen() {
     val navController = rememberNavController()
     val selectedScreen = remember { mutableStateOf(Screens.Home.screen) }
 
     Scaffold(
         bottomBar = {
-            BottomAppBar(
-                modifier = Modifier.background(Color.White).height(56.dp)
-            ) {
-                // Home button
-                IconButton(
-                    onClick = {
-                        selectedScreen.value = Screens.Home.screen
-                        navController.navigate(Screens.Home.screen) {
-                            popUpTo(Screens.Home.screen) { inclusive = true }
-                        }
-                    },
-                    modifier = Modifier.weight(0.5f)
-                ) {
-                    val icon = if (selectedScreen.value == Screens.Home.screen) painterResource(id = R.drawable.calandergreen) else painterResource(id = R.drawable.calandergray)
-                    Icon(
-                        painter = icon,
-                        contentDescription = "Home",
-                        modifier = Modifier.size(28.dp)
-                    )
+            CustomBottomNavigationBar(
+                selectedScreen = selectedScreen.value,
+                onScreenSelected = { screen ->
+                    selectedScreen.value = screen
+                    navController.navigate(screen) {
+                        popUpTo(screen) { inclusive = true }
+                    }
                 }
-
-                // Chatbot button
-                IconButton(
-                    onClick = {
-                        selectedScreen.value = Screens.Chatbot.screen
-                        navController.navigate(Screens.Chatbot.screen) {
-                            popUpTo(Screens.Chatbot.screen) { inclusive = true }
-                        }
-                    },
-                    modifier = Modifier.weight(0.5f)
-                ) {
-                    val icon = if (selectedScreen.value == Screens.Chatbot.screen) painterResource(id = R.drawable.chatggreen) else painterResource(id = R.drawable.chatgray)
-                    Icon(
-                        painter = icon,
-                        contentDescription = "Chatbot",
-                        modifier = Modifier.size(28.dp)
-                    )
-                }
-                // Requests button
-                IconButton(
-                    onClick = {
-                        selectedScreen.value = Screens.Requests.screen
-                        navController.navigate(Screens.Requests.screen) {
-                            popUpTo(Screens.Requests.screen) { inclusive = true }
-                        }
-                    },
-                    modifier = Modifier.weight(0.5f)
-                ) {
-                    val icon = if (selectedScreen.value == Screens.Requests.screen) painterResource(id = R.drawable.requestgreen) else painterResource(id = R.drawable.requestgray)
-                    Icon(
-                        painter = icon,
-                        contentDescription = "Requests",
-                        modifier = Modifier.size(28.dp)
-                    )
-                }
-
-                // Notifications button
-                IconButton(
-                    onClick = {
-                        selectedScreen.value = Screens.Notification.screen
-                        navController.navigate(Screens.Notification.screen) {
-                            popUpTo(Screens.Notification.screen) { inclusive = true }
-                        }
-                    },
-                    modifier = Modifier.weight(0.5f)
-                ) {
-                    val icon = if (selectedScreen.value == Screens.Notification.screen) painterResource(id = R.drawable.notifygreen) else painterResource(id = R.drawable.notifygray)
-                    Icon(
-                        painter = icon,
-                        contentDescription = "Notifications",
-                        modifier = Modifier.size(28.dp)
-                    )
-                }
-            }
+            )
         }
     ) { paddingValues ->
         NavHost(
@@ -139,21 +120,55 @@ fun NavigationBar() {
             composable(Screens.Home.screen) { Finallayout() }
             composable(Screens.Notification.screen) { NotificationScreen() }
             composable(Screens.Chatbot.screen) { Chatbot() }
-            composable(Screens.Requests.screen) { val sampleRequests = listOf(
+            composable(Screens.Requests.screen) {   val sampleRequests = listOf(
                 Request("8m ago", "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec fringilla quam eu faci", RequestStatus.PENDING),
                 Request("10 days ago", "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec fringilla quam eu faci", RequestStatus.APPROVED),
                 Request("15 days ago", "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec fringilla quam eu faci", RequestStatus.DENIED)
             )
-                MyRequestsPage(requests = sampleRequests) }
+                MyRequestsPage(requests = sampleRequests)
+            }
         }
     }
 }
-@RequiresApi(Build.VERSION_CODES.O)
-@Preview
+
 @Composable
-fun NotificationScreenPreview() {
-    NavigationBar()
+fun BarIcon(
+    selected: Boolean,
+    iconId: Int,
+    contentDescription: String,
+    onClick: () -> Unit
+) {
+    Box(
+        modifier = Modifier
+            .size(50.dp)
+            .clickable(onClick = onClick)
+            .padding(8.dp)
+            .background(Color.Transparent) // Ensures background is transparent
+    ) {
+        // Icon
+        val iconPainter = painterResource(id = iconId)
+        Icon(
+            painter = iconPainter,
+            contentDescription = contentDescription,
+            modifier = Modifier
+                .align(Alignment.Center)
+                .size(50.dp) // Adjust size of the icon as needed
+                .padding(bottom = 8.dp), // Adds space for the dot indicator
+            tint = if (selected) GreenJC else Color.Gray // Change color based on selection
+        )
+
+        // Dot indicator
+        if (selected) {
+            Box(
+                modifier = Modifier
+                    .align(Alignment.BottomCenter) // Align dot at the bottom center of the icon
+                    .size(8.dp) // Size of the dot
+                    .background(GreenJC, shape = CircleShape) // Color and shape of the dot
+            )
+        }
+    }
 }
+
 
 
 

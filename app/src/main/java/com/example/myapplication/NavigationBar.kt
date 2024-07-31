@@ -26,6 +26,9 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.*
 import com.example.myapplication.calander.Finallayout
 import com.example.myapplication.ui.theme.GreenJC
+import com.example.yourapp.ui.MyRequestsPage
+import com.example.yourapp.ui.Request
+import com.example.yourapp.ui.RequestStatus
 
 class MainActivity : ComponentActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
@@ -34,10 +37,8 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             MyApplicationTheme {
-//
-//                NavigationBar()
-//                Finallayout()
                 NavigationScreen()
+//                LoginScreen()
             }
         }
     }
@@ -118,7 +119,13 @@ fun NavigationScreen() {
             composable(Screens.Home.screen) { Finallayout() }
             composable(Screens.Notification.screen) { NotificationScreen() }
             composable(Screens.Chatbot.screen) { Chatbot() }
-            composable(Screens.Requests.screen) { Requests() }
+            composable(Screens.Requests.screen) {   val sampleRequests = listOf(
+                Request("8m ago", "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec fringilla quam eu faci", RequestStatus.PENDING),
+                Request("10 days ago", "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec fringilla quam eu faci", RequestStatus.APPROVED),
+                Request("15 days ago", "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec fringilla quam eu faci", RequestStatus.DENIED)
+            )
+                MyRequestsPage(requests = sampleRequests)
+            }
         }
     }
 }

@@ -39,6 +39,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             MyApplicationTheme {
                 NavigationScreen()
+//                LoginScreen()
             }
         }
     }
@@ -144,7 +145,7 @@ fun BarIcon(
 ) {
     Box(
         modifier = Modifier
-            .size(50.dp)
+            .size(70.dp)
             .clickable(onClick = onClick)
             .padding(8.dp)
             .background(Color.Transparent) // Ensures background is transparent
@@ -172,6 +173,7 @@ fun BarIcon(
         }
     }
 }
+
 
 
 

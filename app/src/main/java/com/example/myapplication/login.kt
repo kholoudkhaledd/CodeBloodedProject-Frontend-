@@ -46,11 +46,12 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.myapplication.ui.theme.MyApplicationTheme
 
 @Preview
 @Composable
-fun LoginScreen() {
+fun LoginScreen(navController: NavController) {
     // State variables for email and password
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -132,8 +133,12 @@ fun LoginScreen() {
 
 
         Button(
-            onClick = { /* Handle login button click */
-                      },
+            onClick = { /* Need Still to edit it */
+                navController.navigate(Screens.Home.screen) {
+                    popUpTo(Screens.Login.screen) { inclusive = true }
+                }
+
+            },
             modifier = Modifier
                 .width(350.dp)
                 .height(50.dp)

@@ -60,8 +60,12 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     implementation(libs.androidx.navigation.compose)
-//    implementation(libs.androidx.appcompat)
-//    implementation(libs.material)
+
+    implementation("io.coil-kt:coil-compose:2.1.0")
+    implementation("io.coil-kt:coil-gif:2.1.0")
+    implementation("com.github.skydoves:landscapist-glide:1.3.7")
+    implementation ("io.coil-kt:coil-compose:2.4.0")
+
     implementation(libs.androidx.activity)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

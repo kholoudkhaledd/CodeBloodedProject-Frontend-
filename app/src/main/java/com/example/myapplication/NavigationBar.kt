@@ -31,20 +31,7 @@ import com.example.yourapp.ui.MyRequestsPage
 import com.example.yourapp.ui.Request
 import com.example.yourapp.ui.RequestStatus
 
-class MainActivity : ComponentActivity() {
-    @RequiresApi(Build.VERSION_CODES.O)
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContent {
-            MyApplicationTheme {
-                NavigationScreen()
-//                LoginScreen()
-            }
-        }
-    }
 
-}
 
 @Composable
 fun CustomBottomNavigationBar(
@@ -105,36 +92,43 @@ fun NavigationScreen() {
     val selectedScreen = remember { mutableStateOf(Screens.Home.screen) }
 
     Scaffold(
+
         bottomBar = {
-            CustomBottomNavigationBar(
-                selectedScreen = selectedScreen.value,
-                onScreenSelected = { screen ->
-                    selectedScreen.value = screen
-                    navController.navigate(screen) {
-                        popUpTo(screen) { inclusive = true }
+            if (selectedScreen.value !in listOf(Screens.SplashScreen.screen, Screens.Login.screen)) {
+                CustomBottomNavigationBar(
+                    selectedScreen = selectedScreen.value,
+                    onScreenSelected = { screen ->
+                        selectedScreen.value = screen
+                        navController.navigate(screen) {
+                            popUpTo(screen) { inclusive = true }
+                        }
                     }
-                }
-            )
+                )
+            }
         }
     ) { paddingValues ->
         NavHost(
             navController = navController,
-            startDestination = Screens.Home.screen,
+            startDestination = Screens.SplashScreen.screen, // Start with SplashScreen
             modifier = Modifier.padding(paddingValues)
         ) {
+            composable(Screens.SplashScreen.screen) { SplashScreen(navController) }
+            composable(Screens.Login.screen) { LoginScreen(navController) }
             composable(Screens.Home.screen) { Finallayout() }
             composable(Screens.Notification.screen) { NotificationScreen() }
             composable(Screens.Chatbot.screen) { ChatScreenPreview() }
-            composable(Screens.Requests.screen) {   val sampleRequests = listOf(
-                Request("8m ago", "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec fringilla quam eu faci", RequestStatus.PENDING),
-                Request("10 days ago", "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec fringilla quam eu faci", RequestStatus.APPROVED),
-                Request("15 days ago", "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec fringilla quam eu faci", RequestStatus.DENIED)
-            )
+            composable(Screens.Requests.screen) {
+                val sampleRequests = listOf(
+                    Request("8m ago", "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec fringilla quam eu faci", RequestStatus.PENDING),
+                    Request("10 days ago", "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec fringilla quam eu faci", RequestStatus.APPROVED),
+                    Request("15 days ago", "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec fringilla quam eu faci", RequestStatus.DENIED)
+                )
                 MyRequestsPage(requests = sampleRequests)
             }
         }
     }
 }
+
 
 @Composable
 fun BarIcon(

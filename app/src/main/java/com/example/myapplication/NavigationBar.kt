@@ -42,7 +42,7 @@ fun CustomBottomNavigationBar(
         modifier = Modifier
             .fillMaxWidth()
             .background(Color.White)
-            .padding(horizontal = 16.dp)
+            .padding(horizontal = 16.dp, vertical = 16.dp)
             .height(56.dp), // Height of the bottom bar
         horizontalArrangement = Arrangement.SpaceAround, // Distribute space evenly
         verticalAlignment = Alignment.CenterVertically // Center icons vertically
@@ -92,7 +92,6 @@ fun NavigationScreen() {
     val selectedScreen = remember { mutableStateOf(Screens.Home.screen) }
 
     Scaffold(
-
         bottomBar = {
             if (selectedScreen.value !in listOf(Screens.SplashScreen.screen, Screens.Login.screen)) {
                 CustomBottomNavigationBar(
@@ -109,8 +108,10 @@ fun NavigationScreen() {
     ) { paddingValues ->
         NavHost(
             navController = navController,
-            startDestination = Screens.SplashScreen.screen, // Start with SplashScreen
-            modifier = Modifier.padding(paddingValues)
+            startDestination = Screens.SplashScreen.screen,
+            modifier = Modifier
+                .padding(paddingValues)
+                .fillMaxSize() // Ensure it fills the available size
         ) {
             composable(Screens.SplashScreen.screen) { SplashScreen(navController) }
             composable(Screens.Login.screen) { LoginScreen(navController) }
@@ -128,6 +129,7 @@ fun NavigationScreen() {
         }
     }
 }
+
 
 
 @Composable

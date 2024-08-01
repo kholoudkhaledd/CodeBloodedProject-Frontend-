@@ -1,5 +1,6 @@
 package com.example.myapplication
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.LocalTextStyle
@@ -10,6 +11,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -33,7 +35,11 @@ fun SplashScreen(navController: NavController) {
         contentAlignment = Alignment.Center
     ) {
         Column(
+            modifier = Modifier.fillMaxSize().background(color = Color.Black)
+                .padding(vertical = 150.dp),
+            verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
+
         ) {
             // Display the loading GIF using Coil's AsyncImage
             AsyncImage(
@@ -42,11 +48,14 @@ fun SplashScreen(navController: NavController) {
                 modifier = Modifier.size(150.dp) // Adjust the size as needed
             )
 
-            Text(
-                text = "Loading, please wait...",
-                color = Color.Gray,
-                modifier = Modifier.padding(top = 16.dp),
-                style = LocalTextStyle.current.copy(fontSize = 16.sp)
+            Image(
+                painter = painterResource(id = R.drawable.deloittewhitelogo),
+                contentDescription = "Deloitte Logo",
+                modifier = Modifier
+                    .size(150.dp)
+                    .padding(vertical = 16.dp)
+
+//                    .offset(y = 100.dp)
             )
         }
     }

@@ -1,18 +1,9 @@
 package com.example.myapplication
 
 import android.os.Build
-import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-
-import androidx.compose.runtime.Composable
-
-import com.example.myapplication.ui.theme.MyApplicationTheme
-import com.example.myapplication.notifications.ui.theme.NotificationScreen
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
@@ -24,14 +15,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.*
+import com.example.myapplication.notifications.ui.theme.NotificationScreen
 import com.example.myapplication.calander.Finallayout
-import com.example.myapplication.ui.theme.ChatScreenPreview
 import com.example.myapplication.ui.theme.GreenJC
 import com.example.yourapp.ui.MyRequestsPage
 import com.example.yourapp.ui.Request
 import com.example.yourapp.ui.RequestStatus
-
-
+import com.example.myapplication.ui.theme.Chatbot
 
 @Composable
 fun CustomBottomNavigationBar(
@@ -55,9 +45,6 @@ fun CustomBottomNavigationBar(
             onClick = { onScreenSelected(Screens.Home.screen) }
 
         )
-
-
-
         // Chatbot button
         BarIcon(
             selected = selectedScreen == Screens.Chatbot.screen,
@@ -81,7 +68,6 @@ fun CustomBottomNavigationBar(
             contentDescription = "Notifications",
             onClick = { onScreenSelected(Screens.Notification.screen) }
         )
-
     }
 }
 
@@ -89,15 +75,15 @@ fun CustomBottomNavigationBar(
 @Composable
 fun NavigationScreen() {
     val navController = rememberNavController()
-    val selectedScreen = remember { mutableStateOf(Screens.Home.screen) }
+    var selectedScreen by remember { mutableStateOf(Screens.SplashScreen.screen) }
 
     Scaffold(
         bottomBar = {
-            if (selectedScreen.value !in listOf(Screens.SplashScreen.screen, Screens.Login.screen)) {
+            if (selectedScreen !in listOf(Screens.SplashScreen.screen, Screens.Login.screen)) {
                 CustomBottomNavigationBar(
-                    selectedScreen = selectedScreen.value,
+                    selectedScreen = selectedScreen,
                     onScreenSelected = { screen ->
-                        selectedScreen.value = screen
+                        selectedScreen = screen
                         navController.navigate(screen) {
                             popUpTo(screen) { inclusive = true }
                         }
@@ -111,13 +97,16 @@ fun NavigationScreen() {
             startDestination = Screens.SplashScreen.screen,
             modifier = Modifier
                 .padding(paddingValues)
-                .fillMaxSize() // Ensure it fills the available size
+                .fillMaxSize()
         ) {
             composable(Screens.SplashScreen.screen) { SplashScreen(navController) }
             composable(Screens.Login.screen) { LoginScreen(navController) }
-            composable(Screens.Home.screen) { Finallayout() }
+            composable(Screens.Home.screen) {
+                selectedScreen = Screens.Home.screen
+                Finallayout()
+            }
             composable(Screens.Notification.screen) { NotificationScreen() }
-            composable(Screens.Chatbot.screen) { ChatScreenPreview() }
+            composable(Screens.Chatbot.screen) { Chatbot() }
             composable(Screens.Requests.screen) {
                 val sampleRequests = listOf(
                     Request("8m ago", "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec fringilla quam eu faci", RequestStatus.PENDING),
@@ -129,7 +118,6 @@ fun NavigationScreen() {
         }
     }
 }
-
 
 
 @Composable
@@ -169,12 +157,3 @@ fun BarIcon(
         }
     }
 }
-
-
-
-
-
-
-
-
-

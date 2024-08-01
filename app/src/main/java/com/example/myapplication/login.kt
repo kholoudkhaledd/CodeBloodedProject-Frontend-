@@ -49,7 +49,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.myapplication.ui.theme.MyApplicationTheme
 
-@Preview
+
 @Composable
 fun LoginScreen(navController: NavController) {
     // State variables for email and password

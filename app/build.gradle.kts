@@ -65,6 +65,7 @@ dependencies {
     implementation("io.coil-kt:coil-gif:2.1.0")
     implementation("com.github.skydoves:landscapist-glide:1.3.7")
     implementation ("io.coil-kt:coil-compose:2.4.0")
+    implementation ("com.github.bumptech.glide:compose:1.0.0-beta01")
 
     implementation(libs.androidx.activity)
     testImplementation(libs.junit)

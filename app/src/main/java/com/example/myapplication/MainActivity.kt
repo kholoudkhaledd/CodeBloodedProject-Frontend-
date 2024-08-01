@@ -6,6 +6,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.annotation.RequiresApi
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.myapplication.ui.theme.MyApplicationTheme
 
 class MainActivity : ComponentActivity() {
@@ -16,7 +17,6 @@ class MainActivity : ComponentActivity() {
         setContent {
             MyApplicationTheme {
                 NavigationScreen()
-//                LoginScreen()
             }
         }
     }

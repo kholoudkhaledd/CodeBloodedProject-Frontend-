@@ -132,7 +132,8 @@ fun LoginScreen() {
 
 
         Button(
-            onClick = { /* Handle login button click */ },
+            onClick = { /* Handle login button click */
+                      },
             modifier = Modifier
                 .width(350.dp)
                 .height(50.dp)

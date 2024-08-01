@@ -23,6 +23,7 @@ import androidx.compose.foundation.layout.paddingFrom
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -128,7 +129,7 @@ fun UserInfo(name:String) {
 fun Indication(){
     Row(
         modifier = Modifier
-            .padding(horizontal = 10.dp)
+            .padding(horizontal = 18.dp, vertical = 10.dp)
             .fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -273,7 +274,7 @@ fun CustomCalendar(
                         .padding(4.dp), // Adjust padding to fit smaller size
                     fontWeight = FontWeight.SemiBold,
                     textAlign = TextAlign.Center,
-                    fontSize = 12.sp // Adjust font size for smaller header
+                    fontSize = 14.sp // Smaller font size for the header
                 )
             }
         }
@@ -292,15 +293,15 @@ fun CustomCalendar(
                         Box(
                             modifier = Modifier
                                 .weight(1f)
-                                .aspectRatio(1f) // Ensures each cell is square
-                                .padding(horizontal = 1.dp) // Adjust padding to make boxes smaller
+                                .aspectRatio(1f) // Keeps boxes square
+                                .padding(0.1.dp) // Decrease padding to make boxes smaller
                                 .clickable { onDateSelected(dateString) },
                             contentAlignment = Alignment.Center
                         ) {
                             Text(
                                 text = dayIndex.toString(),
                                 color = if (isSelected) Color.Blue else Color.Black,
-                                fontSize = 15.sp // Adjust font size for smaller days
+                                fontSize = 14.sp // Smaller font size for days
                             )
                         }
                     } else {
@@ -313,9 +314,11 @@ fun CustomCalendar(
                 }
             }
         }
-        Spacer(modifier = Modifier.height(5.dp)) // Adjusted height for smaller spacing
+        Spacer(modifier = Modifier.height(2.dp)) // Decrease spacer height
     }
 }
+
+
 
 
 
@@ -330,15 +333,13 @@ fun CalendarViewScreen() {
     Column(
         modifier = Modifier
             .background(GrayD)
-
-
     ) {
         val currentMonthAndYear = "${currentMonth.name} $currentYear"
 
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding( vertical = 10.dp)
+                .padding(vertical = 10.dp)
                 .background(GrayD)
                 .clip(RoundedCornerShape(30.dp))
         ) {
@@ -346,12 +347,11 @@ fun CalendarViewScreen() {
                 Text(
                     text = "Working from home/office schedule",
                     fontSize = 18.sp,
-                    modifier = Modifier.padding(vertical = 8.dp, horizontal = 12.dp)
+                    modifier = Modifier.padding(vertical = 8.dp, horizontal = 15.dp)
                 )
-
             }
 
-            Box(modifier = Modifier.background(Color.White).fillMaxWidth()) {
+            Box(modifier = Modifier.background(Color.White).fillMaxWidth().padding(horizontal = 15.dp)) {
                 Row(
                     modifier = Modifier
                         .padding(vertical = 10.dp)
@@ -402,11 +402,13 @@ fun CalendarViewScreen() {
             // Custom calendar component
             Box(
                 modifier = Modifier
-                    .weight(1f)
-                    .fillMaxWidth()
+                    .fillMaxWidth() // Adjust width to fit parent
+                    .padding(horizontal = 8.dp) // Add some horizontal padding if needed
             ) {
                 CustomCalendar(
-                    modifier = Modifier.fillMaxSize(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(0.dp), // Ensure no extra padding
                     currentMonth = currentMonth,
                     currentYear = currentYear,
                     selectedDate = selectedDate,
@@ -416,8 +418,8 @@ fun CalendarViewScreen() {
 
             Divider(
                 color = Color.Gray,
-                thickness = 0.9.dp,
-                modifier = Modifier.fillMaxWidth()
+                thickness = 1.dp,
+                modifier = Modifier.fillMaxWidth().padding( horizontal = 20.dp)
             )
 
             Box(
@@ -425,14 +427,13 @@ fun CalendarViewScreen() {
                     .background(Color.White)
                     .fillMaxWidth()
                     .clip(RoundedCornerShape(bottomStart = 30.dp, bottomEnd = 30.dp))
-                    .padding(vertical = 0.dp) // Ensure no padding
+                    .padding(vertical = 0.dp, horizontal = 15.dp) // Ensure no padding
             ) {
                 Indication()
             }
         }
     }
 }
-
 
 
 
@@ -450,60 +451,63 @@ fun getCurrentDate(): String {
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun Finallayout() {
-    Column(
+    LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .background(GrayD), // Set background color to debug
+            .background(GrayD),
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
-
     ) {
-        // User Info Section
-        Box(
-            modifier = Modifier
-                .background(Color.Transparent)
-                .fillMaxWidth()
-                .padding(top=20.dp) // Ensure no padding
-
-        ) {
-            UserInfo("Kholoud")
+        item {
+            // User Info Section
+            Box(
+                modifier = Modifier
+                    .background(Color.Transparent)
+                    .fillMaxWidth()
+                    .padding(top = 20.dp) // Ensure no padding
+            ) {
+                UserInfo("Kholoud")
+            }
         }
 
-        // Display if home or office Section
-        Box(
-            modifier = Modifier
-                .background(Color.Transparent)
-                .fillMaxWidth()
-                .padding(vertical = 10.dp) // Ensure no padding
-        ) {
-            Displayifhomeoroffice("Home")
+        item {
+            // Display if home or office Section
+            Box(
+                modifier = Modifier
+                    .background(Color.Transparent)
+                    .fillMaxWidth()
+                    .padding(vertical = 10.dp) // Ensure no padding
+            ) {
+                Displayifhomeoroffice("Home")
+            }
         }
 
-        // Calendar View Screen
-        Box(
-            modifier = Modifier
-                .background(Color.White)
-                .fillMaxWidth()
-//                    .clip(RoundedCornerShape(40.dp))
-                .weight(1f) // Allows the CalendarViewScreen to expand and take up available space
-                .padding(0.dp) // Ensure no padding
-        ) {
-            CalendarViewScreen()
+        item {
+            // Calendar View Screen
+            Box(
+                modifier = Modifier
+                    .background(Color.White)
+                    .fillMaxWidth()
+            ) {
+                CalendarViewScreen()
+            }
         }
 
-
-        // Requests Section
-        Box(
-            modifier = Modifier
-                .background(GrayD)
-                .fillMaxWidth()
-                .padding(vertical = 0.dp) // Ensure no padding
-                .weight(0.6f)
-        ) {
-            RequestsSection()
+        item {
+            // Requests Section
+            Box(
+                modifier = Modifier
+                    .background(GrayD)
+                    .fillMaxWidth()
+                    .padding(vertical = 0.dp) // Ensure no padding
+            ) {
+                RequestsSection()
+            }
         }
     }
 }
+
+
 
 
 

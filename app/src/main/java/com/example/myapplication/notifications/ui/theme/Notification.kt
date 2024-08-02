@@ -67,16 +67,16 @@ fun NotificationCard(
                 .background(stripeColor)
         )
         Spacer(modifier = Modifier.width(16.dp))
-            Icon(
-                painter = painterResource(id = icon),
-                contentDescription = null,
-                tint = Color.Unspecified,
-                modifier = Modifier
-                    .size(40.dp)
-                    .align(Alignment.CenterVertically)
+        Icon(
+            painter = painterResource(id = icon),
+            contentDescription = null,
+            tint = Color.Unspecified,
+            modifier = Modifier
+                .size(40.dp)
+                .align(Alignment.CenterVertically)
 
 
-            )
+        )
 
         Spacer(modifier = Modifier.width(16.dp))
         Text(

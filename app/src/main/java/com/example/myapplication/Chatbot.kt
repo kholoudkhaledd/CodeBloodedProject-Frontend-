@@ -44,15 +44,16 @@ fun ChatScreen() {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFF5F5F5))
-            .padding(16.dp)
+//            .background(Color.Red)
+            .background(Color(0xFFECECEC))
+            .padding(vertical = 20.dp)
     ) {
         // Card that encapsulates header and messages
         Card(
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(1f),
-            shape = RoundedCornerShape(16.dp),
+            shape = RoundedCornerShape(25.dp),
             colors = CardDefaults.cardColors(containerColor = Color.White)
         ) {
             Column {
@@ -86,9 +87,8 @@ fun ChatScreen() {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .background(Color(0xFFE0E0E0), shape = RoundedCornerShape(50.dp))
-                        .padding(0.5.dp)
-                        .padding(horizontal = 16.dp, vertical = 8.dp)
+                        .padding(horizontal = 16.dp) // Added padding to the Row
+                        .padding(bottom = 16.dp)
                 ) {
                     TextField(
                         value = message,
@@ -96,7 +96,9 @@ fun ChatScreen() {
                         placeholder = { Text("Message here...") },
                         modifier = Modifier
                             .weight(1f)
-                            .padding(end = 8.dp),
+                            .padding(end = 8.dp)
+                            .height(50.dp) // Adjusted height for the TextField
+                            .background(Color(0xFFE0E0E0), shape = RoundedCornerShape(24.dp)), // Added background color and shape
                         colors = TextFieldDefaults.textFieldColors(
                             containerColor = Color.Transparent,
                             focusedIndicatorColor = Color.Transparent,
@@ -107,7 +109,7 @@ fun ChatScreen() {
                     IconButton(
                         onClick = { sendMessage() },
                         modifier = Modifier
-                            .size(40.dp)
+                            .size(50.dp) // Adjusted size for the IconButton
                             .background(Color(0xFF4EA362), shape = CircleShape)
                             .align(Alignment.CenterVertically)
                     ) {

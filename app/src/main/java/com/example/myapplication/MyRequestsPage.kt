@@ -3,6 +3,8 @@ package com.example.yourapp.ui
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -16,7 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.myapplication.R
 
-data class Request(val time: String, val description: String, val status: RequestStatus)
+data class Request(val id: Int, val time: String, val description: String, val status: RequestStatus)
 
 enum class RequestStatus {
     PENDING, APPROVED, DENIED
@@ -31,7 +33,6 @@ fun MyRequestsPage(requests: List<Request>) {
             .fillMaxSize()
             .background(Color(0xFFF5F5F5))
             .statusBarsPadding(),
-
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Card(
@@ -40,8 +41,6 @@ fun MyRequestsPage(requests: List<Request>) {
                 .fillMaxWidth()
                 .background(Color.Transparent),
             colors = CardDefaults.cardColors(containerColor = Color.White),
-
-
         ) {
             Column(
                 modifier = Modifier
@@ -64,21 +63,23 @@ fun MyRequestsPage(requests: List<Request>) {
                         .alpha(0.5f)
                 )
 
-                requestList.forEachIndexed { index, request ->
-                    if (index > 0) {
+                LazyColumn(
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    items(requestList) { request ->
+                        RequestItem(
+                            request = request,
+                            onCancelRequest = { requestToCancel ->
+                                requestList = requestList.filter { it.id != requestToCancel.id }
+                            }
+                        )
+                        Spacer(modifier = Modifier.height(16.dp))
                         Divider(
                             modifier = Modifier
                                 .padding(vertical = 8.dp)
                                 .alpha(0.5f)
                         )
                     }
-                    RequestItem(
-                        request = request,
-                        onCancelRequest = { requestToCancel ->
-                            requestList = requestList.filter { it != requestToCancel }
-                        }
-                    )
-                    Spacer(modifier = Modifier.height(16.dp))
                 }
             }
         }
@@ -100,7 +101,7 @@ fun RequestItem(request: Request, onCancelRequest: (Request) -> Unit) {
             fontWeight = FontWeight.Medium,
             fontSize = 16.sp
         )
-        Spacer(modifier = Modifier.height(12.dp)) // Increased space here
+        Spacer(modifier = Modifier.height(12.dp))
         when (request.status) {
             RequestStatus.PENDING -> {
                 Row(verticalAlignment = Alignment.CenterVertically) {

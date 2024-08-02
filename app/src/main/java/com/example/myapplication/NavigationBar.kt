@@ -24,6 +24,7 @@ import androidx.navigation.compose.*
 import com.example.myapplication.calander.Finallayout
 import com.example.myapplication.notifications.ui.theme.NotificationScreen
 import com.example.myapplication.ui.theme.ChatScreenPreview
+import com.example.myapplication.ui.theme.GrayD
 import com.example.myapplication.ui.theme.GreenJC
 import com.example.myapplication.ui.theme.MyApplicationTheme
 import com.example.yourapp.ui.MyRequestsPage
@@ -106,6 +107,7 @@ fun NavigationScreen() {
     val selectedScreen = remember { mutableStateOf(Screens.Home.screen) }
 
     Scaffold(
+        containerColor = Color(0xFFECECEC),
         bottomBar = {
             CustomBottomNavigationBar(
                 selectedScreen = selectedScreen.value,
@@ -128,10 +130,13 @@ fun NavigationScreen() {
             composable(Screens.Chatbot.screen) { ChatScreenPreview() }
             composable(Screens.Requests.screen) {
                 val sampleRequests = listOf(
-                    Request("8m ago", "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec fringilla quam eu faci", RequestStatus.PENDING),
-                    Request("10 days ago", "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec fringilla quam eu faci", RequestStatus.APPROVED),
-                    Request("15 days ago", "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec fringilla quam eu faci", RequestStatus.DENIED)
+                    Request(id = 1, time = "8m ago", description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec fringilla quam eu faci", status = RequestStatus.PENDING),
+                    Request(id = 2, time = "8m ago", description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec fringilla quam eu faci", status = RequestStatus.PENDING),
+                    Request(id = 3, time = "10 days ago", description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec fringilla quam eu faci", status = RequestStatus.APPROVED),
+                    Request(id = 4, time = "15 days ago", description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec fringilla quam eu faci", status = RequestStatus.APPROVED),
+                    Request(id = 5, time = "20 days ago", description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec fringilla quam eu faci", status = RequestStatus.DENIED)
                 )
+
                 MyRequestsPage(requests = sampleRequests)
             }
         }

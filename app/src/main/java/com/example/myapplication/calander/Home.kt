@@ -1,52 +1,27 @@
 package com.example.myapplication.calander
 
-
 import android.os.Build
-
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
-
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.paddingFrom
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.KeyboardArrowRight
-
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Divider
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.Icon
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -55,9 +30,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.myapplication.R
 import com.example.myapplication.ui.theme.Darkblue
-import com.example.myapplication.ui.theme.GrayD
 import com.example.myapplication.ui.theme.GreenJC
-
 import java.time.LocalDate
 import java.time.Month
 import java.time.Year
@@ -66,18 +39,17 @@ import java.time.format.DateTimeFormatter
 // USER INFO SECTION
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun UserInfo(name:String) {
+fun UserInfo(name: String) {
     // Get current date
     val currentDate = LocalDate.now()
     val currentDay = currentDate.dayOfMonth.toString()
-    val currentDayName = currentDate.format(DateTimeFormatter.ofPattern("EEEE"))
-    val currentMonthAndYear = "${currentDate.month} ${currentDate.year}"
+    val currentDayName = currentDate.format(DateTimeFormatter.ofPattern("E")) // Short day name
+    val currentMonthAndYear = "${currentDate.month.name.lowercase().capitalize().substring(0, 3)} ${currentDate.year}" // Short month name
 
     Column(
         modifier = Modifier
             .padding(5.dp)
             .fillMaxWidth()
-
     ) {
         // First row
         Row(
@@ -89,21 +61,13 @@ fun UserInfo(name:String) {
                 text = "Welcome Back",
                 color = Color.Gray,
                 modifier = Modifier.align(Alignment.CenterVertically)
-                    //.padding(bottom=1.dp, top = 1.dp)
-
-
-
             )
             Text(
-
-                text = " $currentDay  $currentDayName",
+                text = "$currentDay $currentDayName",
                 color = Color.Gray,
                 modifier = Modifier.align(Alignment.CenterVertically)
-                   // .padding(top=1.dp, bottom = 1.dp)
             )
         }
-
-        //Spacer(modifier = Modifier.height(8.dp)) // Spacer between rows
 
         // Second row
         Row(
@@ -125,63 +89,58 @@ fun UserInfo(name:String) {
     }
 }
 
+
 @Composable
-fun Indication(){
+fun Indication() {
     Row(
         modifier = Modifier
-            .padding(horizontal = 18.dp, vertical = 10.dp)
+            .padding(horizontal = 25.dp, vertical = 10.dp)
             .fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Box(
             modifier = Modifier
-                .size(16.dp)
+                .size(14.dp)
                 .background(Darkblue, shape = CircleShape)
         )
-        Spacer(modifier = Modifier.width(20.dp))
+        Spacer(modifier = Modifier.width(12.dp))
         Text(
             text = "From Office",
-            fontSize = 18.sp,
-
+            fontSize = 15.sp,
         )
         Spacer(modifier = Modifier.width(35.dp))
         Box(
             modifier = Modifier
-                .size(16.dp)
+                .size(14.dp)
                 .background(GreenJC, shape = CircleShape)
         )
-        Spacer(modifier = Modifier.width(4.dp))
+        Spacer(modifier = Modifier.width(12.dp))
         Text(
             text = "From Home",
-            fontSize = 18.sp
+            fontSize = 15.sp
         )
     }
 }
 
-
-//PREVIEW
 @RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true)
 @Composable
 fun CalendarViewScreenPreview() {
-
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(GrayD), // Set background color to debug
+            .background(Color(0xFFECECEC)),
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
-
     ) {
         // User Info Section
         Box(
             modifier = Modifier
                 .background(Color.Transparent)
                 .fillMaxWidth()
-                .padding(top=5.dp) // Ensure no padding
-
+                .padding(top = 5.dp)
         ) {
-            UserInfo("Kholoud")
+            UserInfo("CodeBlooded")
         }
 
         // Display if home or office Section
@@ -189,7 +148,7 @@ fun CalendarViewScreenPreview() {
             modifier = Modifier
                 .background(Color.Transparent)
                 .fillMaxWidth()
-                .padding(vertical = 10.dp) // Ensure no padding
+                .padding(vertical = 10.dp)
         ) {
             Displayifhomeoroffice("Home")
         }
@@ -199,20 +158,18 @@ fun CalendarViewScreenPreview() {
             modifier = Modifier
                 .background(Color.White)
                 .fillMaxWidth()
-//                    .clip(RoundedCornerShape(40.dp))
-                .weight(1f) // Allows the CalendarViewScreen to expand and take up available space
-                .padding(0.dp) // Ensure no padding
+                .weight(1f)
+                .padding(0.dp)
         ) {
             CalendarViewScreen()
         }
 
-
         // Requests Section
         Box(
             modifier = Modifier
-                .background(GrayD)
+                .background(Color(0xFFECECEC))
                 .fillMaxWidth()
-                .padding(vertical = 0.dp) // Ensure no padding
+                .padding(vertical = 0.dp)
                 .weight(0.6f)
         ) {
             RequestsSection()
@@ -220,27 +177,26 @@ fun CalendarViewScreenPreview() {
     }
 }
 
-
-//LABEL HOME OR OFFICE
+// LABEL HOME OR OFFICE
 @Composable
-fun Displayifhomeoroffice( place: String) {
+fun Displayifhomeoroffice(place: String) {
     Surface(
         modifier = Modifier
-            .fillMaxWidth() // Make the Surface take the full width of the parent
-            .padding(horizontal = 20.dp) // Add padding to the left and right of the Surface
-            .clip(RoundedCornerShape(10.dp)), // Apply rounded corners
-        color = GreenJC, // Set background color
-        contentColor = Color.White // Set content color (for text)
+            .fillMaxWidth()
+            .padding(horizontal = 20.dp)
+            .clip(RoundedCornerShape(10.dp)),
+        color = GreenJC,
+        contentColor = Color.White
     ) {
         Text(
             text = "Today you are working from $place",
             fontSize = 16.sp,
             modifier = Modifier
-                .padding(vertical = 5.dp, horizontal = 10.dp) // Add padding around the text inside the Surface
+                .padding(vertical = 12.dp, horizontal = 18.dp)
         )
     }
 }
-////Calander
+
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun CustomCalendar(
@@ -274,7 +230,7 @@ fun CustomCalendar(
                         .padding(4.dp), // Adjust padding to fit smaller size
                     fontWeight = FontWeight.SemiBold,
                     textAlign = TextAlign.Center,
-                    fontSize = 14.sp // Smaller font size for the header
+                    fontSize = 12.sp // Adjust font size for smaller header
                 )
             }
         }
@@ -284,6 +240,7 @@ fun CustomCalendar(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .height(43.dp)
             ) {
                 for (columnIndex in 0 until 7) {
                     val dayIndex = rowIndex * 7 + columnIndex - startDayOfWeek + 1
@@ -293,15 +250,15 @@ fun CustomCalendar(
                         Box(
                             modifier = Modifier
                                 .weight(1f)
-                                .aspectRatio(1f) // Keeps boxes square
-                                .padding(0.1.dp) // Decrease padding to make boxes smaller
+                                .aspectRatio(1f) // Ensures each cell is square
+                                .padding(1.dp) // Adjust padding to make boxes smaller
                                 .clickable { onDateSelected(dateString) },
                             contentAlignment = Alignment.Center
                         ) {
                             Text(
                                 text = dayIndex.toString(),
                                 color = if (isSelected) Color.Blue else Color.Black,
-                                fontSize = 14.sp // Smaller font size for days
+                                fontSize = 15.sp // Adjust font size for smaller days
                             )
                         }
                     } else {
@@ -314,7 +271,7 @@ fun CustomCalendar(
                 }
             }
         }
-        Spacer(modifier = Modifier.height(2.dp)) // Decrease spacer height
+        Spacer(modifier = Modifier.height(8.dp)) // Adjusted height for smaller spacing
     }
 }
 
@@ -332,29 +289,45 @@ fun CalendarViewScreen() {
 
     Column(
         modifier = Modifier
-            .background(GrayD)
+            .background(Color.White)
+            .clip(RoundedCornerShape(25.dp))
     ) {
-        val currentMonthAndYear = "${currentMonth.name} $currentYear"
+        val currentMonthAndYear = "${currentMonth.name.lowercase().capitalize()} $currentYear"
 
         Column(
             modifier = Modifier
-                .fillMaxWidth()
+                //.fillMaxWidth()
                 .padding(vertical = 10.dp)
-                .background(GrayD)
-                .clip(RoundedCornerShape(30.dp))
+                //.background(Color.White)
+                .clip(RoundedCornerShape(50.dp))
         ) {
-            Box(modifier = Modifier.background(Color.White).fillMaxWidth()) {
+            Box(modifier = Modifier
+                .clip(RoundedCornerShape(20.dp))
+                .fillMaxWidth()) {
                 Text(
                     text = "Working from home/office schedule",
-                    fontSize = 18.sp,
-                    modifier = Modifier.padding(vertical = 8.dp, horizontal = 15.dp)
+                    fontSize = 15.sp,
+                    fontWeight = FontWeight.SemiBold ,
+                    modifier = Modifier
+                        .padding(vertical = 15.dp, horizontal = 25.dp)
                 )
             }
 
-            Box(modifier = Modifier.background(Color.White).fillMaxWidth().padding(horizontal = 15.dp)) {
+            Divider(
+                color = Color.LightGray,
+                thickness = 0.5.dp,
+                modifier = Modifier
+                    .alpha(0.5f)
+                    .padding(horizontal = 25.dp, vertical = 6.dp)
+            )
+
+            Box(modifier = Modifier
+                .background(Color.White)
+                .fillMaxWidth()) {
                 Row(
                     modifier = Modifier
                         .padding(vertical = 10.dp)
+                        .padding(horizontal = 15.dp)
                         .background(Color.White),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween
@@ -362,7 +335,7 @@ fun CalendarViewScreen() {
                     Icon(
                         imageVector = Icons.Filled.KeyboardArrowLeft,
                         contentDescription = "Previous month",
-                        tint = GreenJC,
+                        tint = Color(0xFF76B31B),
                         modifier = Modifier
                             .size(30.dp)
                             .clickable {
@@ -384,7 +357,7 @@ fun CalendarViewScreen() {
                     Icon(
                         imageVector = Icons.Filled.KeyboardArrowRight,
                         contentDescription = "Next month",
-                        tint = GreenJC,
+                        tint = Color(0xFF76B31B),
                         modifier = Modifier
                             .size(30.dp)
                             .clickable {
@@ -402,13 +375,12 @@ fun CalendarViewScreen() {
             // Custom calendar component
             Box(
                 modifier = Modifier
-                    .fillMaxWidth() // Adjust width to fit parent
-                    .padding(horizontal = 8.dp) // Add some horizontal padding if needed
+                    .weight(1f)
+                    .fillMaxWidth()
+                    .padding(vertical = 5.dp)
             ) {
                 CustomCalendar(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(0.dp), // Ensure no extra padding
+                    modifier = Modifier.fillMaxSize(),
                     currentMonth = currentMonth,
                     currentYear = currentYear,
                     selectedDate = selectedDate,
@@ -417,17 +389,19 @@ fun CalendarViewScreen() {
             }
 
             Divider(
-                color = Color.Gray,
-                thickness = 1.dp,
-                modifier = Modifier.fillMaxWidth().padding( horizontal = 20.dp)
+                color = Color.LightGray,
+                thickness = 0.5.dp,
+                modifier = Modifier
+                    .alpha(0.5f)
+                    .padding(horizontal = 25.dp, vertical = 5.dp)
             )
 
             Box(
                 modifier = Modifier
                     .background(Color.White)
                     .fillMaxWidth()
-                    .clip(RoundedCornerShape(bottomStart = 30.dp, bottomEnd = 30.dp))
-                    .padding(vertical = 0.dp, horizontal = 15.dp) // Ensure no padding
+                    .clip(RoundedCornerShape(50.dp))
+
             ) {
                 Indication()
             }
@@ -435,18 +409,11 @@ fun CalendarViewScreen() {
     }
 }
 
-
-
-
 @RequiresApi(Build.VERSION_CODES.O)
 fun getCurrentDate(): String {
     val today = LocalDate.now()
     return "${today.dayOfMonth}-${today.monthValue}-${today.year}"
 }
-
-
-
-
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -454,7 +421,7 @@ fun Finallayout() {
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .background(GrayD),
+            .background(Color(0xFFECECEC)),
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -462,11 +429,12 @@ fun Finallayout() {
             // User Info Section
             Box(
                 modifier = Modifier
-                    .background(Color.Transparent)
+                    .background(Color(0xFFECECEC))
                     .fillMaxWidth()
-                    .padding(top = 20.dp) // Ensure no padding
+                    .padding(top = 20.dp)
+                    .padding(horizontal = 25.dp)
             ) {
-                UserInfo("Kholoud")
+                UserInfo("CodeBlooded")
             }
         }
 
@@ -474,9 +442,9 @@ fun Finallayout() {
             // Display if home or office Section
             Box(
                 modifier = Modifier
-                    .background(Color.Transparent)
+                    .background(Color(0xFFECECEC))
                     .fillMaxWidth()
-                    .padding(vertical = 10.dp) // Ensure no padding
+                    .padding(vertical = 10.dp)
             ) {
                 Displayifhomeoroffice("Home")
             }
@@ -486,8 +454,11 @@ fun Finallayout() {
             // Calendar View Screen
             Box(
                 modifier = Modifier
-                    .background(Color.White)
+                    .background(Color(0xFFECECEC))
                     .fillMaxWidth()
+                    .padding(0.dp)
+                    .clip(RoundedCornerShape(25.dp))
+                    .height(450.dp)
             ) {
                 CalendarViewScreen()
             }
@@ -497,22 +468,15 @@ fun Finallayout() {
             // Requests Section
             Box(
                 modifier = Modifier
-                    .background(GrayD)
+                    .background(Color(0xFFECECEC))
                     .fillMaxWidth()
-                    .padding(vertical = 0.dp) // Ensure no padding
+                    .padding(vertical = 0.dp)
             ) {
                 RequestsSection()
             }
         }
     }
 }
-
-
-
-
-
-
-
 
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -527,7 +491,7 @@ fun RequestsSection() {
     val daysList2 = (currentDay + 1..31).toList()
 
     // State to manage the selected day and expanded state of dropdown
-    var selectedDay by remember { mutableStateOf<Int?>(null) } // Use nullable type for initial placeholder
+    var selectedDay by remember { mutableStateOf<Int?>(null) }
     var changeday by remember { mutableStateOf<Int?>(null) }
     var expanded by remember { mutableStateOf(false) }
     var expanded2 by remember { mutableStateOf(false) }
@@ -535,17 +499,16 @@ fun RequestsSection() {
     Box(
         modifier = Modifier
             .padding(vertical = 15.dp)
-            .clip(RoundedCornerShape(20.dp))
+            .clip(RoundedCornerShape(25.dp))
             .fillMaxWidth()
             .background(Color.White)
     ) {
         Column(
             modifier = Modifier
-                .padding(vertical = 15.dp)
-                .clip(RoundedCornerShape(10.dp))
+                .padding(vertical = 15.dp, horizontal = 25.dp)
+                .clip(RoundedCornerShape(20.dp))
                 .background(Color.White)
         ) {
-
             // First row with text at the start
             Text(
                 text = "Schedule change requests",
@@ -560,14 +523,13 @@ fun RequestsSection() {
                     .fillMaxWidth()
                     .padding(vertical = 10.dp, horizontal = 10.dp)
                     .wrapContentSize(Alignment.TopStart)
-                    .clip(RoundedCornerShape(10.dp))
-
+                    .clip(RoundedCornerShape(8.dp))
             ) {
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .background(GrayD)
-                        .clip(RoundedCornerShape(20.dp)) // Set the corner radius here
+                        .background(Color(0xFFECECEC))
+                        .clip(RoundedCornerShape(20.dp))
                         .padding(vertical = 5.dp, horizontal = 10.dp)
                         .clickable { expanded = true }
                 ) {
@@ -576,14 +538,16 @@ fun RequestsSection() {
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         Text(
-                            text = selectedDay?.toString() ?: "select day",
-                            color = Color.Black,
-                            modifier = Modifier.weight(1f).padding(end = 8.dp)
+                            text = selectedDay?.toString() ?: "Select day",
+                            color = Color.Gray,
+                            modifier = Modifier
+                                .weight(1f)
+                                .padding(end = 8.dp, start = 8.dp)
                         )
                         Image(
-                            painter = painterResource(id = R.drawable.select),
+                            painter = painterResource(id = R.drawable.calendar),
                             contentDescription = "Dropdown Icon",
-                            Modifier.size(20.dp)
+                            Modifier.size(26.dp)
                         )
                     }
                 }
@@ -613,14 +577,13 @@ fun RequestsSection() {
                     .fillMaxWidth()
                     .padding(vertical = 10.dp, horizontal = 10.dp)
                     .wrapContentSize(Alignment.TopStart)
-                    .clip(RoundedCornerShape(10.dp))
-
+                    .clip(RoundedCornerShape(8.dp))
             ) {
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .background(GrayD)
-                        .clip(RoundedCornerShape(8.dp)) // Set the corner radius here
+                        .background(Color(0xFFECECEC))
+                        .clip(RoundedCornerShape(20.dp))
                         .padding(vertical = 5.dp, horizontal = 10.dp)
                         .clickable { expanded2 = true }
                 ) {
@@ -629,14 +592,16 @@ fun RequestsSection() {
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         Text(
-                            text = changeday?.toString() ?: "change to",
-                            color = Color.Black,
-                            modifier = Modifier.weight(1f).padding(end = 8.dp)
+                            text = changeday?.toString() ?: "Change to",
+                            color = Color.Gray,
+                            modifier = Modifier
+                                .weight(1f)
+                                .padding(end = 8.dp, start = 8.dp)
                         )
                         Image(
-                            painter = painterResource(id = R.drawable.select),
+                            painter = painterResource(id = R.drawable.calendar),
                             contentDescription = "Dropdown Icon",
-                            Modifier.size(20.dp)
+                            Modifier.size(26.dp)
                         )
                     }
                 }
@@ -677,6 +642,3 @@ fun RequestsSection() {
         }
     }
 }
-
-
-

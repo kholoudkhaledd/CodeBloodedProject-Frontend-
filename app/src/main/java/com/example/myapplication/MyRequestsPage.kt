@@ -57,16 +57,17 @@ fun MyRequestsPage(requests: List<Request>) {
                         .padding(bottom = 10.dp)
                         .padding(top = 10.dp)
                 )
-                Divider(
-                    modifier = Modifier
-                        .padding(vertical = 8.dp)
-                        .alpha(0.5f)
-                )
 
                 LazyColumn(
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     items(requestList) { request ->
+                        Divider(
+                            modifier = Modifier
+                                .padding(vertical = 8.dp)
+                                .alpha(0.5f)
+                        )
+
                         RequestItem(
                             request = request,
                             onCancelRequest = { requestToCancel ->
@@ -74,11 +75,7 @@ fun MyRequestsPage(requests: List<Request>) {
                             }
                         )
                         Spacer(modifier = Modifier.height(16.dp))
-                        Divider(
-                            modifier = Modifier
-                                .padding(vertical = 8.dp)
-                                .alpha(0.5f)
-                        )
+
                     }
                 }
             }
@@ -88,7 +85,7 @@ fun MyRequestsPage(requests: List<Request>) {
 
 @Composable
 fun RequestItem(request: Request, onCancelRequest: (Request) -> Unit) {
-    Column(modifier = Modifier.fillMaxWidth()) {
+    Column(modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)) {
         Text(
             text = request.time,
             fontSize = 16.sp,

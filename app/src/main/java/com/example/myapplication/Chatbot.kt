@@ -14,10 +14,12 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.myapplication.R
 import kotlinx.coroutines.launch
 
 data class ChatMessage(val message: String, val isUserMessage: Boolean)
@@ -44,7 +46,6 @@ fun ChatScreen() {
     Column(
         modifier = Modifier
             .fillMaxSize()
-//            .background(Color.Red)
             .background(Color(0xFFECECEC))
             .padding(vertical = 20.dp)
     ) {
@@ -87,7 +88,7 @@ fun ChatScreen() {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 16.dp) // Added padding to the Row
+                        .padding(horizontal = 16.dp)
                         .padding(bottom = 16.dp)
                 ) {
                     TextField(
@@ -95,30 +96,32 @@ fun ChatScreen() {
                         onValueChange = { message = it },
                         placeholder = { Text("Message here...") },
                         modifier = Modifier
-                            .weight(1f)
-                            .padding(end = 8.dp)
-                            .height(50.dp) // Adjusted height for the TextField
-                            .background(Color(0xFFE0E0E0), shape = RoundedCornerShape(24.dp)), // Added background color and shape
+                            .fillMaxWidth()
+                            .height(50.dp)
+                            .background(Color(0xFFE0E0E0), shape = RoundedCornerShape(24.dp)),
                         colors = TextFieldDefaults.textFieldColors(
                             containerColor = Color.Transparent,
                             focusedIndicatorColor = Color.Transparent,
                             unfocusedIndicatorColor = Color.Transparent
                         ),
-                        shape = RoundedCornerShape(24.dp)
+                        shape = RoundedCornerShape(24.dp),
+                        trailingIcon = {
+
+                            IconButton(
+                                onClick = { sendMessage() },
+                                modifier = Modifier
+                                    .size(36.dp)
+                                    .background(Color.Transparent)
+                            ) {
+                                Icon(
+                                    painter = painterResource(id = R.drawable.sendgray),
+                                    contentDescription = "Send",
+                                    modifier = Modifier.background(Color.Transparent)
+                                )
+                            }
+
+                        }
                     )
-                    IconButton(
-                        onClick = { sendMessage() },
-                        modifier = Modifier
-                            .size(50.dp) // Adjusted size for the IconButton
-                            .background(Color(0xFF4EA362), shape = CircleShape)
-                            .align(Alignment.CenterVertically)
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.KeyboardArrowUp,
-                            contentDescription = "Send",
-                            tint = Color.White
-                        )
-                    }
                 }
             }
         }

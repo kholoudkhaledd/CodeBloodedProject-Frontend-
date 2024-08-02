@@ -134,7 +134,9 @@ fun NavigationScreen() {
                     Request(id = 2, time = "8m ago", description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec fringilla quam eu faci", status = RequestStatus.PENDING),
                     Request(id = 3, time = "10 days ago", description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec fringilla quam eu faci", status = RequestStatus.APPROVED),
                     Request(id = 4, time = "15 days ago", description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec fringilla quam eu faci", status = RequestStatus.APPROVED),
-                    Request(id = 5, time = "20 days ago", description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec fringilla quam eu faci", status = RequestStatus.DENIED)
+                    Request(id = 5, time = "20 days ago", description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec fringilla quam eu faci", status = RequestStatus.DENIED),
+                    Request(id = 6, time = "20 days ago", description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec fringilla quam eu faci", status = RequestStatus.DENIED)
+
                 )
 
                 MyRequestsPage(requests = sampleRequests)

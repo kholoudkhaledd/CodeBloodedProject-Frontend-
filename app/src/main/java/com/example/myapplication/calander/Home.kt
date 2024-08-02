@@ -60,7 +60,7 @@ fun UserInfo(name: String) {
             Text(
                 text = "Welcome Back",
                 color = Color.Gray,
-                modifier = Modifier.align(Alignment.CenterVertically)
+                modifier = Modifier.align(Alignment.CenterVertically).padding(vertical = 5.dp)
             )
             Text(
                 text = "$currentDay $currentDayName",
@@ -184,6 +184,7 @@ fun Displayifhomeoroffice(place: String) {
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 20.dp)
+            .padding(vertical = 10.dp)
             .clip(RoundedCornerShape(10.dp)),
         color = GreenJC,
         contentColor = Color.White
@@ -291,6 +292,7 @@ fun CalendarViewScreen() {
         modifier = Modifier
             .background(Color.White)
             .clip(RoundedCornerShape(25.dp))
+            .padding(horizontal = 20.dp)
     ) {
         val currentMonthAndYear = "${currentMonth.name.lowercase().capitalize()} $currentYear"
 
@@ -306,7 +308,7 @@ fun CalendarViewScreen() {
                 .fillMaxWidth()) {
                 Text(
                     text = "Working from home/office schedule",
-                    fontSize = 15.sp,
+                    fontSize = 17.sp,
                     fontWeight = FontWeight.SemiBold ,
                     modifier = Modifier
                         .padding(vertical = 15.dp, horizontal = 25.dp)

@@ -9,7 +9,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -19,31 +18,14 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.*
 import com.example.myapplication.notifications.ui.theme.NotificationScreen
 import com.example.myapplication.calander.Finallayout
-
-import com.example.myapplication.notifications.ui.theme.NotificationScreen
 import com.example.myapplication.ui.theme.ChatScreenPreview
-
-import com.example.myapplication.ui.theme.GreenJC
-import com.example.myapplication.ui.theme.MyApplicationTheme
+import com.example.myapplication.ui.theme.ChatScreen
 import com.example.yourapp.ui.MyRequestsPage
 import com.example.yourapp.ui.Request
 import com.example.yourapp.ui.RequestStatus
 
-import com.example.myapplication.ui.theme.Chatbot
 
-
-class MainActivity : ComponentActivity() {
-    @RequiresApi(Build.VERSION_CODES.O)
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContent {
-            MyApplicationTheme {
-                NavigationScreen()
-            }
-        }
-    }
-}
+import androidx.compose.material3.*
 
 
 @Composable
@@ -56,88 +38,42 @@ fun CustomBottomNavigationBar(
             .fillMaxWidth()
             .background(Color.White)
             .padding(horizontal = 16.dp, vertical = 16.dp)
-            .height(56.dp), // Height of the bottom bar
-        horizontalArrangement = Arrangement.SpaceAround, // Distribute space evenly
-        verticalAlignment = Alignment.CenterVertically // Center icons vertically
+            .height(56.dp) // Height of the bottom bar
     ) {
-        // Home button
-        BarIcon(
-            selected = selectedScreen == Screens.Home.screen,
-            iconId = if (selectedScreen == Screens.Home.screen) R.drawable.calandergreen else R.drawable.calandergray,
-            contentDescription = "Home",
-            onClick = { onScreenSelected(Screens.Home.screen) }
-
-        )
-        // Chatbot button
-        BarIcon(
-            selected = selectedScreen == Screens.Chatbot.screen,
-            iconId = if (selectedScreen == Screens.Chatbot.screen) R.drawable.chatggreen else R.drawable.chatgray,
-            contentDescription = "Chatbot",
-            onClick = { onScreenSelected(Screens.Chatbot.screen) }
-        )
-
-        // Requests button
-        BarIcon(
-            selected = selectedScreen == Screens.Requests.screen,
-            iconId = if (selectedScreen == Screens.Requests.screen) R.drawable.requestgreen else R.drawable.requestgray,
-            contentDescription = "Requests",
-            onClick = { onScreenSelected(Screens.Requests.screen) }
-        )
-
-        // Notifications button
-        BarIcon(
-            selected = selectedScreen == Screens.Notification.screen,
-            iconId = if (selectedScreen == Screens.Notification.screen) R.drawable.notifygreen else R.drawable.notifygray,
-            contentDescription = "Notifications",
-            onClick = { onScreenSelected(Screens.Notification.screen) }
-        )
-=======
-            .background(Color(0xFFECECEC))
-    ) {
-        Surface(
-            shape = RoundedCornerShape(topStart = 30.dp, topEnd = 30.dp),
-            color = Color.White,
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(90.dp)
+        Row(
+            modifier = Modifier.fillMaxSize(),
+            horizontalArrangement = Arrangement.SpaceAround, // Distribute space evenly
+            verticalAlignment = Alignment.CenterVertically // Center icons vertically
         ) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
-                horizontalArrangement = Arrangement.SpaceAround,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                BarIcon(
-                    selected = selectedScreen == Screens.Home.screen,
-                    iconId = if (selectedScreen == Screens.Home.screen) R.drawable.calendergreen else R.drawable.calendergray,
-                    contentDescription = "Home",
-                    onClick = { onScreenSelected(Screens.Home.screen) }
-                )
-
-                BarIcon(
-                    selected = selectedScreen == Screens.Chatbot.screen,
-                    iconId = if (selectedScreen == Screens.Chatbot.screen) R.drawable.chatggreen else R.drawable.chatgray,
-                    contentDescription = "Chatbot",
-                    onClick = { onScreenSelected(Screens.Chatbot.screen) }
-                )
-
-                BarIcon(
-                    selected = selectedScreen == Screens.Requests.screen,
-                    iconId = if (selectedScreen == Screens.Requests.screen) R.drawable.requestgreen else R.drawable.requestgray,
-                    contentDescription = "Requests",
-                    onClick = { onScreenSelected(Screens.Requests.screen) }
-                )
-
-                BarIcon(
-                    selected = selectedScreen == Screens.Notification.screen,
-                    iconId = if (selectedScreen == Screens.Notification.screen) R.drawable.notifygreen else R.drawable.notifygray,
-                    contentDescription = "Notifications",
-                    onClick = { onScreenSelected(Screens.Notification.screen) }
-                )
-            }
+            // Home button
+            BarIcon(
+                selected = selectedScreen == Screens.Home.screen,
+                iconId = if (selectedScreen == Screens.Home.screen) R.drawable.calendergreen else R.drawable.calendergray,
+                contentDescription = "Home",
+                onClick = { onScreenSelected(Screens.Home.screen) }
+            )
+            // Chatbot button
+            BarIcon(
+                selected = selectedScreen == Screens.Chatbot.screen,
+                iconId = if (selectedScreen == Screens.Chatbot.screen) R.drawable.chatggreen else R.drawable.chatgray,
+                contentDescription = "Chatbot",
+                onClick = { onScreenSelected(Screens.Chatbot.screen) }
+            )
+            // Requests button
+            BarIcon(
+                selected = selectedScreen == Screens.Requests.screen,
+                iconId = if (selectedScreen == Screens.Requests.screen) R.drawable.requestgreen else R.drawable.requestgray,
+                contentDescription = "Requests",
+                onClick = { onScreenSelected(Screens.Requests.screen) }
+            )
+            // Notifications button
+            BarIcon(
+                selected = selectedScreen == Screens.Notification.screen,
+                iconId = if (selectedScreen == Screens.Notification.screen) R.drawable.notifygreen else R.drawable.notifygray,
+                contentDescription = "Notifications",
+                onClick = { onScreenSelected(Screens.Notification.screen) }
+            )
         }
-
     }
 }
 
@@ -175,11 +111,10 @@ fun NavigationScreen() {
                 selectedScreen = Screens.Home.screen
                 Finallayout()
             }
+            composable(Screens.Chatbot.screen) { ChatScreen() }
+
             composable(Screens.Notification.screen) { NotificationScreen() }
-
-            composable(Screens.Chatbot.screen) { Chatbot() }
-
-            composable(Screens.Chatbot.screen) { ChatScreenPreview() }
+            composable(Screens.Requests.screen) { ChatScreen() }
 
             composable(Screens.Requests.screen) {
                 val sampleRequests = listOf(
@@ -192,7 +127,6 @@ fun NavigationScreen() {
         }
     }
 }
-
 
 @Composable
 fun BarIcon(

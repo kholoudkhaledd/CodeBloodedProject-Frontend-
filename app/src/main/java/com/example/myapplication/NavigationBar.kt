@@ -1,5 +1,6 @@
 package com.example.myapplication
 
+import ChatScreenPreview
 import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -23,7 +24,6 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.*
 import com.example.myapplication.calander.Finallayout
 import com.example.myapplication.notifications.ui.theme.NotificationScreen
-import com.example.myapplication.ui.theme.ChatScreenPreview
 import com.example.myapplication.ui.theme.GrayD
 import com.example.myapplication.ui.theme.GreenJC
 import com.example.myapplication.ui.theme.MyApplicationTheme

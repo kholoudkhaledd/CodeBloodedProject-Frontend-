@@ -1,5 +1,3 @@
-package com.example.myapplication.ui.theme
-
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -7,17 +5,19 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.myapplication.R
 import kotlinx.coroutines.launch
 
 data class ChatMessage(val message: String, val isUserMessage: Boolean)
@@ -29,6 +29,7 @@ fun ChatScreen() {
     var messages by remember { mutableStateOf(listOf<ChatMessage>()) }
     val listState = rememberLazyListState()
     val coroutineScope = rememberCoroutineScope()
+    val keyboardController = LocalSoftwareKeyboardController.current
 
     fun sendMessage() {
         if (message.isNotBlank()) {
@@ -38,17 +39,19 @@ fun ChatScreen() {
             coroutineScope.launch {
                 listState.animateScrollToItem(messages.size - 1)
             }
+            keyboardController?.hide() // Dismiss the keyboard
         }
     }
+
+    // Determine which icon to use based on whether there is text in the message
+    val iconRes = if (message.isNotBlank()) R.drawable.send2 else R.drawable.send
 
     Column(
         modifier = Modifier
             .fillMaxSize()
-//            .background(Color.Red)
             .background(Color(0xFFECECEC))
             .padding(vertical = 20.dp)
     ) {
-        // Card that encapsulates header and messages
         Card(
             modifier = Modifier
                 .fillMaxWidth()
@@ -57,7 +60,6 @@ fun ChatScreen() {
             colors = CardDefaults.cardColors(containerColor = Color.White)
         ) {
             Column {
-                // Chatbot header
                 Text(
                     text = "Chatbot",
                     fontSize = 24.sp,
@@ -67,7 +69,6 @@ fun ChatScreen() {
                         .padding(vertical = 16.dp)
                 )
 
-                // Chat messages
                 LazyColumn(
                     state = listState,
                     modifier = Modifier
@@ -83,42 +84,42 @@ fun ChatScreen() {
                     }
                 }
 
-                // Message input
-                Row(
+                Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 16.dp) // Added padding to the Row
+                        .padding(horizontal = 16.dp)
                         .padding(bottom = 16.dp)
+                        .height(50.dp)
                 ) {
                     TextField(
                         value = message,
                         onValueChange = { message = it },
                         placeholder = { Text("Message here...") },
                         modifier = Modifier
-                            .weight(1f)
-                            .padding(end = 8.dp)
-                            .height(50.dp) // Adjusted height for the TextField
-                            .background(Color(0xFFE0E0E0), shape = RoundedCornerShape(24.dp)), // Added background color and shape
+                            .fillMaxWidth()
+                            .background(Color(0xFFE0E0E0), shape = RoundedCornerShape(24.dp)),
                         colors = TextFieldDefaults.textFieldColors(
                             containerColor = Color.Transparent,
                             focusedIndicatorColor = Color.Transparent,
                             unfocusedIndicatorColor = Color.Transparent
                         ),
-                        shape = RoundedCornerShape(24.dp)
+                        shape = RoundedCornerShape(24.dp),
+                        trailingIcon = {
+                            IconButton(
+                                onClick = { sendMessage() },
+                                modifier = Modifier
+                                    .size(36.dp)
+                            ) {
+                                Icon(
+                                    painter = painterResource(id = iconRes),
+                                    contentDescription = "Send",
+                                    tint = Color.Unspecified, // No tint, use the PNG's original color
+                                    modifier = Modifier
+                                        .size(36.dp)
+                                )
+                            }
+                        }
                     )
-                    IconButton(
-                        onClick = { sendMessage() },
-                        modifier = Modifier
-                            .size(50.dp) // Adjusted size for the IconButton
-                            .background(Color(0xFF4EA362), shape = CircleShape)
-                            .align(Alignment.CenterVertically)
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.KeyboardArrowUp,
-                            contentDescription = "Send",
-                            tint = Color.White
-                        )
-                    }
                 }
             }
         }

@@ -52,7 +52,7 @@ fun CustomBottomNavigationBar(
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .background(Color(0xFFECECEC))
+            .background(Color(0xFFECECEC)) //put in colors.xml
     ) {
         Surface(
             shape = RoundedCornerShape(topStart = 30.dp, topEnd = 30.dp),
@@ -107,7 +107,7 @@ fun NavigationScreen() {
     val selectedScreen = remember { mutableStateOf(Screens.Home.screen) }
 
     Scaffold(
-        containerColor = Color(0xFFECECEC),
+        containerColor = Color(0xFFECECEC), //colors.xml
         bottomBar = {
             CustomBottomNavigationBar(
                 selectedScreen = selectedScreen.value,
@@ -155,7 +155,7 @@ fun BarIcon(
             .size(50.dp)
             .clickable(onClick = onClick)
             .padding(8.dp)
-            .background(Color.Transparent) // Ensures background is transparent
+            .background(Color.Transparent) //hoisting plz
     ) {
         val iconPainter = painterResource(id = iconId)
         Icon(
@@ -163,17 +163,17 @@ fun BarIcon(
             contentDescription = contentDescription,
             modifier = Modifier
                 .align(Alignment.Center)
-                .size(50.dp) // Adjust size of the icon as needed
-                .padding(bottom = 8.dp), // Adds space for the dot indicator
-            tint = if (selected) Color(0xFF76B31B) else Color(0xFF8F8EA2) // Change color based on selection
+                .size(50.dp)
+                .padding(bottom = 8.dp),
+            tint = if (selected) Color(0xFF76B31B) else Color(0xFF8F8EA2)
         )
 
         if (selected) {
             Box(
                 modifier = Modifier
-                    .align(Alignment.BottomCenter) // Align dot at the bottom center of the icon
-                    .size(4.dp) // Size of the dot
-                    .background(Color(0xFF76B31B), shape = CircleShape) // Color and shape of the dot
+                    .align(Alignment.BottomCenter)
+                    .size(4.dp)
+                    .background(Color(0xFF76B31B), shape = CircleShape)
             )
         }
     }

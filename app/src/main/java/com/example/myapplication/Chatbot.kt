@@ -39,11 +39,10 @@ fun ChatScreen() {
             coroutineScope.launch {
                 listState.animateScrollToItem(messages.size - 1)
             }
-            keyboardController?.hide() // Dismiss the keyboard
+            keyboardController?.hide()
         }
     }
 
-    // Determine which icon to use based on whether there is text in the message
     val iconRes = if (message.isNotBlank()) R.drawable.send2 else R.drawable.send
 
     Column(
@@ -113,7 +112,7 @@ fun ChatScreen() {
                                 Icon(
                                     painter = painterResource(id = iconRes),
                                     contentDescription = "Send",
-                                    tint = Color.Unspecified, // No tint, use the PNG's original color
+                                    tint = Color.Unspecified,
                                     modifier = Modifier
                                         .size(36.dp)
                                 )

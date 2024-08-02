@@ -25,13 +25,13 @@ enum class RequestStatus {
 }
 
 @Composable
-fun MyRequestsPage(requests: List<Request>) {
+fun MyRequestsPage(requests: List<Request>) { //seperate files
     var requestList by remember { mutableStateOf(requests) }
 
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFF5F5F5))
+            .background(Color(0xFFF5F5F5)) //colors
             .statusBarsPadding(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -57,16 +57,17 @@ fun MyRequestsPage(requests: List<Request>) {
                         .padding(bottom = 10.dp)
                         .padding(top = 10.dp)
                 )
-                Divider(
-                    modifier = Modifier
-                        .padding(vertical = 8.dp)
-                        .alpha(0.5f)
-                )
+
 
                 LazyColumn(
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     items(requestList) { request ->
+                        Divider(
+                            modifier = Modifier
+                                .padding(vertical = 8.dp)
+                                .alpha(0.5f)
+                        )
                         RequestItem(
                             request = request,
                             onCancelRequest = { requestToCancel ->
@@ -74,11 +75,7 @@ fun MyRequestsPage(requests: List<Request>) {
                             }
                         )
                         Spacer(modifier = Modifier.height(16.dp))
-                        Divider(
-                            modifier = Modifier
-                                .padding(vertical = 8.dp)
-                                .alpha(0.5f)
-                        )
+
                     }
                 }
             }

@@ -140,7 +140,7 @@ fun CalendarViewScreenPreview() {
                 .fillMaxWidth()
                 .padding(top = 5.dp)
         ) {
-            UserInfo("CodeBlooded")
+            UserInfo("Mohammed Fouad")
         }
 
         // Display if home or office Section
@@ -183,7 +183,7 @@ fun Displayifhomeoroffice(place: String) {
     Surface(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 20.dp)
+            .padding(horizontal = 20.dp, vertical = 10.dp)
             .clip(RoundedCornerShape(10.dp)),
         color = GreenJC,
         contentColor = Color.White
@@ -434,7 +434,7 @@ fun Finallayout() {
                     .padding(top = 20.dp)
                     .padding(horizontal = 25.dp)
             ) {
-                UserInfo("CodeBlooded")
+                UserInfo("Mohammed Fouad")
             }
         }
 
@@ -555,7 +555,9 @@ fun RequestsSection() {
                 DropdownMenu(
                     expanded = expanded,
                     onDismissRequest = { expanded = false },
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .height(330.dp)
+//                        .padding(start = 50.dp, end = 50.dp)
                 ) {
                     daysList.forEach { day ->
                         DropdownMenuItem(
@@ -564,7 +566,7 @@ fun RequestsSection() {
                                 selectedDay = day
                                 expanded = false
                             },
-                            modifier = Modifier.background(Color.Gray)
+                            modifier = Modifier.background(Color.White).height(50.dp)
                         )
                     }
                 }
@@ -609,7 +611,8 @@ fun RequestsSection() {
                 DropdownMenu(
                     expanded = expanded2,
                     onDismissRequest = { expanded2 = false },
-                    modifier = Modifier.fillMaxWidth()
+                    modifier =  Modifier
+                        .height(330.dp)
                 ) {
                     daysList2.forEach { day ->
                         DropdownMenuItem(
@@ -618,7 +621,7 @@ fun RequestsSection() {
                                 changeday = day
                                 expanded2 = false
                             },
-                            modifier = Modifier.background(Color.Gray)
+                            modifier = Modifier.background(Color.White).height(50.dp)
                         )
                     }
                 }

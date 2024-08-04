@@ -60,8 +60,14 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     implementation(libs.androidx.navigation.compose)
-//    implementation(libs.androidx.appcompat)
-//    implementation(libs.material)
+
+
+    implementation(libs.coil.compose)
+    implementation(libs.coil.gif)
+    implementation(libs.landscapist.glide)
+    implementation (libs.coil.compose.v240)
+    implementation (libs.compose)
+
     implementation(libs.androidx.activity)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

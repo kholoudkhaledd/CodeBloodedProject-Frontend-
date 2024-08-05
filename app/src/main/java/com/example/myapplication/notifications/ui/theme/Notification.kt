@@ -2,6 +2,8 @@ package com.example.myapplication.notifications.ui.theme
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -22,7 +24,6 @@ fun NotificationScreen() {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .fillMaxWidth()
             .background(Color(0xFFF5F5F5)) // Background color matching MyRequestsPage
             .statusBarsPadding()
     ) {
@@ -31,33 +32,33 @@ fun NotificationScreen() {
             modifier = Modifier
                 .fillMaxSize() // Fill max width of the screen
                 .padding(bottom = 24.dp), // Padding to ensure the card background is visible
-            colors = CardDefaults.cardColors(containerColor = Color.White),
-//            elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+            colors = CardDefaults.cardColors(containerColor = Color.White)
         ) {
             Column(
-                modifier = Modifier.padding(top = 16.dp)
+                modifier = Modifier.fillMaxSize()
             ) {
                 Text(
                     text = "Notifications",
                     fontSize = 24.sp,
                     modifier = Modifier
+                        .padding(16.dp) // Padding around the title
                         .align(Alignment.CenterHorizontally)
-                        .padding(bottom = 20.dp)
                 )
-                NotificationCard(
-                    backgroundColor = Color(0xFFE8F5E9),
-                    stripeColor = Color(0xFF19C588),
-                    icon = R.drawable.icon_check,
-                    text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec fringilla quam eu facilisis mollis."
-                )
-                Spacer(modifier = Modifier.height(16.dp))
-                NotificationCard(
-                    backgroundColor = Color(0xFFFFEBEE),
-                    stripeColor = Color(0xFFF44336),
-                    icon = R.drawable.icon_deny,
-                    text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec fringilla quam eu facilisis mollis."
-                )
-                Spacer(modifier = Modifier.height(16.dp))
+
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxSize()
+                ) {
+                    items(notificationItems) { notification ->
+                        NotificationCard(
+                            backgroundColor = notification.backgroundColor,
+                            stripeColor = notification.stripeColor,
+                            icon = notification.icon,
+                            text = notification.text
+                        )
+                        Spacer(modifier = Modifier.height(16.dp))
+                    }
+                }
             }
         }
     }
@@ -75,14 +76,9 @@ fun NotificationCard(
         modifier = Modifier
             .fillMaxWidth() // Fill max width of the screen
             .height(90.dp), // Fixed height for all cards
-        colors = CardDefaults.cardColors(containerColor = backgroundColor),
-//        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+        colors = CardDefaults.cardColors(containerColor = backgroundColor)
     ) {
-        Row(
-            modifier = Modifier
-                .fillMaxSize(),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
+        Row() {
             Box(
                 modifier = Modifier
                     .width(4.dp)
@@ -116,3 +112,48 @@ fun NotificationCard(
 fun NotificationScreenPreview() {
     NotificationScreen()
 }
+
+// Example data for preview
+private val notificationItems = listOf(
+    NotificationData(
+        backgroundColor = Color(0xFFE8F5E9),
+        stripeColor = Color(0xFF19C588),
+        icon = R.drawable.icon_check,
+        text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec fringilla quam eu facilisis mollis."
+    ),
+    NotificationData(
+        backgroundColor = Color(0xFFFFEBEE),
+        stripeColor = Color(0xFFF44336),
+        icon = R.drawable.icon_deny,
+        text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec fringilla quam eu facilisis mollis."
+    ),    NotificationData(
+        backgroundColor = Color(0xFFE8F5E9),
+        stripeColor = Color(0xFF19C588),
+        icon = R.drawable.icon_check,
+        text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec fringilla quam eu facilisis mollis."
+    ),
+    NotificationData(
+        backgroundColor = Color(0xFFFFEBEE),
+        stripeColor = Color(0xFFF44336),
+        icon = R.drawable.icon_deny,
+        text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec fringilla quam eu facilisis mollis."
+    ),    NotificationData(
+        backgroundColor = Color(0xFFE8F5E9),
+        stripeColor = Color(0xFF19C588),
+        icon = R.drawable.icon_check,
+        text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec fringilla quam eu facilisis mollis."
+    ),
+    NotificationData(
+        backgroundColor = Color(0xFFFFEBEE),
+        stripeColor = Color(0xFFF44336),
+        icon = R.drawable.icon_deny,
+        text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec fringilla quam eu facilisis mollis."
+    )
+)
+
+data class NotificationData(
+    val backgroundColor: Color,
+    val stripeColor: Color,
+    val icon: Int,
+    val text: String
+)

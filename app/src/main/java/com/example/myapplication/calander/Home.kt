@@ -57,90 +57,90 @@ import java.time.Year
 import java.time.format.DateTimeFormatter
 
 // USER INFO SECTION
-@RequiresApi(Build.VERSION_CODES.O)
-@Composable
-fun UserInfo(name: String) {
-    // Get current date
-    val currentDate = LocalDate.now()
-    val currentDay = currentDate.dayOfMonth.toString()
-    val currentDayName = currentDate.format(DateTimeFormatter.ofPattern("E")) // Short day name
-    val currentMonthAndYear = "${currentDate.month.name.lowercase().capitalize().substring(0, 3)} ${currentDate.year}" // Short month name
+//@RequiresApi(Build.VERSION_CODES.O)
+//@Composable
+//fun UserInfo(name: String) {
+//    // Get current date
+//    val currentDate = LocalDate.now()
+//    val currentDay = currentDate.dayOfMonth.toString()
+//    val currentDayName = currentDate.format(DateTimeFormatter.ofPattern("E")) // Short day name
+//    val currentMonthAndYear = "${currentDate.month.name.lowercase().capitalize().substring(0, 3)} ${currentDate.year}" // Short month name
+//
+//    Column(
+//        modifier = Modifier
+//            .padding(5.dp)
+//            .fillMaxWidth()
+//    ) {
+//        // First row
+//        Row(
+//            modifier = Modifier.fillMaxWidth(),
+//            horizontalArrangement = Arrangement.SpaceBetween,
+//            verticalAlignment = Alignment.CenterVertically
+//        ) {
+//            Text(
+//                text = "Welcome Back",
+//                color = Color.Gray,
+//                modifier = Modifier.align(Alignment.CenterVertically)
+//            )
+//            Text(
+//                text = "$currentDay $currentDayName",
+//                color = Color.Gray,
+//                modifier = Modifier.align(Alignment.CenterVertically)
+//            )
+//        }
+//
+//        // Second row
+//        Row(
+//            modifier = Modifier.fillMaxWidth(),
+//            horizontalArrangement = Arrangement.SpaceBetween,
+//            verticalAlignment = Alignment.CenterVertically
+//        ) {
+//            Text(
+//                text = name,
+//                fontWeight = FontWeight.Bold,
+//                fontSize = 20.sp,
+//                modifier = Modifier.align(Alignment.CenterVertically)
+//            )
+//            Text(
+//                text = currentMonthAndYear,
+//                modifier = Modifier.align(Alignment.CenterVertically)
+//            )
+//        }
+//    }
+//}
 
-    Column(
-        modifier = Modifier
-            .padding(5.dp)
-            .fillMaxWidth()
-    ) {
-        // First row
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(
-                text = "Welcome Back",
-                color = Color.Gray,
-                modifier = Modifier.align(Alignment.CenterVertically)
-            )
-            Text(
-                text = "$currentDay $currentDayName",
-                color = Color.Gray,
-                modifier = Modifier.align(Alignment.CenterVertically)
-            )
-        }
-
-        // Second row
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(
-                text = name,
-                fontWeight = FontWeight.Bold,
-                fontSize = 20.sp,
-                modifier = Modifier.align(Alignment.CenterVertically)
-            )
-            Text(
-                text = currentMonthAndYear,
-                modifier = Modifier.align(Alignment.CenterVertically)
-            )
-        }
-    }
-}
-
-
-@Composable
-fun Indication() {
-    Row(
-        modifier = Modifier
-            .padding(horizontal = 25.dp, vertical = 10.dp)
-            .fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Box(
-            modifier = Modifier
-                .size(14.dp)
-                .background(Darkblue, shape = CircleShape)
-        )
-        Spacer(modifier = Modifier.width(12.dp))
-        Text(
-            text = "From Office",
-            fontSize = 15.sp,
-        )
-        Spacer(modifier = Modifier.width(35.dp))
-        Box(
-            modifier = Modifier
-                .size(14.dp)
-                .background(GreenJC, shape = CircleShape)
-        )
-        Spacer(modifier = Modifier.width(12.dp))
-        Text(
-            text = "From Home",
-            fontSize = 15.sp
-        )
-    }
-}
+//
+//@Composable
+//fun Indication() {
+//    Row(
+//        modifier = Modifier
+//            .padding(horizontal = 25.dp, vertical = 10.dp)
+//            .fillMaxWidth(),
+//        verticalAlignment = Alignment.CenterVertically
+//    ) {
+//        Box(
+//            modifier = Modifier
+//                .size(14.dp)
+//                .background(Darkblue, shape = CircleShape)
+//        )
+//        Spacer(modifier = Modifier.width(12.dp))
+//        Text(
+//            text = "From Office",
+//            fontSize = 15.sp,
+//        )
+//        Spacer(modifier = Modifier.width(35.dp))
+//        Box(
+//            modifier = Modifier
+//                .size(14.dp)
+//                .background(GreenJC, shape = CircleShape)
+//        )
+//        Spacer(modifier = Modifier.width(12.dp))
+//        Text(
+//            text = "From Home",
+//            fontSize = 15.sp
+//        )
+//    }
+//}
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true)
@@ -197,103 +197,103 @@ fun CalendarViewScreenPreview() {
     }
 }
 
-// LABEL HOME OR OFFICE
-@Composable
-fun Displayifhomeoroffice(place: String) {
-    Surface(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 20.dp, vertical = 10.dp)
-            .clip(RoundedCornerShape(10.dp)),
-        color = GreenJC,
-        contentColor = Color.White
-    ) {
-        Text(
-            text = "Today you are working from $place",
-            fontSize = 16.sp,
-            modifier = Modifier
-                .padding(vertical = 12.dp, horizontal = 18.dp)
-        )
-    }
-}
+//// LABEL HOME OR OFFICE
+//@Composable
+//fun Displayifhomeoroffice(place: String) {
+//    Surface(
+//        modifier = Modifier
+//            .fillMaxWidth()
+//            .padding(horizontal = 20.dp, vertical = 10.dp)
+//            .clip(RoundedCornerShape(10.dp)),
+//        color = GreenJC,
+//        contentColor = Color.White
+//    ) {
+//        Text(
+//            text = "Today you are working from $place",
+//            fontSize = 16.sp,
+//            modifier = Modifier
+//                .padding(vertical = 12.dp, horizontal = 18.dp)
+//        )
+//    }
+//}
 
-@RequiresApi(Build.VERSION_CODES.O)
-@Composable
-fun CustomCalendar(
-    modifier: Modifier = Modifier,
-    currentMonth: Month,
-    currentYear: Int,
-    selectedDate: String,
-    onDateSelected: (String) -> Unit
-) {
-    val daysOfWeek = listOf("S", "M", "T", "W", "T", "F", "S")
-    val daysInMonth = currentMonth.length(Year.of(currentYear).isLeap)
-    val startOfMonth = LocalDate.of(currentYear, currentMonth, 1)
-    val startDayOfWeek = startOfMonth.dayOfWeek.value % 7
-    val totalCells = (startDayOfWeek + daysInMonth + 6) / 7 * 7
-
-    Column(
-        modifier = modifier
-            .background(Color.White)
-            .padding(0.dp) // Remove any extra padding
-    ) {
-        // Header Row with Days of Week
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-        ) {
-            daysOfWeek.forEach { day ->
-                Text(
-                    text = day,
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(4.dp), // Adjust padding to fit smaller size
-                    fontWeight = FontWeight.SemiBold,
-                    textAlign = TextAlign.Center,
-                    fontSize = 12.sp // Adjust font size for smaller header
-                )
-            }
-        }
-
-        // Calendar Days
-        for (rowIndex in 0 until totalCells / 7) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(43.dp)
-            ) {
-                for (columnIndex in 0 until 7) {
-                    val dayIndex = rowIndex * 7 + columnIndex - startDayOfWeek + 1
-                    if (dayIndex in 1..daysInMonth) {
-                        val dateString = "$dayIndex-${currentMonth.value}-$currentYear"
-                        val isSelected = dateString == selectedDate
-                        Box(
-                            modifier = Modifier
-                                .weight(1f)
-                                .aspectRatio(1f) // Ensures each cell is square
-                                .padding(1.dp) // Adjust padding to make boxes smaller
-                                .clickable { onDateSelected(dateString) },
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Text(
-                                text = dayIndex.toString(),
-                                color = if (isSelected) Color.Blue else Color.Black,
-                                fontSize = 15.sp // Adjust font size for smaller days
-                            )
-                        }
-                    } else {
-                        Box(
-                            modifier = Modifier
-                                .weight(1f)
-                                .aspectRatio(1f) // Empty box for padding
-                        )
-                    }
-                }
-            }
-        }
-        Spacer(modifier = Modifier.height(8.dp)) // Adjusted height for smaller spacing
-    }
-}
+//@RequiresApi(Build.VERSION_CODES.O)
+//@Composable
+//fun CustomCalendar(
+//    modifier: Modifier = Modifier,
+//    currentMonth: Month,
+//    currentYear: Int,
+//    selectedDate: String,
+//    onDateSelected: (String) -> Unit
+//) {
+//    val daysOfWeek = listOf("S", "M", "T", "W", "T", "F", "S")
+//    val daysInMonth = currentMonth.length(Year.of(currentYear).isLeap)
+//    val startOfMonth = LocalDate.of(currentYear, currentMonth, 1)
+//    val startDayOfWeek = startOfMonth.dayOfWeek.value % 7
+//    val totalCells = (startDayOfWeek + daysInMonth + 6) / 7 * 7
+//
+//    Column(
+//        modifier = modifier
+//            .background(Color.White)
+//            .padding(0.dp) // Remove any extra padding
+//    ) {
+//        // Header Row with Days of Week
+//        Row(
+//            modifier = Modifier
+//                .fillMaxWidth()
+//        ) {
+//            daysOfWeek.forEach { day ->
+//                Text(
+//                    text = day,
+//                    modifier = Modifier
+//                        .weight(1f)
+//                        .padding(4.dp), // Adjust padding to fit smaller size
+//                    fontWeight = FontWeight.SemiBold,
+//                    textAlign = TextAlign.Center,
+//                    fontSize = 12.sp // Adjust font size for smaller header
+//                )
+//            }
+//        }
+//
+//        // Calendar Days
+//        for (rowIndex in 0 until totalCells / 7) {
+//            Row(
+//                modifier = Modifier
+//                    .fillMaxWidth()
+//                    .height(43.dp)
+//            ) {
+//                for (columnIndex in 0 until 7) {
+//                    val dayIndex = rowIndex * 7 + columnIndex - startDayOfWeek + 1
+//                    if (dayIndex in 1..daysInMonth) {
+//                        val dateString = "$dayIndex-${currentMonth.value}-$currentYear"
+//                        val isSelected = dateString == selectedDate
+//                        Box(
+//                            modifier = Modifier
+//                                .weight(1f)
+//                                .aspectRatio(1f) // Ensures each cell is square
+//                                .padding(1.dp) // Adjust padding to make boxes smaller
+//                                .clickable { onDateSelected(dateString) },
+//                            contentAlignment = Alignment.Center
+//                        ) {
+//                            Text(
+//                                text = dayIndex.toString(),
+//                                color = if (isSelected) Color.Blue else Color.Black,
+//                                fontSize = 15.sp // Adjust font size for smaller days
+//                            )
+//                        }
+//                    } else {
+//                        Box(
+//                            modifier = Modifier
+//                                .weight(1f)
+//                                .aspectRatio(1f) // Empty box for padding
+//                        )
+//                    }
+//                }
+//            }
+//        }
+//        Spacer(modifier = Modifier.height(8.dp)) // Adjusted height for smaller spacing
+//    }
+//}
 
 
 
@@ -498,170 +498,170 @@ fun Finallayout() {
     }
 }
 
-
-@RequiresApi(Build.VERSION_CODES.O)
-@Composable
-fun RequestsSection() {
-    // Get the current date and day
-    val currentDate = LocalDate.now()
-    val currentDay = currentDate.dayOfMonth
-
-    // Create a list of days greater than the current day
-    val daysList = (currentDay + 1..31).toList()
-    val daysList2 = (currentDay + 1..31).toList()
-
-    // State to manage the selected day and expanded state of dropdown
-    var selectedDay by remember { mutableStateOf<Int?>(null) }
-    var changeday by remember { mutableStateOf<Int?>(null) }
-    var expanded by remember { mutableStateOf(false) }
-    var expanded2 by remember { mutableStateOf(false) }
-
-    Box(
-        modifier = Modifier
-            .padding(vertical = 15.dp)
-            .clip(RoundedCornerShape(25.dp))
-            .fillMaxWidth()
-            .background(Color.White)
-    ) {
-        Column(
-            modifier = Modifier
-                .padding(vertical = 15.dp, horizontal = 25.dp)
-                .clip(RoundedCornerShape(20.dp))
-                .background(Color.White)
-        ) {
-            // First row with text at the start
-            Text(
-                text = "Schedule change requests",
-                fontWeight = FontWeight.SemiBold,
-                fontSize = 18.sp,
-                modifier = Modifier.padding(vertical = 10.dp, horizontal = 10.dp)
-            )
-
-            // Selected Day
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 10.dp, horizontal = 10.dp)
-                    .wrapContentSize(Alignment.TopStart)
-                    .clip(RoundedCornerShape(8.dp))
-            ) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(Color(0xFFECECEC))
-                        .clip(RoundedCornerShape(20.dp))
-                        .padding(vertical = 5.dp, horizontal = 10.dp)
-                        .clickable { expanded = true }
-                ) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Text(
-                            text = selectedDay?.toString() ?: "Select day",
-                            color = Color.Gray,
-                            modifier = Modifier
-                                .weight(1f)
-                                .padding(end = 8.dp, start = 8.dp)
-                        )
-                        Image(
-                            painter = painterResource(id = R.drawable.calendar),
-                            contentDescription = "Dropdown Icon",
-                            Modifier.size(26.dp)
-                        )
-                    }
-                }
-
-                DropdownMenu(
-                    expanded = expanded,
-                    onDismissRequest = { expanded = false },
-                    modifier = Modifier
-                        .height(330.dp)
-//                        .padding(start = 50.dp, end = 50.dp)
-                ) {
-                    daysList.forEach { day ->
-                        DropdownMenuItem(
-                            text = { Text(day.toString(), color = Color.Black) },
-                            onClick = {
-                                selectedDay = day
-                                expanded = false
-                            },
-                            modifier = Modifier.background(Color.White).height(50.dp)
-                        )
-                    }
-                }
-            }
-
-            // Changed Day
-            // Second row with a dropdown box
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 10.dp, horizontal = 10.dp)
-                    .wrapContentSize(Alignment.TopStart)
-                    .clip(RoundedCornerShape(8.dp))
-            ) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(Color(0xFFECECEC))
-                        .clip(RoundedCornerShape(20.dp))
-                        .padding(vertical = 5.dp, horizontal = 10.dp)
-                        .clickable { expanded2 = true }
-                ) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Text(
-                            text = changeday?.toString() ?: "Change to",
-                            color = Color.Gray,
-                            modifier = Modifier
-                                .weight(1f)
-                                .padding(end = 8.dp, start = 8.dp)
-                        )
-                        Image(
-                            painter = painterResource(id = R.drawable.calendar),
-                            contentDescription = "Dropdown Icon",
-                            Modifier.size(26.dp)
-                        )
-                    }
-                }
-
-                DropdownMenu(
-                    expanded = expanded2,
-                    onDismissRequest = { expanded2 = false },
-                    modifier =  Modifier
-                        .height(330.dp)
-                ) {
-                    daysList2.forEach { day ->
-                        DropdownMenuItem(
-                            text = { Text(day.toString(), color = Color.Black) },
-                            onClick = {
-                                changeday = day
-                                expanded2 = false
-                            },
-                            modifier = Modifier.background(Color.White).height(50.dp)
-                        )
-                    }
-                }
-            }
-
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .wrapContentSize(Alignment.TopStart)
-            ) {
-                Button(
-                    onClick = { },
-                    colors = ButtonDefaults.buttonColors(Color.LightGray),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 10.dp, horizontal = 10.dp)
-                ) {
-                    Text("Submit")
-                }
-            }
-        }
-    }
-}
+//
+//@RequiresApi(Build.VERSION_CODES.O)
+//@Composable
+//fun RequestsSection() {
+//    // Get the current date and day
+//    val currentDate = LocalDate.now()
+//    val currentDay = currentDate.dayOfMonth
+//
+//    // Create a list of days greater than the current day
+//    val daysList = (currentDay + 1..31).toList()
+//    val daysList2 = (currentDay + 1..31).toList()
+//
+//    // State to manage the selected day and expanded state of dropdown
+//    var selectedDay by remember { mutableStateOf<Int?>(null) }
+//    var changeday by remember { mutableStateOf<Int?>(null) }
+//    var expanded by remember { mutableStateOf(false) }
+//    var expanded2 by remember { mutableStateOf(false) }
+//
+//    Box(
+//        modifier = Modifier
+//            .padding(vertical = 15.dp)
+//            .clip(RoundedCornerShape(25.dp))
+//            .fillMaxWidth()
+//            .background(Color.White)
+//    ) {
+//        Column(
+//            modifier = Modifier
+//                .padding(vertical = 15.dp, horizontal = 25.dp)
+//                .clip(RoundedCornerShape(20.dp))
+//                .background(Color.White)
+//        ) {
+//            // First row with text at the start
+//            Text(
+//                text = "Schedule change requests",
+//                fontWeight = FontWeight.SemiBold,
+//                fontSize = 18.sp,
+//                modifier = Modifier.padding(vertical = 10.dp, horizontal = 10.dp)
+//            )
+//
+//            // Selected Day
+//            Box(
+//                modifier = Modifier
+//                    .fillMaxWidth()
+//                    .padding(vertical = 10.dp, horizontal = 10.dp)
+//                    .wrapContentSize(Alignment.TopStart)
+//                    .clip(RoundedCornerShape(8.dp))
+//            ) {
+//                Box(
+//                    modifier = Modifier
+//                        .fillMaxWidth()
+//                        .background(Color(0xFFECECEC))
+//                        .clip(RoundedCornerShape(20.dp))
+//                        .padding(vertical = 5.dp, horizontal = 10.dp)
+//                        .clickable { expanded = true }
+//                ) {
+//                    Row(
+//                        verticalAlignment = Alignment.CenterVertically,
+//                        modifier = Modifier.fillMaxWidth()
+//                    ) {
+//                        Text(
+//                            text = selectedDay?.toString() ?: "Select day",
+//                            color = Color.Gray,
+//                            modifier = Modifier
+//                                .weight(1f)
+//                                .padding(end = 8.dp, start = 8.dp)
+//                        )
+//                        Image(
+//                            painter = painterResource(id = R.drawable.calendar),
+//                            contentDescription = "Dropdown Icon",
+//                            Modifier.size(26.dp)
+//                        )
+//                    }
+//                }
+//
+//                DropdownMenu(
+//                    expanded = expanded,
+//                    onDismissRequest = { expanded = false },
+//                    modifier = Modifier
+//                        .height(330.dp)
+////                        .padding(start = 50.dp, end = 50.dp)
+//                ) {
+//                    daysList.forEach { day ->
+//                        DropdownMenuItem(
+//                            text = { Text(day.toString(), color = Color.Black) },
+//                            onClick = {
+//                                selectedDay = day
+//                                expanded = false
+//                            },
+//                            modifier = Modifier.background(Color.White).height(50.dp)
+//                        )
+//                    }
+//                }
+//            }
+//
+//            // Changed Day
+//            // Second row with a dropdown box
+//            Box(
+//                modifier = Modifier
+//                    .fillMaxWidth()
+//                    .padding(vertical = 10.dp, horizontal = 10.dp)
+//                    .wrapContentSize(Alignment.TopStart)
+//                    .clip(RoundedCornerShape(8.dp))
+//            ) {
+//                Box(
+//                    modifier = Modifier
+//                        .fillMaxWidth()
+//                        .background(Color(0xFFECECEC))
+//                        .clip(RoundedCornerShape(20.dp))
+//                        .padding(vertical = 5.dp, horizontal = 10.dp)
+//                        .clickable { expanded2 = true }
+//                ) {
+//                    Row(
+//                        verticalAlignment = Alignment.CenterVertically,
+//                        modifier = Modifier.fillMaxWidth()
+//                    ) {
+//                        Text(
+//                            text = changeday?.toString() ?: "Change to",
+//                            color = Color.Gray,
+//                            modifier = Modifier
+//                                .weight(1f)
+//                                .padding(end = 8.dp, start = 8.dp)
+//                        )
+//                        Image(
+//                            painter = painterResource(id = R.drawable.calendar),
+//                            contentDescription = "Dropdown Icon",
+//                            Modifier.size(26.dp)
+//                        )
+//                    }
+//                }
+//
+//                DropdownMenu(
+//                    expanded = expanded2,
+//                    onDismissRequest = { expanded2 = false },
+//                    modifier =  Modifier
+//                        .height(330.dp)
+//                ) {
+//                    daysList2.forEach { day ->
+//                        DropdownMenuItem(
+//                            text = { Text(day.toString(), color = Color.Black) },
+//                            onClick = {
+//                                changeday = day
+//                                expanded2 = false
+//                            },
+//                            modifier = Modifier.background(Color.White).height(50.dp)
+//                        )
+//                    }
+//                }
+//            }
+//
+//            Box(
+//                modifier = Modifier
+//                    .fillMaxWidth()
+//                    .wrapContentSize(Alignment.TopStart)
+//            ) {
+//                Button(
+//                    onClick = { },
+//                    colors = ButtonDefaults.buttonColors(Color.LightGray),
+//                    modifier = Modifier
+//                        .fillMaxWidth()
+//                        .padding(vertical = 10.dp, horizontal = 10.dp)
+//                ) {
+//                    Text("Submit")
+//                }
+//            }
+//        }
+//    }
+//}

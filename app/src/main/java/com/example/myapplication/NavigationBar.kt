@@ -121,10 +121,7 @@ fun NavigationScreen() {
                 Finallayout()
             }
             composable(Screens.Chatbot.screen) { ChatScreen() }
-
             composable(Screens.Notification.screen) { NotificationScreen() }
-            composable(Screens.Requests.screen) { ChatScreen() }
-
             composable(Screens.Requests.screen) {
                 val sampleRequests = listOf(
                     Request(id = 1, time = "8m ago", description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec fringilla quam eu faci", status = RequestStatus.PENDING),

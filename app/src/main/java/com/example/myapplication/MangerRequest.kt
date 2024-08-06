@@ -2,38 +2,21 @@ package com.example.myapplication
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Divider
-import androidx.compose.material3.Icon
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.myapplication.ui.theme.GreenJC
 import com.example.yourapp.ui.Request
 
 @Composable
@@ -56,45 +39,37 @@ fun ManagerRequest(requests: List<Request>) {
             .statusBarsPadding(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Card(
-            shape = RoundedCornerShape(40.dp),
+        Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .background(Color.Transparent),
-            colors = CardDefaults.cardColors(containerColor = Color.White),
+                .padding(16.dp)
+                .fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
         ) {
-            Column(
+            Text(
+                text = "Requests",
+                fontSize = 24.sp,
+                fontWeight = FontWeight.Bold,
                 modifier = Modifier
-                    .padding(16.dp)
-                    .fillMaxWidth(),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
-            ) {
-                Text(
-                    text = "Requests",
-                    fontSize = 24.sp,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier
-                        .padding(bottom = 10.dp)
-                        .padding(top = 10.dp)
-                )
+                    .padding(bottom = 10.dp)
+                    .padding(top = 10.dp)
+            )
 
-                LazyColumn(
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    items(requestList) { request ->
-                        Divider(
-                            modifier = Modifier
-                                .padding(vertical = 8.dp)
-                                .alpha(0.5f)
-                        )
-                        RequestItem(
-                            request = request,
-                            onApproveRequest = { approveRequest(request) },
-                            onDenyRequest = { denyRequest(request) }
-                        )
-                        Spacer(modifier = Modifier.height(16.dp))
-                    }
+            LazyColumn(
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                items(requestList) { request ->
+                    Divider(
+                        modifier = Modifier
+                            .padding(vertical = 8.dp)
+                            .alpha(0.5f)
+                    )
+                    RequestItem(
+                        request = request,
+                        onApproveRequest = { approveRequest(request) },
+                        onDenyRequest = { denyRequest(request) }
+                    )
+                    Spacer(modifier = Modifier.height(16.dp))
                 }
             }
         }
@@ -109,6 +84,8 @@ fun RequestItem(
 ) {
     var isApproved by remember { mutableStateOf(false) }
     var isDenied by remember { mutableStateOf(false) }
+    var showMessage by remember { mutableStateOf(false) }
+    var message by remember { mutableStateOf("") }
 
     Column(modifier = Modifier.fillMaxWidth()) {
         Text(
@@ -124,37 +101,46 @@ fun RequestItem(
             fontSize = 16.sp
         )
         Spacer(modifier = Modifier.height(12.dp))
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            if (!isApproved) {
-                Icon(
-                    painter = painterResource(id = R.drawable.icon_check),
-                    contentDescription = "Approve Request",
-                    tint = Color(0xFF4CAF50), // Green color for approval
-                    modifier = Modifier
-                        .size(24.dp)
-                        .clickable {
-                            onApproveRequest(request)
-                            isApproved = true
-                            isDenied = false
-                        }
-                )
-            }
-            Spacer(modifier = Modifier.width(16.dp))
-            if (!isDenied) {
+        if (!showMessage) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
                 Icon(
                     painter = painterResource(id = R.drawable.icon_deny),
                     contentDescription = "Deny Request",
-                    tint = Color(0xFFF44336), // Red color for denial
+                    tint = Color.Unspecified, // Remove any tint
                     modifier = Modifier
-                        .size(24.dp)
+                        .size(35.dp)
                         .clickable {
                             onDenyRequest(request)
                             isDenied = true
                             isApproved = false
+                            showMessage = true
+                            message = "You have denied the request"
+                        }
+                )
+                Spacer(modifier = Modifier.width(16.dp))
+                Icon(
+                    painter = painterResource(id = R.drawable.icon_check),
+                    contentDescription = "Approve Request",
+                    tint = Color.Unspecified, // Remove any tint
+                    modifier = Modifier
+                        .size(35.dp)
+                        .clickable {
+                            onApproveRequest(request)
+                            isApproved = true
+                            isDenied = false
+                            showMessage = true
+                            message = "You have accepted the request"
                         }
                 )
             }
+        } else {
+            Text(
+                text = message,
+                color = if (isApproved) {
+                    colorResource(id = R.color.deloitteGreen)
+                } else Color.Red,
+                fontWeight = FontWeight.Bold
+            )
         }
     }
 }
-

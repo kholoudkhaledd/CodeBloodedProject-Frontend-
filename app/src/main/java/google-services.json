@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "878112314169",
+    "project_id": "code-blooded",
+    "storage_bucket": "code-blooded.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:878112314169:android:c4cc0c89eadb32451f0ee8",
+        "android_client_info": {
+          "package_name": "com.example.myapplication"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCemCU_zMZK-A6v8RqLWnmMaZNXdv-28Es"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

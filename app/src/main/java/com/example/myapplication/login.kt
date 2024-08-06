@@ -1,7 +1,13 @@
 package com.example.myapplication
 
 
+import android.os.Bundle
+import android.widget.Toast
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+
 import SharedViewModel
+
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.aspectRatio
@@ -38,6 +44,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 
+import com.example.myapplication.ui.theme.MyApplicationTheme
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+
+
 
 @Composable
 
@@ -46,6 +58,7 @@ fun LoginScreen(navController: NavController, sharedViewModel: SharedViewModel) 
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var isTextFieldNotEmpty by remember { mutableStateOf(false) }
+    var isLoginSuccessful by remember { mutableStateOf(false) }
 
     isTextFieldNotEmpty = email.isNotEmpty() && password.isNotEmpty()
 
@@ -123,10 +136,24 @@ fun LoginScreen(navController: NavController, sharedViewModel: SharedViewModel) 
 
 
         Button(
-            onClick = { /* Need Still to edit it */
-                navController.navigate(Screens.Home.screen) {
-                    popUpTo(Screens.Login.screen) { inclusive = true }
+            onClick = {
+                if (isTextFieldNotEmpty) {
+                    loginUser(email, password, navController) {
+                        if (it) {
+                            // Navigate to home screen if login is successful
+                            navController.navigate(Screens.Home.screen) {
+                                popUpTo(Screens.Login.screen) { inclusive = true }
+                            }
+                        }
+                    }
+                } else {
+                    Toast.makeText(
+                        navController.context,
+                        "Please fill in all fields",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
+
 
             },
             modifier = Modifier
@@ -148,3 +175,29 @@ fun LoginScreen(navController: NavController, sharedViewModel: SharedViewModel) 
 
     }
 }
+fun loginUser(email: String, password: String, navController: NavController, onResult: (Boolean) -> Unit) {
+    val loginRequest = LoginRequest(email, password)
+    RetrofitClient.apiService.login(loginRequest).enqueue(object : Callback<LoginResponse> {
+        override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
+            if (response.isSuccessful) {
+                val loginResponse = response.body()
+                Toast.makeText(
+                    navController.context,
+                    "Login successful: ${loginResponse?.uid}",
+                    Toast.LENGTH_LONG
+                ).show()
+                onResult(true)  // Notify that login was successful
+            } else {
+                Toast.makeText(navController.context, "Login failed: ${response.message()}", Toast.LENGTH_LONG).show()
+                onResult(false) // Notify that login failed
+            }
+        }
+
+        override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
+            Toast.makeText(navController.context, "Error: ${t.message}", Toast.LENGTH_LONG).show()
+            onResult(false) // Notify that login failed
+        }
+    })
+}
+
+

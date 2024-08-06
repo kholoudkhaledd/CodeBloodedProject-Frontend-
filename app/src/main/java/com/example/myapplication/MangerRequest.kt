@@ -101,13 +101,15 @@ fun ManagerRequest(requests: List<Request>) {
     }
 }
 
-
 @Composable
 fun RequestItem(
     request: Request,
     onApproveRequest: (Request) -> Unit,
     onDenyRequest: (Request) -> Unit
 ) {
+    var isApproved by remember { mutableStateOf(false) }
+    var isDenied by remember { mutableStateOf(false) }
+
     Column(modifier = Modifier.fillMaxWidth()) {
         Text(
             text = request.time,
@@ -123,23 +125,35 @@ fun RequestItem(
         )
         Spacer(modifier = Modifier.height(12.dp))
         Row(verticalAlignment = Alignment.CenterVertically) {
-            Icon(
-                painter = painterResource(id = R.drawable.icon_check),
-                contentDescription = "Approve Request",
-               tint = Color(0xFF4CAF50), // Green color for approval
-                modifier = Modifier
-                    .size(24.dp)
-                    .clickable { onApproveRequest(request) }
-            )
+            if (!isApproved) {
+                Icon(
+                    painter = painterResource(id = R.drawable.icon_check),
+                    contentDescription = "Approve Request",
+                    tint = Color(0xFF4CAF50), // Green color for approval
+                    modifier = Modifier
+                        .size(24.dp)
+                        .clickable {
+                            onApproveRequest(request)
+                            isApproved = true
+                            isDenied = false
+                        }
+                )
+            }
             Spacer(modifier = Modifier.width(16.dp))
-            Icon(
-                painter = painterResource(id = R.drawable.icon_deny),
-                contentDescription = "Deny Request",
-               tint = Color(0xFFF44336), // Red color for denial
-                modifier = Modifier
-                    .size(24.dp)
-                    .clickable { onDenyRequest(request) }
-            )
+            if (!isDenied) {
+                Icon(
+                    painter = painterResource(id = R.drawable.icon_deny),
+                    contentDescription = "Deny Request",
+                    tint = Color(0xFFF44336), // Red color for denial
+                    modifier = Modifier
+                        .size(24.dp)
+                        .clickable {
+                            onDenyRequest(request)
+                            isDenied = true
+                            isApproved = false
+                        }
+                )
+            }
         }
     }
 }

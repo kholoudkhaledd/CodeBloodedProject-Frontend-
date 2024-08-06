@@ -2,6 +2,7 @@ package com.example.myapplication
 
 
 import ChatScreen
+import SharedViewModel
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
@@ -27,6 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -90,6 +92,7 @@ fun CustomBottomNavigationBar(
 @Composable
 fun NavigationScreen() {
     val navController = rememberNavController()
+    val sharedViewModel: SharedViewModel = viewModel()
     var selectedScreen by remember { mutableStateOf(Screens.SplashScreen.screen) }
 
     Scaffold(
@@ -114,17 +117,14 @@ fun NavigationScreen() {
                 .padding(paddingValues)
                 .fillMaxSize()
         ) {
-            composable(Screens.SplashScreen.screen) { SplashScreen(navController) }
-            composable(Screens.Login.screen) { LoginScreen(navController) }
+            composable(Screens.SplashScreen.screen) { SplashScreen(navController, sharedViewModel) }
+            composable(Screens.Login.screen) { LoginScreen(navController, sharedViewModel) }
             composable(Screens.Home.screen) {
                 selectedScreen = Screens.Home.screen
                 Finallayout()
             }
             composable(Screens.Chatbot.screen) { ChatScreen() }
-
             composable(Screens.Notification.screen) { NotificationScreen() }
-            composable(Screens.Requests.screen) { ChatScreen() }
-
             composable(Screens.Requests.screen) {
                 val sampleRequests = listOf(
                     Request(id = 1, time = "8m ago", description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec fringilla quam eu faci", status = RequestStatus.PENDING),

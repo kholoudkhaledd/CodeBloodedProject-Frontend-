@@ -1,5 +1,8 @@
 package com.example.myapplication
 
+import SharedViewModel
+import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -16,13 +19,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import coil.compose.AsyncImage
+import com.skydoves.landscapist.glide.GlideImage
 import kotlinx.coroutines.delay
-
 @Composable
-fun SplashScreen(navController: NavController) {
+fun SplashScreen(navController: NavController, sharedViewModel: SharedViewModel) {
     LaunchedEffect(Unit) {
-        delay(1000) // Simulate loading time
+        delay(2500) // Adjust delay as needed
+        sharedViewModel.logoSize.value = 150.dp
         navController.navigate(Screens.Login.screen) {
             popUpTo(Screens.SplashScreen.screen) { inclusive = true }
         }
@@ -37,24 +40,23 @@ fun SplashScreen(navController: NavController) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(color = Color.Black)
-                .padding(vertical = 150.dp),
-            verticalArrangement = Arrangement.Top,
+                .background(color = Color.Black),
+            verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // Display the loading GIF using Coil's AsyncImage
-            AsyncImage(
-                model = R.drawable.loadingsplashscreen, // Reference your GIF resource
+            GlideImage(
+                imageModel = R.drawable.loadingsplashscreen,
                 contentDescription = "Loading",
-                modifier = Modifier.size(150.dp)
+                modifier = Modifier.size(185.dp)
             )
 
             Image(
-                painter = painterResource(id = R.drawable.deloittewhitelogo),
+                painter = painterResource(id = R.drawable.logo),
                 contentDescription = "Deloitte Logo",
                 modifier = Modifier
-                    .size(150.dp)
+                    .size(237.dp)
                     .padding(vertical = 16.dp)
+                    .animateContentSize(animationSpec = tween(durationMillis = 1000))
             )
         }
     }

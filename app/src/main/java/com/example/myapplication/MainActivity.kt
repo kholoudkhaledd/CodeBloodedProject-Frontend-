@@ -26,7 +26,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             MyApplicationTheme {
                 // Call your Firebase connection test function here
-                FirebaseConnection()
+                NavigationScreen()
             }
         }
     }

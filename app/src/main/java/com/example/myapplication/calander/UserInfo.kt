@@ -1,5 +1,6 @@
 package com.example.myapplication.calander
 
+import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
@@ -15,18 +16,20 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.myapplication.Sharedpreference
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 // USER INFO SECTION
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun UserInfo(name: String) {
+fun UserInfo(context: Context) {
     // Get current date
     val currentDate = LocalDate.now()
     val currentDay = currentDate.dayOfMonth.toString()
     val currentDayName = currentDate.format(DateTimeFormatter.ofPattern("E")) // Short day name
     val currentMonthAndYear = "${currentDate.month.name.lowercase().capitalize().substring(0, 3)} ${currentDate.year}" // Short month name
+    val username = Sharedpreference.getUserName(context) ?: "Guest" // Default to "Guest" if username is null
 
     Column(
         modifier = Modifier
@@ -58,7 +61,7 @@ fun UserInfo(name: String) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = name,
+                text = username,
                 fontWeight = FontWeight.Bold,
                 fontSize = 20.sp,
                 modifier = Modifier.align(Alignment.CenterVertically)

@@ -125,7 +125,8 @@ fun NavigationScreen() {
             }
             composable(Screens.Home.screen) {
                 selectedScreen = Screens.Home.screen
-                Finallayout()
+                val context = LocalContext.current
+                Finallayout(context )
             }
             composable(Screens.Chatbot.screen) { ChatScreen() }
             composable(Screens.Notification.screen) { NotificationScreen() }

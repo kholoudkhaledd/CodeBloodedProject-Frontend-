@@ -1,8 +1,9 @@
 package com.example.myapplication
-
 import SharedViewModel
-import android.widget.Toast
+import android.content.ContentValues.TAG
 import android.content.Context
+import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.aspectRatio
@@ -43,17 +44,14 @@ import androidx.navigation.NavController
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-
 @Composable
 fun LoginScreen(navController: NavController, context: Context,
                 sharedViewModel: SharedViewModel) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var isTextFieldNotEmpty by remember { mutableStateOf(false) }
-   // var isLoginSuccessful by remember { mutableStateOf(false) }
-
+    // var isLoginSuccessful by remember { mutableStateOf(false) }
     isTextFieldNotEmpty = email.isNotEmpty() && password.isNotEmpty()
-
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
@@ -66,7 +64,6 @@ fun LoginScreen(navController: NavController, context: Context,
                 .aspectRatio(0.3f)
                 .alpha(0.9f)
         )
-
         Image(
             painter = painterResource(id = R.drawable.logo),
             contentDescription = "Deloitte Logo",
@@ -87,11 +84,9 @@ fun LoginScreen(navController: NavController, context: Context,
                 .offset(y = (-40).dp),
             shape = RoundedCornerShape(12.dp),
         )
-
         Text(text = "Login", modifier = Modifier.offset(y = (-130).dp), color = Color.White,
             style = LocalTextStyle.current.copy(fontSize = 25.sp)
         )
-
         var passwordVisibility: Boolean by remember { mutableStateOf(false) }
         TextField(
             value = password,
@@ -124,7 +119,6 @@ fun LoginScreen(navController: NavController, context: Context,
             shape = RoundedCornerShape(12.dp),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
         )
-
         Button(
             onClick = {
                 if (isTextFieldNotEmpty) {
@@ -159,7 +153,6 @@ fun LoginScreen(navController: NavController, context: Context,
         }
     }
 }
-
 fun loginUser(email: String, password: String, navController: NavController,
               context: Context, sharedViewModel: SharedViewModel,
               onResult: (Boolean) -> Unit) {
@@ -170,8 +163,9 @@ fun loginUser(email: String, password: String, navController: NavController,
                 val loginResponse = response.body()
                 loginResponse?.let {
                     Sharedpreference.saveUserId(context, loginResponse.uid)
-
+                    Sharedpreference.saveUserName(context,loginResponse.username)
                     sharedViewModel.setUserInfo(it.uid)
+                    Log.d(TAG, "Name: " + Sharedpreference.getUserName(context));
                 }
                 Toast.makeText(navController.context,
                     "Login successful: ${loginResponse?.uid}",
@@ -184,7 +178,6 @@ fun loginUser(email: String, password: String, navController: NavController,
                 onResult(false) // Notify that login failed
             }
         }
-
         override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
             Toast.makeText(navController.context, "Error: ${t.message}",
                 Toast.LENGTH_LONG).show()
@@ -192,10 +185,10 @@ fun loginUser(email: String, password: String, navController: NavController,
         }
     })
 }
-
 class PasswordTrans : VisualTransformation {
     override fun filter(text: AnnotatedString): TransformedText {
         val transformedText = AnnotatedString("*".repeat(text.length))
         return TransformedText(transformedText, OffsetMapping.Identity)
     }
 }
+

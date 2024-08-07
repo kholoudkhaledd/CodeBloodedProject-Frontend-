@@ -74,7 +74,8 @@ fun CustomCalendar(
                     val dayIndex = rowIndex * 7 + columnIndex - startDayOfWeek + 1
                     if (dayIndex in 1..daysInMonth) {
                         val dateString = "$dayIndex-${currentMonth.value}-$currentYear"
-                        val isSelected = dateString == selectedDate
+//                        val isSelected = dateString == selectedDate selected current date
+                          val isSelected="Home"
                         Box(
                             modifier = Modifier
                                 .weight(1f)
@@ -85,7 +86,7 @@ fun CustomCalendar(
                         ) {
                             Text(
                                 text = dayIndex.toString(),
-                                color = if (isSelected) Color.Blue else Color.Black,
+                                color = if (isSelected=="Home") Color.Black else Color.Blue,
                                 fontSize = 15.sp // Adjust font size for smaller days
                             )
                         }

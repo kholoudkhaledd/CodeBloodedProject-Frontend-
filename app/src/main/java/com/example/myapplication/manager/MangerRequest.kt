@@ -120,7 +120,7 @@ fun RequestItem(
         )
         Spacer(modifier = Modifier.height(4.dp))
         Text(
-            text = request.description,
+            text = "Request to change date from " + request.changeDayFrom + " to  " + request.changeDayTo,
             fontWeight = FontWeight.Medium,
             fontSize = 16.sp
         )

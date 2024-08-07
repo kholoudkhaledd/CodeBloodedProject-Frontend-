@@ -23,6 +23,7 @@ import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -36,16 +37,35 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.myapplication.R
+import com.example.myapplication.RetrofitClient
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import com.google.gson.annotations.SerializedName
 
-data class Request(val id: Int, val time: String, val description: String, val status: RequestStatus)
+data class Request(
+    @SerializedName("requestID") val id: String,
+    @SerializedName("Time Stamp") val time: String,
+    @SerializedName("changeDayFrom") val changeDayFrom: String,
+    @SerializedName("changeDayTo") val changeDayTo: String,
+    @SerializedName("Status") val status: RequestStatus
+)
 
 enum class RequestStatus {
-    PENDING, APPROVED, DENIED
+    @SerializedName("Pending") PENDING,
+    @SerializedName("Approved") APPROVED,
+    @SerializedName("Denied") DENIED
 }
 
 @Composable
-fun MyRequestsPage(requests: List<Request>) { //seperate files
-    var requestList by remember { mutableStateOf(requests) }
+fun MyRequestsPage() { //separate files
+    var requestList by remember { mutableStateOf(listOf<Request>()) }
+
+    LaunchedEffect(Unit) {
+        fetchRequests { fetchedRequests ->
+            requestList = fetchedRequests
+        }
+    }
 
     Column(
         modifier = Modifier
@@ -77,7 +97,6 @@ fun MyRequestsPage(requests: List<Request>) { //seperate files
                         .padding(top = 10.dp)
                 )
 
-
                 LazyColumn(
                     modifier = Modifier.fillMaxWidth()
                 ) {
@@ -90,16 +109,45 @@ fun MyRequestsPage(requests: List<Request>) { //seperate files
                         RequestItem(
                             request = request,
                             onCancelRequest = { requestToCancel ->
-                                requestList = requestList.filter { it.id != requestToCancel.id }
+                                deleteRequest(requestToCancel.id) {
+                                    requestList = requestList.filter { it.id != requestToCancel.id }
+                                }
                             }
                         )
                         Spacer(modifier = Modifier.height(16.dp))
-
                     }
                 }
             }
         }
     }
+}
+
+private fun fetchRequests(onResult: (List<Request>) -> Unit) {
+    RetrofitClient.apiService.getRequests().enqueue(object : Callback<List<Request>> {
+        override fun onResponse(call: Call<List<Request>>, response: Response<List<Request>>) {
+            if (response.isSuccessful) {
+                response.body()?.let { onResult(it) }
+            }
+        }
+
+        override fun onFailure(call: Call<List<Request>>, t: Throwable) {
+            // Handle failure
+        }
+    })
+}
+
+private fun deleteRequest(requestId: String, onResult: () -> Unit) {
+    RetrofitClient.apiService.deleteRequest(requestId).enqueue(object : Callback<Void> {
+        override fun onResponse(call: Call<Void>, response: Response<Void>) {
+            if (response.isSuccessful) {
+                onResult()
+            }
+        }
+
+        override fun onFailure(call: Call<Void>, t: Throwable) {
+            // Handle failure
+        }
+    })
 }
 
 @Composable
@@ -113,7 +161,12 @@ fun RequestItem(request: Request, onCancelRequest: (Request) -> Unit) {
         )
         Spacer(modifier = Modifier.height(4.dp))
         Text(
-            text = request.description,
+            text = "From: ${request.changeDayFrom}",
+            fontWeight = FontWeight.Medium,
+            fontSize = 16.sp
+        )
+        Text(
+            text = "To: ${request.changeDayTo}",
             fontWeight = FontWeight.Medium,
             fontSize = 16.sp
         )

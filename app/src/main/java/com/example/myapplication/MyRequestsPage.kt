@@ -4,8 +4,20 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+<<<<<<< Updated upstream
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+=======
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Divider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+>>>>>>> Stashed changes
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -14,23 +26,97 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.myapplication.R
+import com.example.myapplication.RequestsViewModel
+import okhttp3.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.http.Body
+import retrofit2.http.DELETE
+import retrofit2.http.GET
+import retrofit2.http.PUT
+import retrofit2.http.Path
 
+<<<<<<< Updated upstream
 data class Request(val time: String, val description: String, val status: RequestStatus)
+=======
+object RetrofitInstance {
+    private const val BASE_URL = "http://10.0.2.2:8000/"
+
+    val retrofit: Retrofit by lazy {
+        Retrofit.Builder()
+            .baseUrl(BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+    }
+
+    val api: RequestService by lazy {
+        retrofit.create(RequestService::class.java)
+    }
+}
+
+interface RequestService {
+    @GET("http://10.0.2.2:8000/view_requests/")
+    suspend fun getRequests(): List<RequestDto>
+
+    @DELETE("/delete_request/{request_id}")
+    suspend fun deleteRequest(@Path("request_id") requestId: String): Response
+
+    @PUT("/update_status/{document_id}")
+    suspend fun updateStatus(
+        @Path("document_id") documentId: String,
+        @Body statusUpdate: UpdateStatusDto
+    ): Response
+}
+data class RequestDto(
+    val changeDayFrom: String,
+    val requestID: String,
+    val changeDayTo: String,
+    val Status: String,
+    val userID: String,
+    val TimeStamp: String
+)
+
+data class Request(
+    val id: String,
+    val time: String,
+    val description: String,
+    val status: RequestStatus
+)
+
+
+data class UpdateStatusDto(val Status: String)
+>>>>>>> Stashed changes
 
 enum class RequestStatus {
     PENDING, APPROVED, DENIED
 }
 
+
 @Composable
+<<<<<<< Updated upstream
 fun MyRequestsPage(requests: List<Request>) {
     var requestList by remember { mutableStateOf(requests) }
+=======
+fun MyRequestsPage() {
+    val viewModel: RequestsViewModel = viewModel()
+    val requests by viewModel.requests.collectAsState()
+
+    LaunchedEffect(Unit) {
+        viewModel.fetchRequests()
+    }
+>>>>>>> Stashed changes
 
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(Color(0xFFF5F5F5))
+<<<<<<< Updated upstream
             .padding(16.dp),
+=======
+            .statusBarsPadding(),
+>>>>>>> Stashed changes
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Card(
@@ -58,11 +144,30 @@ fun MyRequestsPage(requests: List<Request>) {
                         .alpha(0.5f)
                 )
 
+<<<<<<< Updated upstream
                 requestList.forEachIndexed { index, request ->
                     if (index > 0) {
                         Divider(modifier =
                         Modifier.padding(vertical = 8.dp)
                             .alpha(0.5f))
+=======
+                LazyColumn(
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    items(requests) { request ->
+                        Divider(
+                            modifier = Modifier
+                                .padding(vertical = 8.dp)
+                                .alpha(0.5f)
+                        )
+                        RequestItem(
+                            request = request,
+                            onCancelRequest = { requestToCancel ->
+                                viewModel.cancelRequest(requestToCancel)
+                            }
+                        )
+                        Spacer(modifier = Modifier.height(16.dp))
+>>>>>>> Stashed changes
                     }
                     RequestItem(
                         request = request,
@@ -76,19 +181,18 @@ fun MyRequestsPage(requests: List<Request>) {
         }
     }
 }
-
 @Composable
 fun RequestItem(request: Request, onCancelRequest: (Request) -> Unit) {
     Column(modifier = Modifier.fillMaxWidth()) {
         Text(
-            text = request.time,
+            text = request.description, // Updated message format
             fontSize = 16.sp,
             fontWeight = FontWeight.Medium,
             color = Color.LightGray
         )
         Spacer(modifier = Modifier.height(4.dp))
         Text(
-            text = request.description,
+            text = "Scheduled from ${request.time}",
             fontWeight = FontWeight.Medium,
             fontSize = 16.sp
         )
@@ -123,6 +227,7 @@ fun RequestItem(request: Request, onCancelRequest: (Request) -> Unit) {
         }
     }
 }
+
 
 @Composable
 fun StatusBox(text: String, backgroundColor: Color) {

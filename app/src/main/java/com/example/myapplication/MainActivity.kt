@@ -16,8 +16,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.example.myapplication.ui.theme.MyApplicationTheme
+<<<<<<< Updated upstream
 import com.example.myapplication.notifications.ui.theme.NotificationScreen
 import com.example.yourapp.MyRequestsActivity
+=======
+>>>>>>> Stashed changes
 
 class MainActivity : ComponentActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
@@ -26,9 +29,13 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             MyApplicationTheme {
+<<<<<<< Updated upstream
 //         Finallayout()
                 NotificationScreen()
 
+=======
+                NavigationScreen()
+>>>>>>> Stashed changes
             }
         }
     }

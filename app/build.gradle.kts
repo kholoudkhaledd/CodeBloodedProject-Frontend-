@@ -60,8 +60,24 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     implementation(libs.androidx.navigation.compose)
+<<<<<<< Updated upstream
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
+=======
+    implementation ("androidx.compose.ui:ui:1.5.0")
+    implementation ("com.github.bumptech.glide:glide:4.15.1")
+    implementation ("androidx.compose.ui:ui-tooling:1.5.0")
+
+    implementation(libs.coil.compose)
+    implementation(libs.coil.gif)
+    implementation(libs.landscapist.glide)
+    implementation (libs.coil.compose.v240)
+    implementation (libs.compose)
+    implementation ("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation ("com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.4")
+
+>>>>>>> Stashed changes
     implementation(libs.androidx.activity)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

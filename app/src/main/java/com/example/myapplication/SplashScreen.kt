@@ -61,3 +61,4 @@ fun SplashScreen(navController: NavController, sharedViewModel: SharedViewModel)
         }
     }
 }
+

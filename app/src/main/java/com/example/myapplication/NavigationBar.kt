@@ -49,13 +49,14 @@ fun CustomBottomNavigationBar(
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .background(Color.White)
-            .padding(horizontal = 16.dp, vertical = 16.dp)
-            .height(56.dp)
-            .clip(RoundedCornerShape(25.dp))
+            .background(Color(0xFFECECEC))
+            .height(80.dp)
+            .clip(RoundedCornerShape(32.dp))
     ) {
         Row(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.White),
             horizontalArrangement = Arrangement.SpaceAround, // Distribute space evenly
             verticalAlignment = Alignment.CenterVertically // Center icons vertically
         ) {

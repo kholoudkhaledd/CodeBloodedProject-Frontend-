@@ -2,6 +2,7 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -33,13 +34,6 @@ import com.example.myapplication.CreateRequest
 import com.example.myapplication.R
 import com.example.myapplication.RetrofitClient
 import com.example.myapplication.Sharedpreference
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import okhttp3.RequestBody
-import okhttp3.RequestBody.Companion.toRequestBody
-import org.json.JSONObject
-import java.io.IOException
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -69,21 +63,20 @@ fun RequestsSection() {
     Box(
         modifier = Modifier
             .padding(vertical = 15.dp)
-            .clip(RoundedCornerShape(25.dp))
+            .clip(RoundedCornerShape(32.dp))
             .fillMaxWidth()
             .background(Color.White)
     ) {
         Column(
             modifier = Modifier
                 .padding(vertical = 15.dp, horizontal = 25.dp)
-                .clip(RoundedCornerShape(20.dp))
                 .background(Color.White)
         ) {
             // First row with text at the start
             Text(
                 text = "Schedule change requests",
                 fontWeight = FontWeight.SemiBold,
-                fontSize = 18.sp,
+                fontSize = 14.sp,
                 modifier = Modifier.padding(vertical = 10.dp, horizontal = 10.dp)
             )
 
@@ -94,11 +87,12 @@ fun RequestsSection() {
                     .padding(vertical = 10.dp, horizontal = 10.dp)
                     .wrapContentSize(Alignment.TopStart)
                     .clip(RoundedCornerShape(8.dp))
+                    .border(1.dp, Color(0xFFE8E8E8), RoundedCornerShape(8.dp))
             ) {
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .background(Color(0xFFECECEC))
+                        .background(Color(0xFFF6F6F6))
                         .clip(RoundedCornerShape(20.dp))
                         .padding(vertical = 5.dp, horizontal = 10.dp)
                         .clickable { showDatePicker = true }
@@ -109,7 +103,8 @@ fun RequestsSection() {
                     ) {
                         Text(
                             text = selectedDate?.toString() ?: "Select day",
-                            color = Color.Gray,
+                            fontSize = 14.sp,
+                            color = Color(0xFFBDBDBD),
                             modifier = Modifier
                                 .weight(1f)
                                 .padding(end = 8.dp, start = 8.dp)
@@ -140,11 +135,12 @@ fun RequestsSection() {
                     .padding(vertical = 10.dp, horizontal = 10.dp)
                     .wrapContentSize(Alignment.TopStart)
                     .clip(RoundedCornerShape(8.dp))
+                    .border(1.dp, Color(0xFFE8E8E8), RoundedCornerShape(8.dp))
             ) {
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .background(Color(0xFFECECEC))
+                        .background(Color(0xFFF6F6F6))
                         .clip(RoundedCornerShape(20.dp))
                         .padding(vertical = 5.dp, horizontal = 10.dp)
                         .clickable { showChangeDatePicker = true }
@@ -155,7 +151,8 @@ fun RequestsSection() {
                     ) {
                         Text(
                             text = changeDate?.toString() ?: "Change to",
-                            color = Color.Gray,
+                            fontSize = 14.sp,
+                            color = Color(0xFFBDBDBD),
                             modifier = Modifier
                                 .weight(1f)
                                 .padding(end = 8.dp, start = 8.dp)
@@ -192,6 +189,8 @@ fun RequestsSection() {
                                 selectedDate!!,
                                 changeDate!!
                             )
+                            selectedDate = null
+                            changeDate = null
                         } else {
                             println("Selected date or change date is null")
                         }
@@ -201,9 +200,10 @@ fun RequestsSection() {
                     ) else colorResource(id = R.color.coolGray6)),
                     modifier = Modifier
                         .fillMaxWidth()
+                        .clip(RoundedCornerShape(100.dp))
                         .padding(vertical = 10.dp, horizontal = 10.dp)
                 ) {
-                    Text("Submit")
+                    Text(text = "Submit", fontSize = 16.sp)
                 }
             }
         }

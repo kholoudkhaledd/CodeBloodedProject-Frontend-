@@ -20,7 +20,7 @@ fun Displayifhomeoroffice(place: String) {
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 20.dp, vertical = 10.dp)
-            .clip(RoundedCornerShape(10.dp)),
+            .clip(RoundedCornerShape(8.dp)),
         color = GreenJC,
         contentColor = Color.White
     ) {

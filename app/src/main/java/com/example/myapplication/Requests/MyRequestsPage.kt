@@ -62,8 +62,8 @@ fun MyRequestsPage() {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFF5F5F5)) //colors
-            .statusBarsPadding(),
+            .background(Color(0xFFF5F5F5)), //colors
+//            .statusBarsPadding(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Card(

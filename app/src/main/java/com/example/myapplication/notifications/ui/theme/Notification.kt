@@ -37,7 +37,7 @@ fun NotificationScreen() {
         modifier = Modifier
             .fillMaxSize()
             .background(Color(0xFFF5F5F5)) // Background color matching MyRequestsPage
-            .statusBarsPadding()
+            //.statusBarsPadding()
     ) {
         Card(
             shape = RoundedCornerShape(32.dp), // Rounded corners for the outer card

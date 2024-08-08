@@ -1,5 +1,6 @@
 package com.example.myapplication
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -155,7 +156,12 @@ fun ChatMessageItem(message: String, isUserMessage: Boolean) {
         Box(
             modifier = Modifier
                 .background(
-                    color = if (isUserMessage) Color(0xFF5DB075) else Color(0xFFE0E0E0),
+                    color = if (isUserMessage) Color(0xFF5DB075) else Color(0xFFF6F6F6),
+                    shape = RoundedCornerShape(8.dp)
+                )
+                .border(
+                    1.dp,
+                    color = if (isUserMessage) Color(0xFF5DB075) else Color(0xFFE8E8E8),
                     shape = RoundedCornerShape(8.dp)
                 )
                 .padding(12.dp)

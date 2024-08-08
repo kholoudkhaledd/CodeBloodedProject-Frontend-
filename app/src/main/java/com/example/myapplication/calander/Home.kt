@@ -4,6 +4,7 @@ import RequestsSection
 import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -33,9 +34,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.myapplication.R
 import java.time.LocalDate
 import java.time.Month
 
@@ -51,7 +54,7 @@ fun CalendarViewScreen() {
     Column(
         modifier = Modifier
             .background(Color.White)
-            .clip(RoundedCornerShape(25.dp))
+            .clip(RoundedCornerShape(32.dp))
     ) {
         val currentMonthAndYear = "${currentMonth.name.lowercase().capitalize()} $currentYear"
 
@@ -93,12 +96,13 @@ fun CalendarViewScreen() {
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Icon(
-                        imageVector = Icons.Filled.KeyboardArrowLeft,
+                    Image(
+                        painter = painterResource(id = R.drawable.back),
                         contentDescription = "Previous month",
-                        tint = Color(0xFF76B31B),
                         modifier = Modifier
-                            .size(30.dp)
+                            .align(Alignment.CenterVertically)
+                            .padding(end = 13.dp)
+                            .size(12.dp)
                             .clickable {
                                 if (currentMonth == Month.JANUARY) {
                                     currentMonth = Month.DECEMBER
@@ -111,16 +115,17 @@ fun CalendarViewScreen() {
 
                     Text(
                         text = currentMonthAndYear,
-                        fontSize = 18.sp,
+                        fontSize = 16.sp,
                         fontWeight = FontWeight.SemiBold
                     )
 
-                    Icon(
-                        imageVector = Icons.Filled.KeyboardArrowRight,
+                    Image(
+                        painter = painterResource(id = R.drawable.next),
                         contentDescription = "Next month",
-                        tint = Color(0xFF76B31B),
                         modifier = Modifier
-                            .size(30.dp)
+                            .padding(start = 13.dp)
+                            .align(Alignment.CenterVertically)
+                            .size(12.dp)
                             .clickable {
                                 if (currentMonth == Month.DECEMBER) {
                                     currentMonth = Month.JANUARY

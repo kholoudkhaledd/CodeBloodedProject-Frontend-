@@ -82,7 +82,7 @@ fun MyRequestsPage() {
             ) {
                 Text(
                     text = "My Requests",
-                    fontSize = 24.sp,
+                    fontSize = 22.sp,
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier
                         .padding(bottom = 10.dp)

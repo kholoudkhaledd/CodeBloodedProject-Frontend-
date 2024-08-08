@@ -2,7 +2,6 @@ package com.example.myapplication.calander
 
 import RequestsSection
 import android.content.Context
-
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
@@ -151,8 +150,8 @@ fun CalendarViewScreen() {
             }
 
             Divider(
-                color = Color.LightGray,
-                thickness = 0.5.dp,
+                color = Color(0xFFF1F1F1) ,
+                thickness = 1.dp,
                 modifier = Modifier
                     .alpha(0.5f)
                     .padding(horizontal = 25.dp, vertical = 5.dp)

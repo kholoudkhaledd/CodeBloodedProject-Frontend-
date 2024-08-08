@@ -1,10 +1,11 @@
 package com.example.myapplication
 
 
-import ChatScreen
 import SharedViewModel
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -16,6 +17,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -25,6 +27,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -36,21 +39,20 @@ import androidx.navigation.compose.rememberNavController
 import com.example.myapplication.calander.Finallayout
 import com.example.myapplication.notifications.ui.theme.NotificationScreen
 import com.example.yourapp.ui.MyRequestsPage
-import com.example.yourapp.ui.Request
-import com.example.yourapp.ui.RequestStatus
 
 
 @Composable
 fun CustomBottomNavigationBar(
     selectedScreen: String,
-    onScreenSelected: (String) -> Unit
+    onScreenSelected: (String) -> Unit,
 ) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .background(Color.White)
             .padding(horizontal = 16.dp, vertical = 16.dp)
-            .height(56.dp) // Height of the bottom bar
+            .height(56.dp)
+            .clip(RoundedCornerShape(25.dp))
     ) {
         Row(
             modifier = Modifier.fillMaxSize(),
@@ -136,37 +138,47 @@ fun NavigationScreen() {
 }
 
 @Composable
-    fun BarIcon(
-        selected: Boolean,
-        iconId: Int,
-        contentDescription: String,
-        onClick: () -> Unit
-    ) {
-        Box(
-            modifier = Modifier
-                .size(50.dp)
-                .clickable(onClick = onClick)
-                .padding(8.dp)
-                .background(Color.Transparent) //hoisting plz
-        ) {
-            val iconPainter = painterResource(id = iconId)
-            Icon(
-                painter = iconPainter,
-                contentDescription = contentDescription,
-                modifier = Modifier
-                    .align(Alignment.Center)
-                    .size(50.dp)
-                    .padding(bottom = 8.dp),
-                tint = if (selected) Color(0xFF76B31B) else Color(0xFF8F8EA2)
-            )
+fun BarIcon(
+    selected: Boolean,
+    iconId: Int,
+    contentDescription: String,
+    onClick: () -> Unit
+) {
+    // Define default and expanded sizes
+    val defaultSize = 50.dp
+    val expandedSize = 64.dp
 
-            if (selected) {
-                Box(
-                    modifier = Modifier
-                        .align(Alignment.BottomCenter)
-                        .size(4.dp)
-                        .background(Color(0xFF76B31B), shape = CircleShape)
-                )
-            }
+    // Animate size change
+    val size by animateDpAsState(
+        targetValue = if (selected) expandedSize else defaultSize,
+        animationSpec = tween(durationMillis = 300) // Duration for the animation
+    )
+
+    Box(
+        modifier = Modifier
+            .size(size) // Apply animated size
+            .clickable(onClick = onClick)
+            .padding(8.dp)
+            .background(Color.Transparent)
+    ) {
+        val iconPainter = painterResource(id = iconId)
+        Icon(
+            painter = iconPainter,
+            contentDescription = contentDescription,
+            modifier = Modifier
+                .align(Alignment.Center)
+                .size(size) // Apply animated size
+                .padding(bottom = 8.dp),
+            tint = if (selected) Color(0xFF76B31B) else Color(0xFF8F8EA2)
+        )
+
+        if (selected) {
+            Box(
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .size(4.dp)
+                    .background(Color(0xFF76B31B), shape = CircleShape)
+            )
         }
     }
+}

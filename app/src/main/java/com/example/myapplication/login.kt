@@ -149,7 +149,10 @@ fun LoginScreen(navController: NavController, context: Context,
                 id = R.color.deloitteGreen
             ) else colorResource(id = R.color.coolGray6))
         ) {
-            Text(text = "Login")
+            Text(
+                text = "Login",
+                fontSize = 16.sp
+            )
         }
     }
 }

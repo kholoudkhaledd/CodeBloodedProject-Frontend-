@@ -138,7 +138,7 @@ fun RequestsSection() {
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         Text(
-                            text = selectedDate?.toString() ?: "Select date",
+                            text = selectedDate?.toString() ?: "Select day",
                             color = Color.Gray,
                             modifier = Modifier
                                 .weight(1f)

@@ -38,10 +38,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.myapplication.R
 import com.example.myapplication.RetrofitClient
+import com.google.gson.annotations.SerializedName
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import com.google.gson.annotations.SerializedName
 
 data class Request(
     @SerializedName("requestID") val id: String,
@@ -90,7 +90,7 @@ fun MyRequestsPage() { //separate files
             ) {
                 Text(
                     text = "My Requests",
-                    fontSize = 24.sp,
+                    fontSize = 22.sp,
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier
                         .padding(bottom = 10.dp)

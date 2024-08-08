@@ -165,7 +165,10 @@ fun loginUser(email: String, password: String, navController: NavController,
                     Sharedpreference.saveUserId(context, loginResponse.uid)
                     Sharedpreference.saveUserName(context,loginResponse.username)
                     sharedViewModel.setUserInfo(it.uid)
-                    Log.d(TAG, "Name: " + Sharedpreference.getUserName(context));
+                    Log.d(TAG, "Name: " + Sharedpreference.getUserName(context))
+                    Log.d(TAG, "UID: " + Sharedpreference.getUserId(context))
+
+
                 }
                 Toast.makeText(navController.context,
                     "Login successful: ${loginResponse?.uid}",

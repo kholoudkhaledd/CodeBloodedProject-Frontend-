@@ -29,7 +29,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.myapplication.CreateRequest
 import com.example.myapplication.R
+import com.example.myapplication.RetrofitClient
+import com.example.myapplication.Sharedpreference
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -41,49 +44,16 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Calendar
-
-@RequiresApi(Build.VERSION_CODES.O)
-fun createRequest(changeDayFrom: LocalDate, changeDayTo: LocalDate) {
-    val client = OkHttpClient()
-    val dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
-    val currentDateTime = LocalDateTime.now().format(dateTimeFormatter)
-
-    val jsonObject = JSONObject().apply {
-        put("changeDayFrom", changeDayFrom.toString())
-        put("changeDayTo", changeDayTo.toString())
-        put("Status", "Pending")
-        put("Time Stamp", currentDateTime)
-    }
-    val mediaType = "application/json; charset=utf-8".toMediaTypeOrNull()
-    val requestBody: RequestBody = jsonObject.toString().toRequestBody(mediaType)
-    val request = Request.Builder()
-        .url("http://10.0.2.2:8000/create_request") // Use 10.0.2.2 to access localhost from emulator
-        .post(requestBody)
-        .build()
-
-    println("Sending request with data: $jsonObject")
-
-    client.newCall(request).enqueue(object : okhttp3.Callback {
-        override fun onFailure(call: okhttp3.Call, e: IOException) {
-            e.printStackTrace()
-            println("Request failed: ${e.message}")
-        }
-
-        override fun onResponse(call: okhttp3.Call, response: okhttp3.Response) {
-            if (response.isSuccessful) {
-                println("Request successfully created")
-                println("Response: ${response.body?.string()}")
-            } else {
-                println("Error: ${response.code}")
-                println("Response: ${response.body?.string()}")
-            }
-        }
-    })
-}
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun RequestsSection() {
+    val context = LocalContext.current
+    val userId = Sharedpreference.getUserId(context) ?: return
+
     // Get the current date and day
     val currentDate = LocalDate.now()
     val currentDay = currentDate.dayOfMonth
@@ -217,12 +187,16 @@ fun RequestsSection() {
                 Button(
                     onClick = {
                         if (selectedDate != null && changeDate != null) {
-                            createRequest(selectedDate!!, changeDate!!)
+                            createRequest(
+                                userId,
+                                selectedDate!!,
+                                changeDate!!
+                            )
                         } else {
                             println("Selected date or change date is null")
                         }
                     },
-                    colors = ButtonDefaults.buttonColors(containerColor  = if (selectedDate != null && changeDate != null) colorResource(
+                    colors = ButtonDefaults.buttonColors(containerColor = if (selectedDate != null && changeDate != null) colorResource(
                         id = R.color.deloitteGreen
                     ) else colorResource(id = R.color.coolGray6)),
                     modifier = Modifier
@@ -234,6 +208,35 @@ fun RequestsSection() {
             }
         }
     }
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
+fun createRequest(userId: String, changeDayFrom: LocalDate, changeDayTo: LocalDate) {
+    val dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+    val currentDateTime = LocalDateTime.now().format(dateTimeFormatter)
+
+    val createRequest = CreateRequest(
+        userID = userId,
+        changeDayFrom = changeDayFrom.toString(),
+        changeDayTo = changeDayTo.toString(),
+        Status = "Pending",
+        timeStamp = currentDateTime
+    )
+
+    RetrofitClient.apiService.createRequest(userId, createRequest).enqueue(object : Callback<Void> {
+        override fun onResponse(call: Call<Void>, response: Response<Void>) {
+            if (response.isSuccessful) {
+                println("Request successfully created")
+            } else {
+                println("Error: ${response.code()}")
+            }
+        }
+
+        override fun onFailure(call: Call<Void>, t: Throwable) {
+            t.printStackTrace()
+            println("Request failed: ${t.message}")
+        }
+    })
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -257,4 +260,3 @@ fun DatePickerDialog(
         setOnDismissListener { onDismissRequest() }
     }.show()
 }
-

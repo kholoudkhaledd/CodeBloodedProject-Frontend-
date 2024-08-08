@@ -1,19 +1,10 @@
 package com.example.yourapp.ui
 
+import SharedViewModel
+import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -22,33 +13,31 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.myapplication.R
 import com.example.myapplication.RetrofitClient
+import com.example.myapplication.Sharedpreference
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import com.google.gson.annotations.SerializedName
+import android.util.Log
 
 data class Request(
-    @SerializedName("requestID") val id: String,
-    @SerializedName("Time Stamp") val time: String,
-    @SerializedName("changeDayFrom") val changeDayFrom: String,
-    @SerializedName("changeDayTo") val changeDayTo: String,
-    @SerializedName("Status") val status: RequestStatus
+    @SerializedName("requestID") val id: String = "",
+    @SerializedName("timeStamp") val time: String = "",
+    @SerializedName("changeDayFrom") val changeDayFrom: String = "",
+    @SerializedName("changeDayTo") val changeDayTo: String = "",
+    @SerializedName("Status") val status: RequestStatus = RequestStatus.PENDING
 )
 
 enum class RequestStatus {
@@ -58,11 +47,14 @@ enum class RequestStatus {
 }
 
 @Composable
-fun MyRequestsPage() { //separate files
+fun MyRequestsPage() {
+    val context = LocalContext.current // Get the current Context
+    val userId = Sharedpreference.getUserId(context) ?: return // Return early if userId is null
     var requestList by remember { mutableStateOf(listOf<Request>()) }
 
     LaunchedEffect(Unit) {
-        fetchRequests { fetchedRequests ->
+        fetchRequests(userId) { fetchedRequests ->
+            Log.d("MyRequestsPage", "Fetched requests: $fetchedRequests")
             requestList = fetchedRequests
         }
     }
@@ -122,16 +114,21 @@ fun MyRequestsPage() { //separate files
     }
 }
 
-private fun fetchRequests(onResult: (List<Request>) -> Unit) {
-    RetrofitClient.apiService.getRequests().enqueue(object : Callback<List<Request>> {
+private fun fetchRequests(userId: String, onResult: (List<Request>) -> Unit) {
+    RetrofitClient.apiService.getRequests(userId).enqueue(object : Callback<List<Request>> {
         override fun onResponse(call: Call<List<Request>>, response: Response<List<Request>>) {
             if (response.isSuccessful) {
-                response.body()?.let { onResult(it) }
+                response.body()?.let {
+                    Log.d("fetchRequests", "Fetched requests: $it")
+                    onResult(it)
+                }
+            } else {
+                Log.e("fetchRequests", "Failed to fetch requests: ${response.code()}")
             }
         }
 
         override fun onFailure(call: Call<List<Request>>, t: Throwable) {
-            // Handle failure
+            Log.e("fetchRequests", "Error fetching requests", t)
         }
     })
 }
@@ -141,11 +138,13 @@ private fun deleteRequest(requestId: String, onResult: () -> Unit) {
         override fun onResponse(call: Call<Void>, response: Response<Void>) {
             if (response.isSuccessful) {
                 onResult()
+            } else {
+                Log.e("deleteRequest", "Failed to delete request: ${response.code()}")
             }
         }
 
         override fun onFailure(call: Call<Void>, t: Throwable) {
-            // Handle failure
+            Log.e("deleteRequest", "Error deleting request", t)
         }
     })
 }

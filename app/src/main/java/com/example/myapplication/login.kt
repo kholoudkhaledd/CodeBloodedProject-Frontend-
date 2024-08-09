@@ -163,6 +163,7 @@ fun loginUser(email: String, password: String, navController: NavController,
                 val loginResponse = response.body()
                 loginResponse?.let {
                     Sharedpreference.saveUserId(context, loginResponse.uid)
+                    Log.d(TAG, "IDDD: " + loginResponse.uid);
                     Sharedpreference.saveUserName(context,loginResponse.username)
                     sharedViewModel.setUserInfo(it.uid)
                     Log.d(TAG, "Name: " + Sharedpreference.getUserName(context));

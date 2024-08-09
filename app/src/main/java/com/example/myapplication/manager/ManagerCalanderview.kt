@@ -21,7 +21,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
@@ -33,12 +32,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.myapplication.calander.CalendarViewScreen
@@ -138,27 +134,23 @@ fun Viewteamscalander() {
                         .clip(RoundedCornerShape(10.dp))
 
                 ) {
-                    Caladarmanager()
+                    Calanderperemployee()
                 }
             }
         }
     }
 }
-@RequiresApi(Build.VERSION_CODES.O)
-@Preview
-@Composable
-fun DropdownPreview() {
-    CalendarViewScreen()
-}
+
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun Caladarmanager() {
+fun Calanderperemployee() {
     LazyColumn(
         modifier = Modifier
-            .fillMaxSize()
+            .fillMaxSize().padding(vertical = 10.dp)
             .background(Color(0xFFECECEC)),
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
+
     ) {
 
 
@@ -168,7 +160,7 @@ fun Caladarmanager() {
                 modifier = Modifier
                     .background(Color(0xFFECECEC))
                     .fillMaxWidth()
-                    .padding(vertical = 10.dp , horizontal = 10.dp)
+                    .padding(vertical = 20.dp , horizontal = 20.dp)
             ) {
                 Text("Click on day to change between office&home")
             }

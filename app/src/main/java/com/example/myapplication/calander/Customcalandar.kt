@@ -49,6 +49,14 @@ import retrofit2.Response
 import java.time.LocalDate
 import java.time.Month
 import java.time.Year
+data class CalendarData(
+    val date: String,
+    val location: String
+)
+data class CalendarResponse(
+    val calendar: Map<String, String> // Adjusted to match the JSON structure
+)
+
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -67,32 +75,31 @@ fun CustomCalendar(
     val startDayOfWeek = startOfMonth.dayOfWeek.value % 7
     val totalCells = (startDayOfWeek + daysInMonth + 6) / 7 * 7
 
-    // State to hold the calendar data
-    var calendarData by remember { mutableStateOf<Map<String, String>>(emptyMap()) }
-
     // Format month as two-digit string
     val formattedMonth = currentMonth.value.toString().padStart(2, '0')
+
+    // State to hold the calendar data
+    var calendarData by remember { mutableStateOf<Map<String, String>>(emptyMap()) }
 
     // Fetch calendar data using Retrofit
     LaunchedEffect(currentMonth, currentYear, userId) {
         userId?.let {
             val dateString = "$formattedMonth-$currentYear"
-
             RetrofitClient.apiService.getCalendarForMonth(it, dateString)
-                .enqueue(object : Callback<Map<String, String>> {
+                .enqueue(object : Callback<CalendarResponse> {
                     override fun onResponse(
-                        call: Call<Map<String, String>>,
-                        response: Response<Map<String, String>>
+                        call: Call<CalendarResponse>,
+                        response: Response<CalendarResponse>
                     ) {
                         if (response.isSuccessful) {
-                            calendarData = response.body() ?: emptyMap()
+                            calendarData = response.body()?.calendar ?: emptyMap()
                             Log.d(TAG, "Calendar data: $calendarData")
                         } else {
                             Log.e(TAG, "API Error: ${response.errorBody()?.string()}")
                         }
                     }
 
-                    override fun onFailure(call: Call<Map<String, String>>, t: Throwable) {
+                    override fun onFailure(call: Call<CalendarResponse>, t: Throwable) {
                         Log.e(TAG, "API Failure: ${t.message}")
                     }
                 })
@@ -136,7 +143,7 @@ fun CustomCalendar(
                     if (dayIndex in 1..daysInMonth) {
                         val dateString = "$dayIndex-$formattedMonth-$currentYear"
                         val location = calendarData[dateString] ?: "Unknown"
-                        Log.d(TAG, "CustomCalendar: $dateString -> $location")
+                        Log.d(TAG, "CustomCalendar: $location")
 
                         Box(
                             modifier = Modifier
@@ -166,6 +173,9 @@ fun CustomCalendar(
         Spacer(modifier = Modifier.height(8.dp)) // Adjusted height for smaller spacing
     }
 }
+
+
+
 
 
 

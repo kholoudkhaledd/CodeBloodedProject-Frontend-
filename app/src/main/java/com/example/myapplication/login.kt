@@ -65,7 +65,7 @@ fun LoginScreen(navController: NavController, context: Context,
                 .alpha(0.9f)
         )
         Image(
-            painter = painterResource(id = R.drawable.logo),
+            painter = painterResource(id = R.drawable.deloittelogo),
             contentDescription = "Deloitte Logo",
             modifier = Modifier
                 .size(300.dp)

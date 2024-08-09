@@ -150,7 +150,7 @@ fun ChatMessageItem(message: String, isUserMessage: Boolean) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 4.dp),
+            .padding(vertical = 10.dp),
         horizontalArrangement = if (isUserMessage) Arrangement.End else Arrangement.Start
     ) {
         Box(

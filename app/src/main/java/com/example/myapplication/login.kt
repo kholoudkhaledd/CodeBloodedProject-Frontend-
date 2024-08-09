@@ -143,7 +143,7 @@ fun LoginScreen(navController: NavController, context: Context,
                 .padding(horizontal = 20.dp)
                 .height(50.dp)
                 .align(Alignment.BottomCenter)
-                .offset(y = (-280).dp),
+                .offset(y = (-320).dp),
             colors = ButtonDefaults.
             buttonColors(containerColor = if (isTextFieldNotEmpty) colorResource(
                 id = R.color.deloitteGreen
@@ -197,4 +197,3 @@ class PasswordTrans : VisualTransformation {
         return TransformedText(transformedText, OffsetMapping.Identity)
     }
 }
-

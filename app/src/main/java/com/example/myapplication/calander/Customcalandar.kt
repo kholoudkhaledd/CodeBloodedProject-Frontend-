@@ -210,7 +210,7 @@ fun CustomCalendar(
 
     // State to hold the calendar data
     var calendarData by remember { mutableStateOf<Map<String, String>>(emptyMap()) }
-   Log.d(TAG,"calandarData $calendarData ")
+    Log.d(TAG,"calandarData $calendarData ")
     // Fetch calendar data using Retrofit
     LaunchedEffect(currentMonth, currentYear, userId) {
         userId?.let {
@@ -310,7 +310,6 @@ fun CustomCalendar(
                             "Office" -> Darkblue
                             else -> Color.Gray
                         }
-
                         Box(
                             modifier = Modifier
                                 .weight(1f)
@@ -321,18 +320,13 @@ fun CustomCalendar(
                             contentAlignment = Alignment.Center
                         ) {
                             Text(
-
-                                text = "$dayIndex",
+                                text = "$dayIndex",  // Display only the day number
                                 color = backgroundColor, // Text color for better contrast
                                 fontSize = 15.sp, // Adjust font size for smaller days
                                 textAlign = TextAlign.Center
-
-                                text = dayIndex.toString(),
-                                color = if (isSelected=="Home") Color.Black else Color.Blue,
-                                fontSize = 14.sp // Adjust font size for smaller days
-
                             )
                         }
+
                     } else {
                         Box(
                             modifier = Modifier
@@ -357,7 +351,11 @@ fun CustomCalendar(
 
 
 
-
+@RequiresApi(Build.VERSION_CODES.O)
+fun getCurrentDate(): String {
+    val today = LocalDate.now()
+    return "${today.dayOfMonth}-${today.monthValue}-${today.year}"
+}
 
 
 @RequiresApi(Build.VERSION_CODES.O)

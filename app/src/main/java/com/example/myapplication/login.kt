@@ -88,7 +88,7 @@ fun LoginScreen(
         Text(
             text = "Login",
             modifier = Modifier
-                .offset(y = (-130).dp)
+                .offset(y = (300).dp)
                 .align(Alignment.TopCenter),
             color = Color.White,
             style = LocalTextStyle.current.copy(fontSize = 25.sp)
@@ -186,7 +186,7 @@ fun loginUser(
                     Log.d(TAG, "UID: " + Sharedpreference.getUserId(context))
                     Log.d(TAG, "User Position: $userPosition") // Log the user position
 
-                    Toast.makeText(context, "Login successful: ${loginResponse.uid}", Toast.LENGTH_LONG).show()
+                    Toast.makeText(context, "Login successful. Welcome back ${loginResponse.username}!", Toast.LENGTH_LONG).show()
                     onResult(true, userPosition)  // Pass position to onResult
                 }
             } else {

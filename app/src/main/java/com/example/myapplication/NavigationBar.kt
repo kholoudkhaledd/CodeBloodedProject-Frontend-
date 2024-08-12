@@ -114,9 +114,12 @@ fun NavigationScreen() {
                     CustomBottomNavigationBar(
                         selectedScreen = selectedScreen,
                         onScreenSelected = { screen ->
-                            selectedScreen = screen
-                            navController.navigate(screen) {
-                                popUpTo(screen) { inclusive = true }
+                            if (selectedScreen != screen) {
+                                selectedScreen = screen
+                                navController.navigate(screen) {
+                                    launchSingleTop = true
+                                    restoreState = true
+                                }
                             }
                         },
                         additionalIcon = {
@@ -125,9 +128,12 @@ fun NavigationScreen() {
                                 iconId = if (selectedScreen == Screens.TeamsSchedule.screen) R.drawable.teamsgreen else R.drawable.teamsgray,
                                 contentDescription = "Teams Schedule",
                                 onClick = {
-                                    selectedScreen = Screens.TeamsSchedule.screen
-                                    navController.navigate(Screens.TeamsSchedule.screen) {
-                                        popUpTo(Screens.TeamsSchedule.screen) { inclusive = true }
+                                    if (selectedScreen != Screens.TeamsSchedule.screen) {
+                                        selectedScreen = Screens.TeamsSchedule.screen
+                                        navController.navigate(Screens.TeamsSchedule.screen) {
+                                            launchSingleTop = true
+                                            restoreState = true
+                                        }
                                     }
                                 }
                             )
@@ -137,9 +143,12 @@ fun NavigationScreen() {
                     CustomBottomNavigationBar(
                         selectedScreen = selectedScreen,
                         onScreenSelected = { screen ->
-                            selectedScreen = screen
-                            navController.navigate(screen) {
-                                popUpTo(screen) { inclusive = true }
+                            if (selectedScreen != screen) {
+                                selectedScreen = screen
+                                navController.navigate(screen) {
+                                    launchSingleTop = true
+                                    restoreState = true
+                                }
                             }
                         }
                     )
@@ -166,13 +175,26 @@ fun NavigationScreen() {
                 val context = LocalContext.current
                 Finallayout(context)
             }
-            composable(Screens.Chatbot.screen) { ChatScreen() }
-            composable(Screens.Notification.screen) { NotificationScreen() }
-            composable(Screens.Requests.screen) { MyRequestsPage() }
-            composable(Screens.TeamsSchedule.screen) { TeamsScheduleScreen() }
+            composable(Screens.Chatbot.screen) {
+                selectedScreen = Screens.Chatbot.screen
+                ChatScreen()
+            }
+            composable(Screens.Notification.screen) {
+                selectedScreen = Screens.Notification.screen
+                NotificationScreen()
+            }
+            composable(Screens.Requests.screen) {
+                selectedScreen = Screens.Requests.screen
+                MyRequestsPage()
+            }
+            composable(Screens.TeamsSchedule.screen) {
+                selectedScreen = Screens.TeamsSchedule.screen
+                TeamsScheduleScreen()
+            }
         }
     }
 }
+
 
 
 

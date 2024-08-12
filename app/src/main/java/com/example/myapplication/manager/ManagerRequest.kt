@@ -66,8 +66,17 @@ private fun fetchRequests(userId: String, onResult: (List<Request>) -> Unit) {
     })
 }
 @Composable
-fun ManagerRequest(requests: List<Request>) {
-    var requestList by remember { mutableStateOf(requests) }
+fun ManagerRequest() {
+    val context = LocalContext.current // Get the current Context
+    val userId = Sharedpreference.getUserId(context) ?: return // Return early if userId is null
+    var requestList by remember { mutableStateOf(listOf<Request>()) }
+
+    LaunchedEffect(Unit) {
+        fetchRequests(userId) { fetchedRequests ->
+            Log.d("MyRequestsPage", "Fetched requests: $fetchedRequests")
+            requestList = fetchedRequests
+        }
+    }
 
     // Functions to handle approval and denial of requests
     fun approveRequest(request: Request) {
@@ -155,12 +164,13 @@ fun RequestItem(
             fontSize = 16.sp
         )
         Spacer(modifier = Modifier.height(12.dp))
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            if (!isApproved) {
+
+        if (!showMessage) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
                 Icon(
                     painter = painterResource(id = R.drawable.icon_check),
                     contentDescription = "Approve Request",
-                    tint = Color(0xFF4CAF50), // Green color for approval
+                    tint = Color.Unspecified, // Green color for approval
                     modifier = Modifier
                         .size(24.dp)
                         .clickable {
@@ -175,7 +185,7 @@ fun RequestItem(
                 Icon(
                     painter = painterResource(id = R.drawable.icon_deny),
                     contentDescription = "Deny Request",
-                    tint = Color(0xFFF44336), // Red color for denial
+                    tint = Color.Unspecified, // Red color for denial
                     modifier = Modifier
                         .size(24.dp)
                         .clickable {
@@ -187,7 +197,15 @@ fun RequestItem(
                         }
                 )
             }
+        } else {
+            Text(
+                text = message,
+                color = if (isApproved) colorResource(id = R.color.deloitteGreen) else Color.Red,
+                fontWeight = FontWeight.Bold,
+                fontSize = 16.sp
+            )
         }
     }
 }
+
 

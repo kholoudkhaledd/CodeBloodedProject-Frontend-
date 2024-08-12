@@ -1,5 +1,6 @@
 package com.example.myapplication.manager
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -22,6 +23,7 @@ import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -30,16 +32,51 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.myapplication.R
+import com.example.myapplication.RetrofitClient
+import com.example.myapplication.Sharedpreference
 import com.example.yourapp.ui.Request
+//import com.example.yourapp.ui.fetchRequests
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
+private fun fetchRequests(userId: String, onResult: (List<Request>) -> Unit) {
+    RetrofitClient.apiService.getRequests(userId).enqueue(object : Callback<List<Request>> {
+        override fun onResponse(call: Call<List<Request>>, response: Response<List<Request>>) {
+            if (response.isSuccessful) {
+                response.body()?.let {
+                    Log.d("fetchRequests", "Fetched requests: $it")
+                    onResult(it)
+                }
+            } else {
+                Log.e("fetchRequests", "Failed to fetch requests: ${response.code()}")
+            }
+        }
+
+        override fun onFailure(call: Call<List<Request>>, t: Throwable) {
+            Log.e("fetchRequests", "Error fetching requests", t)
+        }
+    })
+}
 @Composable
-fun ManagerRequest(requests: List<Request>) {
-    var requestList by remember { mutableStateOf(requests) }
+fun ManagerRequest() {
+    val context = LocalContext.current // Get the current Context
+    val userId = Sharedpreference.getUserId(context) ?: return // Return early if userId is null
+    var requestList by remember { mutableStateOf(listOf<Request>()) }
+
+    LaunchedEffect(Unit) {
+        fetchRequests(userId) { fetchedRequests ->
+            Log.d("MyRequestsPage", "Fetched requests: $fetchedRequests")
+            requestList = fetchedRequests
+        }
+    }
 
     // Functions to handle approval and denial of requests
     fun approveRequest(request: Request) {
@@ -110,6 +147,8 @@ fun RequestItem(
 ) {
     var isApproved by remember { mutableStateOf(false) }
     var isDenied by remember { mutableStateOf(false) }
+    var showMessage by remember { mutableStateOf(false) }
+    var message by remember { mutableStateOf("") }
 
     Column(modifier = Modifier.fillMaxWidth()) {
         Text(
@@ -120,42 +159,53 @@ fun RequestItem(
         )
         Spacer(modifier = Modifier.height(4.dp))
         Text(
-            text = "Request to change date from " + request.changeDayFrom + " to  " + request.changeDayTo,
+            text = "Request to change date from ${request.changeDayFrom} to ${request.changeDayTo}",
             fontWeight = FontWeight.Medium,
             fontSize = 16.sp
         )
         Spacer(modifier = Modifier.height(12.dp))
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            if (!isApproved) {
+
+        if (!showMessage) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
                 Icon(
                     painter = painterResource(id = R.drawable.icon_check),
                     contentDescription = "Approve Request",
-                    tint = Color(0xFF4CAF50), // Green color for approval
+                    tint = Color.Unspecified, // Green color for approval
                     modifier = Modifier
                         .size(24.dp)
                         .clickable {
                             onApproveRequest(request)
                             isApproved = true
                             isDenied = false
+                            showMessage = true
+                            message = "You have accepted the request"
                         }
                 )
-            }
-            Spacer(modifier = Modifier.width(16.dp))
-            if (!isDenied) {
+                Spacer(modifier = Modifier.width(16.dp))
                 Icon(
                     painter = painterResource(id = R.drawable.icon_deny),
                     contentDescription = "Deny Request",
-                    tint = Color(0xFFF44336), // Red color for denial
+                    tint = Color.Unspecified, // Red color for denial
                     modifier = Modifier
                         .size(24.dp)
                         .clickable {
                             onDenyRequest(request)
                             isDenied = true
                             isApproved = false
+                            showMessage = true
+                            message = "You have denied the request"
                         }
                 )
             }
+        } else {
+            Text(
+                text = message,
+                color = if (isApproved) colorResource(id = R.color.deloitteGreen) else Color.Red,
+                fontWeight = FontWeight.Bold,
+                fontSize = 16.sp
+            )
         }
     }
 }
+
 

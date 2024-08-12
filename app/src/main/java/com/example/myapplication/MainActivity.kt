@@ -59,9 +59,7 @@ class MainActivity : ComponentActivity() {
         askNotificationPermission()
         setContent {
             MyApplicationTheme {
-                // Call your Firebase connection test function here
                 NavigationScreen()
-//                Viewteamscalander()
             }
         }
     }

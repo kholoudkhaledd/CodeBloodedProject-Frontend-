@@ -75,7 +75,7 @@ fun CustomCalendar(
                     if (dayIndex in 1..daysInMonth) {
                         val dateString = "$dayIndex-${currentMonth.value}-$currentYear"
 //                        val isSelected = dateString == selectedDate selected current date
-                          val isSelected="Home"
+                        val isSelected="Home"
                         Box(
                             modifier = Modifier
                                 .weight(1f)

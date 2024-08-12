@@ -9,7 +9,13 @@ import retrofit2.http.GET
 import retrofit2.http.Path
 
 data class LoginRequest(val email: String, val password: String)
-data class LoginResponse(val uid: String, val username: String)
+data class LoginResponse(
+    val uid: String,
+    val username: String,
+    val position: String?
+)
+
+
 data class CreateRequest(val userID: String, val changeDayFrom: String, val changeDayTo: String, val Status: String, val timeStamp: String)
 
 interface ApiService {

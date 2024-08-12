@@ -189,10 +189,6 @@ fun loginUser(
                     Toast.makeText(context, "Login successful: ${loginResponse.uid}", Toast.LENGTH_LONG).show()
                     onResult(true, userPosition)  // Pass position to onResult
                 }
-                Toast.makeText(navController.context,
-                    "Welcome Back ${loginResponse?.username}",
-                    Toast.LENGTH_LONG).show()
-                onResult(true)  // Notify that login was successful
             } else {
                 Toast.makeText(context, "Login failed: ${response.message()}", Toast.LENGTH_LONG).show()
                 onResult(false, "") // Notify that login failed

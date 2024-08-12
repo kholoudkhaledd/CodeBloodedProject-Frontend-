@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -24,8 +25,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -39,37 +42,6 @@ import com.example.myapplication.notifications.ui.theme.NotificationScreen
 import com.example.yourapp.ui.MyRequestsPage
 import com.example.myapplication.Screens
 
-
-import android.content.Context
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Divider
-import androidx.compose.material3.Icon
-import androidx.compose.material3.Text
-import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import com.example.myapplication.R
-import com.example.myapplication.RetrofitClient
-import com.example.myapplication.Sharedpreference
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import com.google.gson.annotations.SerializedName
-import android.util.Log
 
 
 @Composable
@@ -159,16 +131,6 @@ fun NavigationScreen() {
                                     }
                                 }
                             )
-                CustomBottomNavigationBar(
-                    selectedScreen = selectedScreen,
-                    onScreenSelected = { screen ->
-                        if (selectedScreen != screen) {
-                            navController.navigate(screen) {
-                                popUpTo(navController.graph.startDestinationId) {
-                                    inclusive = true
-                                }
-                                launchSingleTop = true
-                            }
                         }
                     )
                 } else {
@@ -192,9 +154,7 @@ fun NavigationScreen() {
                 .padding(paddingValues)
                 .fillMaxSize()
         ) {
-            composable(Screens.SplashScreen.screen) {
-                SplashScreen(navController, sharedViewModel)
-            }
+            composable(Screens.SplashScreen.screen) { SplashScreen(navController, sharedViewModel) }
             composable(Screens.Login.screen) {
                 val context = LocalContext.current
                 LoginScreen(navController, context, sharedViewModel) { success, position ->
@@ -202,9 +162,7 @@ fun NavigationScreen() {
                 }
             }
             composable(Screens.Home.screen) {
-                LaunchedEffect(Unit) {
-                    selectedScreen = Screens.Home.screen
-                }
+                selectedScreen = Screens.Home.screen
                 val context = LocalContext.current
                 Finallayout(context)
             }
@@ -212,28 +170,9 @@ fun NavigationScreen() {
             composable(Screens.Notification.screen) { NotificationScreen() }
             composable(Screens.Requests.screen) { MyRequestsPage() }
             composable(Screens.TeamsSchedule.screen) { TeamsScheduleScreen() }
-            }
-            composable(Screens.Chatbot.screen) {
-                LaunchedEffect(Unit) {
-                    selectedScreen = Screens.Chatbot.screen
-                }
-                ChatScreen()
-            }
-            composable(Screens.Notification.screen) {
-                LaunchedEffect(Unit) {
-                    selectedScreen = Screens.Notification.screen
-                }
-                NotificationScreen()
-            }
-            composable(Screens.Requests.screen) {
-                LaunchedEffect(Unit) {
-                    selectedScreen = Screens.Requests.screen
-                }
-                MyRequestsPage()
-            }
         }
     }
-
+}
 
 
 

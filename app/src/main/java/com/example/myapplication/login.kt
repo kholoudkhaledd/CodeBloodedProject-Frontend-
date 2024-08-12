@@ -174,7 +174,7 @@ fun loginUser(email: String, password: String, navController: NavController,
 
                 }
                 Toast.makeText(navController.context,
-                    "Login successful: ${loginResponse?.uid}",
+                    "Welcome Back ${loginResponse?.username}",
                     Toast.LENGTH_LONG).show()
                 onResult(true)  // Notify that login was successful
             } else {

@@ -52,26 +52,34 @@ fun LoginScreen(
     val isTextFieldNotEmpty by remember {
         derivedStateOf { email.isNotEmpty() && password.isNotEmpty() }
     }
+    var passwordVisibility by remember { mutableStateOf(false) }
 
-    Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
+    Image(
+        painter = painterResource(id = R.drawable.img),
+        contentDescription = "Background",
+        modifier = Modifier
+            .fillMaxSize()
+            .aspectRatio(0.3f)
+            .alpha(0.9f)
+    )
+    Column(
+        modifier = Modifier
+            .padding(20.dp), // Add padding to avoid content sticking to the edges
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center // Center vertically
     ) {
-        Image(
-            painter = painterResource(id = R.drawable.img),
-            contentDescription = "Background",
-            modifier = Modifier
-                .fillMaxSize()
-                .aspectRatio(0.3f)
-                .alpha(0.9f)
-        )
         Image(
             painter = painterResource(id = R.drawable.deloittelogo),
             contentDescription = "Deloitte Logo",
             modifier = Modifier
-                .size(300.dp)
-                .align(Alignment.TopCenter)
-                .offset(y = 80.dp)
+//                .size(247.dp)
+                .padding(bottom = 32.dp) // Add space below the logo
+        )
+        Text(
+            text = "Login",
+            color = Color.White,
+            style = LocalTextStyle.current.copy(fontSize = 25.sp),
+            modifier = Modifier.padding(bottom = 32.dp) // Add space between title and text fields
         )
         TextField(
             value = email,
@@ -81,19 +89,9 @@ fun LoginScreen(
             label = { Text(text = "Email Address") },
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 20.dp)
-                .offset(y = (-40).dp),
+                .padding(bottom = 16.dp),
             shape = RoundedCornerShape(12.dp),
         )
-        Text(
-            text = "Login",
-            modifier = Modifier
-                .offset(y = (300).dp)
-                .align(Alignment.TopCenter),
-            color = Color.White,
-            style = LocalTextStyle.current.copy(fontSize = 25.sp)
-        )
-        var passwordVisibility by remember { mutableStateOf(false) }
         TextField(
             value = password,
             onValueChange = { password = it },
@@ -102,8 +100,7 @@ fun LoginScreen(
             label = { Text(text = "Password") },
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 20.dp)
-                .offset(y = 40.dp),
+                .padding(bottom = 32.dp),
             visualTransformation = if (passwordVisibility) VisualTransformation.None
             else PasswordVisualTransformation(),
             trailingIcon = {
@@ -145,10 +142,7 @@ fun LoginScreen(
             },
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 20.dp)
-                .height(50.dp)
-                .align(Alignment.BottomCenter)
-                .offset(y = (-320).dp),
+                .height(50.dp),
             colors = ButtonDefaults.buttonColors(
                 containerColor = if (isTextFieldNotEmpty) colorResource(id = R.color.deloitteGreen)
                 else colorResource(id = R.color.coolGray6)

@@ -37,14 +37,18 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.myapplication.calander.Finallayout
+import com.example.myapplication.manager.TeamsScheduleScreen
 import com.example.myapplication.notifications.ui.theme.NotificationScreen
 import com.example.yourapp.ui.MyRequestsPage
+import com.example.myapplication.Screens
+
 
 
 @Composable
 fun CustomBottomNavigationBar(
     selectedScreen: String,
     onScreenSelected: (String) -> Unit,
+    additionalIcon: (@Composable () -> Unit)? = null // Add this parameter
 ) {
     Box(
         modifier = Modifier
@@ -57,8 +61,8 @@ fun CustomBottomNavigationBar(
             modifier = Modifier
                 .fillMaxSize()
                 .background(Color.White),
-            horizontalArrangement = Arrangement.SpaceAround, // Distribute space evenly
-            verticalAlignment = Alignment.CenterVertically // Center icons vertically
+            horizontalArrangement = Arrangement.SpaceAround,
+            verticalAlignment = Alignment.CenterVertically
         ) {
             // Home button
             BarIcon(
@@ -74,6 +78,8 @@ fun CustomBottomNavigationBar(
                 contentDescription = "Chatbot",
                 onClick = { onScreenSelected(Screens.Chatbot.screen) }
             )
+            additionalIcon?.invoke()
+
             // Requests button
             BarIcon(
                 selected = selectedScreen == Screens.Requests.screen,
@@ -88,6 +94,7 @@ fun CustomBottomNavigationBar(
                 contentDescription = "Notifications",
                 onClick = { onScreenSelected(Screens.Notification.screen) }
             )
+            // Optionally add the extra icon for managers
         }
     }
 }
@@ -98,19 +105,45 @@ fun NavigationScreen() {
     val navController = rememberNavController()
     val sharedViewModel: SharedViewModel = viewModel()
     var selectedScreen by remember { mutableStateOf(Screens.SplashScreen.screen) }
+    var isManager by remember { mutableStateOf(false) }
 
     Scaffold(
         bottomBar = {
             if (selectedScreen !in listOf(Screens.SplashScreen.screen, Screens.Login.screen)) {
-                CustomBottomNavigationBar(
-                    selectedScreen = selectedScreen,
-                    onScreenSelected = { screen ->
-                        selectedScreen = screen
-                        navController.navigate(screen) {
-                            popUpTo(screen) { inclusive = true }
+                if (isManager) {
+                    CustomBottomNavigationBar(
+                        selectedScreen = selectedScreen,
+                        onScreenSelected = { screen ->
+                            selectedScreen = screen
+                            navController.navigate(screen) {
+                                popUpTo(screen) { inclusive = true }
+                            }
+                        },
+                        additionalIcon = {
+                            BarIcon(
+                                selected = selectedScreen == Screens.TeamsSchedule.screen,
+                                iconId = if (selectedScreen == Screens.TeamsSchedule.screen) R.drawable.teamsgreen else R.drawable.teamsgray,
+                                contentDescription = "Teams Schedule",
+                                onClick = {
+                                    selectedScreen = Screens.TeamsSchedule.screen
+                                    navController.navigate(Screens.TeamsSchedule.screen) {
+                                        popUpTo(Screens.TeamsSchedule.screen) { inclusive = true }
+                                    }
+                                }
+                            )
                         }
-                    }
-                )
+                    )
+                } else {
+                    CustomBottomNavigationBar(
+                        selectedScreen = selectedScreen,
+                        onScreenSelected = { screen ->
+                            selectedScreen = screen
+                            navController.navigate(screen) {
+                                popUpTo(screen) { inclusive = true }
+                            }
+                        }
+                    )
+                }
             }
         }
     ) { paddingValues ->
@@ -124,19 +157,24 @@ fun NavigationScreen() {
             composable(Screens.SplashScreen.screen) { SplashScreen(navController, sharedViewModel) }
             composable(Screens.Login.screen) {
                 val context = LocalContext.current
-                LoginScreen(navController, context,sharedViewModel)
+                LoginScreen(navController, context, sharedViewModel) { success, position ->
+                    isManager = position.equals("Manager", ignoreCase = true)
+                }
             }
             composable(Screens.Home.screen) {
                 selectedScreen = Screens.Home.screen
                 val context = LocalContext.current
-                Finallayout(context )
+                Finallayout(context)
             }
             composable(Screens.Chatbot.screen) { ChatScreen() }
             composable(Screens.Notification.screen) { NotificationScreen() }
             composable(Screens.Requests.screen) { MyRequestsPage() }
+            composable(Screens.TeamsSchedule.screen) { TeamsScheduleScreen() }
         }
     }
 }
+
+
 
 @Composable
 fun BarIcon(

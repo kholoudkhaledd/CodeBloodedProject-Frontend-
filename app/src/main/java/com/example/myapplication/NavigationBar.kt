@@ -41,7 +41,7 @@ import com.example.myapplication.manager.TeamsScheduleScreen
 import com.example.myapplication.notifications.ui.theme.NotificationScreen
 import com.example.yourapp.ui.MyRequestsPage
 import com.example.myapplication.Screens
-
+import com.example.myapplication.manager.ManagerRequest
 
 
 @Composable
@@ -184,13 +184,14 @@ fun NavigationScreen() {
                 NotificationScreen()
             }
             composable(Screens.Requests.screen) {
-                selectedScreen = Screens.Requests.screen
-                MyRequestsPage()
-            }
-            composable(Screens.TeamsSchedule.screen) {
-                selectedScreen = Screens.TeamsSchedule.screen
-                TeamsScheduleScreen()
-            }
+                if (isManager)
+                    ManagerRequest()
+                else
+                    MyRequestsPage()
+
+            } // Show MyRequestsPage for all users
+
+            composable(Screens.TeamsSchedule.screen) { TeamsScheduleScreen() }
         }
     }
 }

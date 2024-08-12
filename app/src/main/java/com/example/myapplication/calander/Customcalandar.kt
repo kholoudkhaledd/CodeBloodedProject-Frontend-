@@ -36,13 +36,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.myapplication.RetrofitClient
 import com.example.myapplication.Sharedpreference
+import com.example.myapplication.ui.theme.Darkblue
+import com.example.myapplication.ui.theme.GreenJC
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -53,11 +54,139 @@ data class CalendarData(
     val date: String,
     val location: String
 )
+
 data class CalendarResponse(
     val calendar: Map<String, String> // Adjusted to match the JSON structure
 )
 
 
+
+//@RequiresApi(Build.VERSION_CODES.O)
+//@Composable
+//fun CustomCalendar(
+//    modifier: Modifier = Modifier,
+//    currentMonth: Month,
+//    currentYear: Int,
+//    selectedDate: String,
+//    onDateSelected: (String) -> Unit,
+//    context: Context // Pass the context to access SharedPreferences
+//) {
+//    val userId = Sharedpreference.getUserId(context) // Retrieve the user ID
+//    val daysOfWeek = listOf("S", "M", "T", "W", "T", "F", "S")
+//    val daysInMonth = currentMonth.length(Year.of(currentYear).isLeap)
+//    val startOfMonth = LocalDate.of(currentYear, currentMonth, 1)
+//    val startDayOfWeek = startOfMonth.dayOfWeek.value % 7
+//    val totalCells = (startDayOfWeek + daysInMonth + 6) / 7 * 7
+//
+//    // Format month and year correctly
+//    val monthNumber = currentMonth.value.toString().padStart(2, '0')
+//    val dateString = "$monthNumber-$currentYear"
+//
+//    // State to hold the calendar data
+//    var calendarData by remember { mutableStateOf<Map<String, String>>(emptyMap()) }
+//
+//    // Fetch calendar data using Retrofit
+//    LaunchedEffect(currentMonth, currentYear, userId) {
+//        userId?.let {
+//            Log.d(TAG, "Requesting calendar data for userId: $it, date: $dateString")
+//
+//            RetrofitClient.apiService.getCalendarForMonth(it, dateString)
+//                .enqueue(object : Callback<CalendarResponse> {
+//                    override fun onResponse(
+//                        call: Call<CalendarResponse>,
+//                        response: Response<CalendarResponse>
+//                    ) {
+//                        if (response.isSuccessful) {
+//                            val responseBody = response.body()
+//                            Log.d(TAG, "API Response: $responseBody")
+//                            calendarData = responseBody?.calendar ?: emptyMap()
+//                            Log.d(TAG, "Parsed Calendar Data: $calendarData")
+//                        } else {
+//                            Log.e(TAG, "API Error: ${response.errorBody()?.string()}")
+//                        }
+//                    }
+//
+//                    override fun onFailure(call: Call<CalendarResponse>, t: Throwable) {
+//                        Log.e(TAG, "API Failure: ${t.message}")
+//                    }
+//                })
+//        } ?: run {
+//            Log.e(TAG, "User ID is null")
+//        }
+//    }
+//
+//    Column(
+//        modifier = modifier
+//            .background(Color.White)
+//            .padding(0.dp) // Remove any extra padding
+//    ) {
+//        // Header Row with Days of Week
+//        Row(
+//            modifier = Modifier
+//                .fillMaxWidth()
+//                .background(Color(0xFFDDDDDD)) // Light gray background for header
+//                .padding(vertical = 4.dp)
+//        ) {
+//            daysOfWeek.forEach { day ->
+//                Text(
+//                    text = day,
+//                    modifier = Modifier
+//                        .weight(1f)
+//                        .padding(4.dp), // Adjust padding to fit smaller size
+//                    fontWeight = FontWeight.SemiBold,
+//                    textAlign = TextAlign.Center,
+//                    fontSize = 12.sp // Adjust font size for smaller header
+//                )
+//            }
+//        }
+//
+//        // Calendar Days
+//        for (rowIndex in 0 until totalCells / 7) {
+//            Row(
+//                modifier = Modifier
+//                    .fillMaxWidth()
+//                    .height(43.dp)
+//            ) {
+//                for (columnIndex in 0 until 7) {
+//                    val dayIndex = rowIndex * 7 + columnIndex - startDayOfWeek + 1
+//                    if (dayIndex in 1..daysInMonth) {
+//                        // Adjust dateString to the format "dd-MM"
+//                        val dayString = "${dayIndex.toString().padStart(2, '0')}-$monthNumber"
+//                        Log.d(TAG, "day-string: $dayString")
+//
+//                        val location = calendarData[dayString] ?: "Unknown"
+//                        val location2 = calendarData[dayString]
+//                        Log.d(TAG, "Location2: $location2")
+//                        Log.d(TAG, "CustomCalendar: Date: $dayString, Location: $location")
+//
+//                        Box(
+//                            modifier = Modifier
+//                                .weight(1f)
+//                                .aspectRatio(1f) // Ensures each cell is square
+//                                .padding(1.dp) // Adjust padding to make boxes smaller
+//                                .clickable { onDateSelected(dayString) },
+//                            contentAlignment = Alignment.Center
+//                        ) {
+//                            Text(
+//                                text = "$dayIndex\n$location",
+//                                color = if (location == "Home") Color.Black else Color.Blue,
+//                                fontSize = 15.sp, // Adjust font size for smaller days
+//                                textAlign = TextAlign.Center
+//                            )
+//                        }
+//                    } else {
+//                        Box(
+//                            modifier = Modifier
+//                                .weight(1f)
+//                                .aspectRatio(1f) // Empty box for padding
+//                        )
+//                    }
+//                }
+//            }
+//        }
+//        Spacer(modifier = Modifier.height(8.dp)) // Adjusted height for smaller spacing
+//    }
+//}
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun CustomCalendar(
@@ -75,16 +204,18 @@ fun CustomCalendar(
     val startDayOfWeek = startOfMonth.dayOfWeek.value % 7
     val totalCells = (startDayOfWeek + daysInMonth + 6) / 7 * 7
 
-    // Format month as two-digit string
-    val formattedMonth = currentMonth.value.toString().padStart(2, '0')
+    // Format month and year correctly for API request
+    val monthNumber = currentMonth.value.toString().padStart(2, '0')
+    val dateString = "$monthNumber-$currentYear"
 
     // State to hold the calendar data
     var calendarData by remember { mutableStateOf<Map<String, String>>(emptyMap()) }
-
+   Log.d(TAG,"calandarData $calendarData ")
     // Fetch calendar data using Retrofit
     LaunchedEffect(currentMonth, currentYear, userId) {
         userId?.let {
-            val dateString = "$formattedMonth-$currentYear"
+            Log.d(TAG, "Requesting calendar data for userId: $it, date: $dateString")
+
             RetrofitClient.apiService.getCalendarForMonth(it, dateString)
                 .enqueue(object : Callback<CalendarResponse> {
                     override fun onResponse(
@@ -92,8 +223,14 @@ fun CustomCalendar(
                         response: Response<CalendarResponse>
                     ) {
                         if (response.isSuccessful) {
-                            calendarData = response.body()?.calendar ?: emptyMap()
-                            Log.d(TAG, "Calendar data: $calendarData")
+                            val responseBody = response.body()
+                            Log.d(TAG, "API Response: $responseBody")
+                            calendarData = responseBody?.calendar ?: emptyMap()
+
+                            // Log all calendar data for debugging
+                            calendarData.forEach { (date, location) ->
+                                Log.d(TAG, "Calendar Data: Date: $date, Location: $location")
+                            }
                         } else {
                             Log.e(TAG, "API Error: ${response.errorBody()?.string()}")
                         }
@@ -117,6 +254,8 @@ fun CustomCalendar(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
+                .background(Color.White) // Light gray background for header
+                .padding(vertical = 4.dp)
         ) {
             daysOfWeek.forEach { day ->
                 Text(
@@ -141,21 +280,49 @@ fun CustomCalendar(
                 for (columnIndex in 0 until 7) {
                     val dayIndex = rowIndex * 7 + columnIndex - startDayOfWeek + 1
                     if (dayIndex in 1..daysInMonth) {
-                        val dateString = "$dayIndex-$formattedMonth-$currentYear"
-                        val location = calendarData[dateString] ?: "Unknown"
-                        Log.d(TAG, "CustomCalendar: $location")
+                        // Format dayString to match API response format "dd-MMM"
+                        // Format dayString to match API response format "dd-MMM"
+                        val dayString = "${dayIndex.toString().padStart(2, '0')}-${currentMonth.name.take(3).lowercase().replaceFirstChar { it.uppercase() }}"
+
+                        Log.d(TAG, "day-string: $dayString")
+                        Log.d(TAG, "calendarData: $calendarData")
+                        Log.d(TAG, "Formatted dayString: $dayString")
+                        calendarData.keys.forEach { key ->
+                            Log.d(TAG, "Key in calendarData: $key")
+                        }
+                        if (calendarData.containsKey(dayString)) {
+                            Log.d(TAG, "Match found for dayString: $dayString")
+                        } else {
+                            Log.d(TAG, "No match found for dayString: $dayString")
+                        }
+
+// Find the location for the current dayString
+                        // Ensure month abbreviation is properly formatted to match calendarData keys
+                        Log.d(TAG, "Formatted dayString: $dayString")
+
+// Find the location for the current dayString
+                        val location = calendarData[dayString]
+                        Log.d(TAG, "Location for $dayString: $location")
+
+                        // Define background color based on the location
+                        val backgroundColor = when (location) {
+                            "Home" -> GreenJC
+                            "Office" -> Darkblue
+                            else -> Color.Gray
+                        }
 
                         Box(
                             modifier = Modifier
                                 .weight(1f)
                                 .aspectRatio(1f) // Ensures each cell is square
                                 .padding(1.dp) // Adjust padding to make boxes smaller
-                                .clickable { onDateSelected(dateString) },
+                                .clickable { onDateSelected(dayString) }
+                                .background(Color.White), // Apply background color based on location
                             contentAlignment = Alignment.Center
                         ) {
                             Text(
-                                text = "$dayIndex\n$location",
-                                color = if (location == "Home") Color.Black else Color.Blue,
+                                text = "$dayIndex",
+                                color = backgroundColor, // Text color for better contrast
                                 fontSize = 15.sp, // Adjust font size for smaller days
                                 textAlign = TextAlign.Center
                             )
@@ -180,13 +347,19 @@ fun CustomCalendar(
 
 
 
+
+
+
+
+
+
+
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun CalendarViewScreen() {
+fun CalendarViewScreen(context: Context) {
     var selectedDate by remember { mutableStateOf(getCurrentDate()) }
     var currentMonth by remember { mutableStateOf(LocalDate.now().month) }
     var currentYear by remember { mutableStateOf(LocalDate.now().year) }
-    val context = LocalContext.current // Obtain the context for SharedPreferences
 
     Column(
         modifier = Modifier

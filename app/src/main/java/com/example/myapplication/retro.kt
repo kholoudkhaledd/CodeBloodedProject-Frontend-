@@ -23,7 +23,6 @@ interface ApiService {
     fun deleteRequest(@Path("request_id") requestId: String): Call<Void>
 
     @GET("view_schedule/{userId}/{date}")
-
     fun getCalendarForMonth(
         @Path("userId") userId: String,
         @Path("date") date: String

@@ -76,7 +76,7 @@ fun Finallayout(context: Context) {
                     .clip(RoundedCornerShape(25.dp))
                     .height(450.dp)
             ) {
-                CalendarViewScreen()
+                CalendarViewScreen(context)
             }
         }
 

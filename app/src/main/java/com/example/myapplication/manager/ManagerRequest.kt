@@ -1,5 +1,6 @@
 package com.example.myapplication.manager
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -22,6 +23,7 @@ import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -30,13 +32,39 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.myapplication.R
+import com.example.myapplication.RetrofitClient
+import com.example.myapplication.Sharedpreference
 import com.example.yourapp.ui.Request
+//import com.example.yourapp.ui.fetchRequests
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
+private fun fetchRequests(userId: String, onResult: (List<Request>) -> Unit) {
+    RetrofitClient.apiService.getRequests(userId).enqueue(object : Callback<List<Request>> {
+        override fun onResponse(call: Call<List<Request>>, response: Response<List<Request>>) {
+            if (response.isSuccessful) {
+                response.body()?.let {
+                    Log.d("fetchRequests", "Fetched requests: $it")
+                    onResult(it)
+                }
+            } else {
+                Log.e("fetchRequests", "Failed to fetch requests: ${response.code()}")
+            }
+        }
+
+        override fun onFailure(call: Call<List<Request>>, t: Throwable) {
+            Log.e("fetchRequests", "Error fetching requests", t)
+        }
+    })
+}
 @Composable
 fun ManagerRequest(requests: List<Request>) {
     var requestList by remember { mutableStateOf(requests) }
@@ -110,6 +138,8 @@ fun RequestItem(
 ) {
     var isApproved by remember { mutableStateOf(false) }
     var isDenied by remember { mutableStateOf(false) }
+    var showMessage by remember { mutableStateOf(false) }
+    var message by remember { mutableStateOf("") }
 
     Column(modifier = Modifier.fillMaxWidth()) {
         Text(
@@ -120,7 +150,7 @@ fun RequestItem(
         )
         Spacer(modifier = Modifier.height(4.dp))
         Text(
-            text = "Request to change date from " + request.changeDayFrom + " to  " + request.changeDayTo,
+            text = "Request to change date from ${request.changeDayFrom} to ${request.changeDayTo}",
             fontWeight = FontWeight.Medium,
             fontSize = 16.sp
         )
@@ -137,11 +167,11 @@ fun RequestItem(
                             onApproveRequest(request)
                             isApproved = true
                             isDenied = false
+                            showMessage = true
+                            message = "You have accepted the request"
                         }
                 )
-            }
-            Spacer(modifier = Modifier.width(16.dp))
-            if (!isDenied) {
+                Spacer(modifier = Modifier.width(16.dp))
                 Icon(
                     painter = painterResource(id = R.drawable.icon_deny),
                     contentDescription = "Deny Request",
@@ -152,6 +182,8 @@ fun RequestItem(
                             onDenyRequest(request)
                             isDenied = true
                             isApproved = false
+                            showMessage = true
+                            message = "You have denied the request"
                         }
                 )
             }

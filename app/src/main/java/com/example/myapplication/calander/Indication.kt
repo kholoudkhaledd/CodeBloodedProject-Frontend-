@@ -28,7 +28,7 @@ fun Indication() {
     ) {
         Box(
             modifier = Modifier
-                .size(14.dp)
+                .size(16.dp)
                 .background(Darkblue, shape = CircleShape)
         )
         Spacer(modifier = Modifier.width(12.dp))
@@ -39,7 +39,7 @@ fun Indication() {
         Spacer(modifier = Modifier.width(35.dp))
         Box(
             modifier = Modifier
-                .size(14.dp)
+                .size(16.dp)
                 .background(GreenJC, shape = CircleShape)
         )
         Spacer(modifier = Modifier.width(12.dp))

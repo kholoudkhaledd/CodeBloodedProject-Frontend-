@@ -65,7 +65,7 @@ fun LoginScreen(navController: NavController, context: Context,
                 .alpha(0.9f)
         )
         Image(
-            painter = painterResource(id = R.drawable.logo),
+            painter = painterResource(id = R.drawable.deloittelogo),
             contentDescription = "Deloitte Logo",
             modifier = Modifier
                 .size(300.dp)
@@ -143,13 +143,16 @@ fun LoginScreen(navController: NavController, context: Context,
                 .padding(horizontal = 20.dp)
                 .height(50.dp)
                 .align(Alignment.BottomCenter)
-                .offset(y = (-280).dp),
+                .offset(y = (-320).dp),
             colors = ButtonDefaults.
             buttonColors(containerColor = if (isTextFieldNotEmpty) colorResource(
                 id = R.color.deloitteGreen
             ) else colorResource(id = R.color.coolGray6))
         ) {
-            Text(text = "Login")
+            Text(
+                text = "Login",
+                fontSize = 16.sp
+            )
         }
     }
 }
@@ -166,7 +169,10 @@ fun loginUser(email: String, password: String, navController: NavController,
                     Log.d(TAG, "IDDD: " + loginResponse.uid);
                     Sharedpreference.saveUserName(context,loginResponse.username)
                     sharedViewModel.setUserInfo(it.uid)
-                    Log.d(TAG, "Name: " + Sharedpreference.getUserName(context));
+                    Log.d(TAG, "Name: " + Sharedpreference.getUserName(context))
+                    Log.d(TAG, "UID: " + Sharedpreference.getUserId(context))
+
+
                 }
                 Toast.makeText(navController.context,
                     "Login successful: ${loginResponse?.uid}",
@@ -192,4 +198,3 @@ class PasswordTrans : VisualTransformation {
         return TransformedText(transformedText, OffsetMapping.Identity)
     }
 }
-

@@ -2,6 +2,7 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -29,61 +30,24 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.myapplication.CreateRequest
 import com.example.myapplication.R
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import okhttp3.RequestBody
-import okhttp3.RequestBody.Companion.toRequestBody
-import org.json.JSONObject
-import java.io.IOException
+import com.example.myapplication.RetrofitClient
+import com.example.myapplication.Sharedpreference
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Calendar
-
-@RequiresApi(Build.VERSION_CODES.O)
-fun createRequest(changeDayFrom: LocalDate, changeDayTo: LocalDate) {
-    val client = OkHttpClient()
-    val dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
-    val currentDateTime = LocalDateTime.now().format(dateTimeFormatter)
-
-    val jsonObject = JSONObject().apply {
-        put("changeDayFrom", changeDayFrom.toString())
-        put("changeDayTo", changeDayTo.toString())
-        put("Status", "Pending")
-        put("Time Stamp", currentDateTime)
-    }
-    val mediaType = "application/json; charset=utf-8".toMediaTypeOrNull()
-    val requestBody: RequestBody = jsonObject.toString().toRequestBody(mediaType)
-    val request = Request.Builder()
-        .url("http://10.0.2.2:8000/create_request") // Use 10.0.2.2 to access localhost from emulator
-        .post(requestBody)
-        .build()
-
-    println("Sending request with data: $jsonObject")
-
-    client.newCall(request).enqueue(object : okhttp3.Callback {
-        override fun onFailure(call: okhttp3.Call, e: IOException) {
-            e.printStackTrace()
-            println("Request failed: ${e.message}")
-        }
-
-        override fun onResponse(call: okhttp3.Call, response: okhttp3.Response) {
-            if (response.isSuccessful) {
-                println("Request successfully created")
-                println("Response: ${response.body?.string()}")
-            } else {
-                println("Error: ${response.code}")
-                println("Response: ${response.body?.string()}")
-            }
-        }
-    })
-}
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun RequestsSection() {
+    val context = LocalContext.current
+    val userId = Sharedpreference.getUserId(context) ?: return
+
     // Get the current date and day
     val currentDate = LocalDate.now()
     val currentDay = currentDate.dayOfMonth
@@ -99,21 +63,20 @@ fun RequestsSection() {
     Box(
         modifier = Modifier
             .padding(vertical = 15.dp)
-            .clip(RoundedCornerShape(25.dp))
+            .clip(RoundedCornerShape(32.dp))
             .fillMaxWidth()
             .background(Color.White)
     ) {
         Column(
             modifier = Modifier
                 .padding(vertical = 15.dp, horizontal = 25.dp)
-                .clip(RoundedCornerShape(20.dp))
                 .background(Color.White)
         ) {
             // First row with text at the start
             Text(
                 text = "Schedule change requests",
                 fontWeight = FontWeight.SemiBold,
-                fontSize = 18.sp,
+                fontSize = 14.sp,
                 modifier = Modifier.padding(vertical = 10.dp, horizontal = 10.dp)
             )
 
@@ -124,11 +87,12 @@ fun RequestsSection() {
                     .padding(vertical = 10.dp, horizontal = 10.dp)
                     .wrapContentSize(Alignment.TopStart)
                     .clip(RoundedCornerShape(8.dp))
+                    .border(1.dp, Color(0xFFE8E8E8), RoundedCornerShape(8.dp))
             ) {
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .background(Color(0xFFECECEC))
+                        .background(Color(0xFFF6F6F6))
                         .clip(RoundedCornerShape(20.dp))
                         .padding(vertical = 5.dp, horizontal = 10.dp)
                         .clickable { showDatePicker = true }
@@ -138,8 +102,9 @@ fun RequestsSection() {
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         Text(
-                            text = selectedDate?.toString() ?: "Select date",
-                            color = Color.Gray,
+                            text = selectedDate?.toString() ?: "Select day",
+                            fontSize = 14.sp,
+                            color = Color(0xFFBDBDBD),
                             modifier = Modifier
                                 .weight(1f)
                                 .padding(end = 8.dp, start = 8.dp)
@@ -170,11 +135,12 @@ fun RequestsSection() {
                     .padding(vertical = 10.dp, horizontal = 10.dp)
                     .wrapContentSize(Alignment.TopStart)
                     .clip(RoundedCornerShape(8.dp))
+                    .border(1.dp, Color(0xFFE8E8E8), RoundedCornerShape(8.dp))
             ) {
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .background(Color(0xFFECECEC))
+                        .background(Color(0xFFF6F6F6))
                         .clip(RoundedCornerShape(20.dp))
                         .padding(vertical = 5.dp, horizontal = 10.dp)
                         .clickable { showChangeDatePicker = true }
@@ -185,7 +151,8 @@ fun RequestsSection() {
                     ) {
                         Text(
                             text = changeDate?.toString() ?: "Change to",
-                            color = Color.Gray,
+                            fontSize = 14.sp,
+                            color = Color(0xFFBDBDBD),
                             modifier = Modifier
                                 .weight(1f)
                                 .padding(end = 8.dp, start = 8.dp)
@@ -217,23 +184,59 @@ fun RequestsSection() {
                 Button(
                     onClick = {
                         if (selectedDate != null && changeDate != null) {
-                            createRequest(selectedDate!!, changeDate!!)
+                            createRequest(
+                                userId,
+                                selectedDate!!,
+                                changeDate!!
+                            )
+                            selectedDate = null
+                            changeDate = null
                         } else {
                             println("Selected date or change date is null")
                         }
                     },
-                    colors = ButtonDefaults.buttonColors(containerColor  = if (selectedDate != null && changeDate != null) colorResource(
+                    colors = ButtonDefaults.buttonColors(containerColor = if (selectedDate != null && changeDate != null) colorResource(
                         id = R.color.deloitteGreen
                     ) else colorResource(id = R.color.coolGray6)),
                     modifier = Modifier
                         .fillMaxWidth()
+                        .clip(RoundedCornerShape(100.dp))
                         .padding(vertical = 10.dp, horizontal = 10.dp)
                 ) {
-                    Text("Submit")
+                    Text(text = "Submit", fontSize = 16.sp)
                 }
             }
         }
     }
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
+fun createRequest(userId: String, changeDayFrom: LocalDate, changeDayTo: LocalDate) {
+    val dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+    val currentDateTime = LocalDateTime.now().format(dateTimeFormatter)
+
+    val createRequest = CreateRequest(
+        userID = userId,
+        changeDayFrom = changeDayFrom.toString(),
+        changeDayTo = changeDayTo.toString(),
+        Status = "Pending",
+        timeStamp = currentDateTime
+    )
+
+    RetrofitClient.apiService.createRequest(userId, createRequest).enqueue(object : Callback<Void> {
+        override fun onResponse(call: Call<Void>, response: Response<Void>) {
+            if (response.isSuccessful) {
+                println("Request successfully created")
+            } else {
+                println("Error: ${response.code()}")
+            }
+        }
+
+        override fun onFailure(call: Call<Void>, t: Throwable) {
+            t.printStackTrace()
+            println("Request failed: ${t.message}")
+        }
+    })
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -257,4 +260,3 @@ fun DatePickerDialog(
         setOnDismissListener { onDismissRequest() }
     }.show()
 }
-

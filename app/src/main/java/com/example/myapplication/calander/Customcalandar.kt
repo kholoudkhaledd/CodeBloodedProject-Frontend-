@@ -263,9 +263,9 @@ fun CustomCalendar(
                     modifier = Modifier
                         .weight(1f)
                         .padding(4.dp), // Adjust padding to fit smaller size
-                    fontWeight = FontWeight.SemiBold,
+                    fontWeight = FontWeight.Bold,
                     textAlign = TextAlign.Center,
-                    fontSize = 12.sp // Adjust font size for smaller header
+                    fontSize = 16.sp // Adjust font size for smaller header
                 )
             }
         }
@@ -321,10 +321,16 @@ fun CustomCalendar(
                             contentAlignment = Alignment.Center
                         ) {
                             Text(
+
                                 text = "$dayIndex",
                                 color = backgroundColor, // Text color for better contrast
                                 fontSize = 15.sp, // Adjust font size for smaller days
                                 textAlign = TextAlign.Center
+
+                                text = dayIndex.toString(),
+                                color = if (isSelected=="Home") Color.Black else Color.Blue,
+                                fontSize = 14.sp // Adjust font size for smaller days
+
                             )
                         }
                     } else {

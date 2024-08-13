@@ -41,14 +41,16 @@ import androidx.compose.ui.unit.sp
 import com.example.myapplication.R
 import com.example.myapplication.RetrofitClient
 import com.example.myapplication.Sharedpreference
+import com.example.myapplication.UpdateStatusModel
 import com.example.yourapp.ui.Request
+import com.example.yourapp.ui.RequestStatus
 //import com.example.yourapp.ui.fetchRequests
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 private fun fetchRequests(userId: String, onResult: (List<Request>) -> Unit) {
-    RetrofitClient.apiService.getRequests(userId).enqueue(object : Callback<List<Request>> {
+    RetrofitClient.apiService.getAllRequests().enqueue(object : Callback<List<Request>> {
         override fun onResponse(call: Call<List<Request>>, response: Response<List<Request>>) {
             if (response.isSuccessful) {
                 response.body()?.let {
@@ -65,26 +67,58 @@ private fun fetchRequests(userId: String, onResult: (List<Request>) -> Unit) {
         }
     })
 }
+
 @Composable
 fun ManagerRequest() {
-    val context = LocalContext.current // Get the current Context
-    val userId = Sharedpreference.getUserId(context) ?: return // Return early if userId is null
+    val context = LocalContext.current
     var requestList by remember { mutableStateOf(listOf<Request>()) }
 
     LaunchedEffect(Unit) {
-        fetchRequests(userId) { fetchedRequests ->
-            Log.d("MyRequestsPage", "Fetched requests: $fetchedRequests")
+        fetchRequests("") { fetchedRequests ->
+            Log.d("ManagerRequest", "Fetched requests: $fetchedRequests")
             requestList = fetchedRequests
         }
     }
 
     // Functions to handle approval and denial of requests
     fun approveRequest(request: Request) {
-        // Handle request approval logic here
+        val statusUpdate = UpdateStatusModel(Status = "Approved")
+        RetrofitClient.apiService.updateStatus(request.id, statusUpdate).enqueue(object : Callback<Void> {
+            override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                if (response.isSuccessful) {
+                    requestList = requestList.map {
+                        if (it.id == request.id) it.copy(status = RequestStatus.APPROVED) else it
+                    }
+                    Log.d("approveRequest", "Request approved successfully")
+                } else {
+                    Log.e("approveRequest", "Failed to approve request: ${response.code()}")
+                }
+            }
+
+            override fun onFailure(call: Call<Void>, t: Throwable) {
+                Log.e("approveRequest", "Error approving request", t)
+            }
+        })
     }
 
     fun denyRequest(request: Request) {
-        // Handle request denial logic here
+        val statusUpdate = UpdateStatusModel(Status = "Denied")
+        RetrofitClient.apiService.updateStatus(request.id, statusUpdate).enqueue(object : Callback<Void> {
+            override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                if (response.isSuccessful) {
+                    requestList = requestList.map {
+                        if (it.id == request.id) it.copy(status = RequestStatus.DENIED) else it
+                    }
+                    Log.d("denyRequest", "Request denied successfully")
+                } else {
+                    Log.e("denyRequest", "Failed to deny request: ${response.code()}")
+                }
+            }
+
+            override fun onFailure(call: Call<Void>, t: Throwable) {
+                Log.e("denyRequest", "Error denying request", t)
+            }
+        })
     }
 
     Column(
@@ -145,10 +179,8 @@ fun RequestItem(
     onApproveRequest: (Request) -> Unit,
     onDenyRequest: (Request) -> Unit
 ) {
-    var isApproved by remember { mutableStateOf(false) }
-    var isDenied by remember { mutableStateOf(false) }
-    var showMessage by remember { mutableStateOf(false) }
-    var message by remember { mutableStateOf("") }
+    val isApproved = request.status == RequestStatus.APPROVED
+    val isDenied = request.status == RequestStatus.DENIED
 
     Column(modifier = Modifier.fillMaxWidth()) {
         Text(
@@ -159,48 +191,41 @@ fun RequestItem(
         )
         Spacer(modifier = Modifier.height(4.dp))
         Text(
-            text = "Request to change date from ${request.changeDayFrom} to ${request.changeDayTo}",
+            text = "Request to change date from ${request.changeDayFrom} to ${request.changeDayTo}. Request ID: ${request.id}",
             fontWeight = FontWeight.Medium,
             fontSize = 16.sp
         )
         Spacer(modifier = Modifier.height(12.dp))
 
-        if (!showMessage) {
+        if (!isApproved && !isDenied) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Icon(
                     painter = painterResource(id = R.drawable.icon_check),
                     contentDescription = "Approve Request",
-                    tint = Color.Unspecified, // Green color for approval
+                    tint = Color.Unspecified,
                     modifier = Modifier
                         .size(24.dp)
                         .clickable {
                             onApproveRequest(request)
-                            isApproved = true
-                            isDenied = false
-                            showMessage = true
-                            message = "You have accepted the request"
                         }
                 )
                 Spacer(modifier = Modifier.width(16.dp))
                 Icon(
                     painter = painterResource(id = R.drawable.icon_deny),
                     contentDescription = "Deny Request",
-                    tint = Color.Unspecified, // Red color for denial
+                    tint = Color.Unspecified,
                     modifier = Modifier
                         .size(24.dp)
                         .clickable {
                             onDenyRequest(request)
-                            isDenied = true
-                            isApproved = false
-                            showMessage = true
-                            message = "You have denied the request"
                         }
                 )
             }
         } else {
+            val statusColor = if (isApproved) Color(0xFF19C588) else Color(0xFFF44336)
             Text(
-                text = message,
-                color = if (isApproved) colorResource(id = R.color.deloitteGreen) else Color.Red,
+                text = if (isApproved) "Approved" else "Denied",
+                color = statusColor,
                 fontWeight = FontWeight.Bold,
                 fontSize = 16.sp
             )

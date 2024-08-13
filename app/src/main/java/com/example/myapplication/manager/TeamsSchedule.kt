@@ -26,8 +26,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.KeyboardArrowRight
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Divider
 import androidx.compose.material3.DropdownMenu
@@ -196,16 +194,16 @@ fun CalendarPerEmployee(context: Context, selectedName: String) {
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        item {
-            Box(
-                modifier = Modifier
-                    .background(Color(0xFFECECEC))
-                    .fillMaxWidth()
-                    .padding(vertical = 20.dp, horizontal = 20.dp)
-            ) {
-                Text("Click on day to change between office&home")
-            }
-        }
+//        item {
+//            Box(
+//                modifier = Modifier
+//                    .background(Color(0xFFECECEC))
+//                    .fillMaxWidth()
+//                    .padding(vertical = 20.dp, horizontal = 20.dp)
+//            ) {
+//                Text("Click on day to change between office&home")
+//            }
+//        }
 
         item {
             Box(
@@ -220,17 +218,17 @@ fun CalendarPerEmployee(context: Context, selectedName: String) {
             }
         }
 
-        item {
-            Button(
-                onClick = { /* Handle submit action */ },
-                colors = ButtonDefaults.buttonColors(Color.LightGray),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 10.dp, horizontal = 10.dp)
-            ) {
-                Text("Save")
-            }
-        }
+//        item {
+//            Button(
+//                onClick = { /* Handle submit action */ },
+//                colors = ButtonDefaults.buttonColors(Color.LightGray),
+//                modifier = Modifier
+//                    .fillMaxWidth()
+//                    .padding(vertical = 10.dp, horizontal = 10.dp)
+//            ) {
+//                Text("Save")
+//            }
+//        }
     }
 }
 

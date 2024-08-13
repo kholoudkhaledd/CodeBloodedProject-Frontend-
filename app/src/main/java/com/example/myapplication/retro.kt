@@ -1,5 +1,6 @@
 package com.example.myapplication
 
+import com.example.myapplication.calander.CalendarResponse
 import com.example.yourapp.ui.Request
 import retrofit2.Call
 import retrofit2.http.Body
@@ -39,4 +40,10 @@ interface ApiService {
 
     @PUT("update_status/{document_id}")
     fun updateStatus(@Path("document_id") documentId: String, @Body statusUpdate: UpdateStatusModel): Call<Void>
+    
+    @GET("view_schedule/{userId}/{date}")
+    fun getCalendarForMonth(
+        @Path("userId") userId: String,
+        @Path("date") date: String
+    ): Call<CalendarResponse>
 }

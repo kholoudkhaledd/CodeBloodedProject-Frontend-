@@ -55,7 +55,7 @@ import java.time.Year
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun Viewteamscalander() {
+fun Viewteamsschedule() {
     // List of names
     val namesList = listOf("Alice", "Bob", "Charlie", "Diana")
 

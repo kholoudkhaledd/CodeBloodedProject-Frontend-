@@ -77,13 +77,17 @@ fun Viewteamsschedule() {
                 .background(Color.White)
         ) {
 
-            // First row with text at the start
-            Text(
-                text = "Select a name",
-                fontWeight = FontWeight.SemiBold,
-                fontSize = 18.sp,
-                modifier = Modifier.padding(vertical = 10.dp, horizontal = 10.dp)
-            )
+            Row(
+                modifier = Modifier.fillMaxWidth(), // Make the Row fill the entire width
+                horizontalArrangement = Arrangement.Center // Center the content horizontally
+            ) {
+                Text(
+                    text = "Team schedule",
+                    fontWeight = FontWeight.SemiBold,
+                    fontSize = 24.sp,
+                    modifier = Modifier.padding(vertical = 20.dp) // Keep vertical padding
+                )
+            }
 
             // Dropdown for selecting names
             Box(

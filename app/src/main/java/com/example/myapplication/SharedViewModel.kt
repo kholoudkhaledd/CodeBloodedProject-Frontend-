@@ -18,7 +18,6 @@ class SharedViewModel : ViewModel() {
 //        userToken.value = token
 //        userName.value = name
     }
-
     fun setUserRequests(requests: List<Request>) {
         userRequests.value = requests
     }

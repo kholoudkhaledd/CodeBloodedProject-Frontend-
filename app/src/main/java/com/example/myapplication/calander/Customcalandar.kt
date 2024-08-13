@@ -59,134 +59,6 @@ data class CalendarResponse(
     val calendar: Map<String, String> // Adjusted to match the JSON structure
 )
 
-
-
-//@RequiresApi(Build.VERSION_CODES.O)
-//@Composable
-//fun CustomCalendar(
-//    modifier: Modifier = Modifier,
-//    currentMonth: Month,
-//    currentYear: Int,
-//    selectedDate: String,
-//    onDateSelected: (String) -> Unit,
-//    context: Context // Pass the context to access SharedPreferences
-//) {
-//    val userId = Sharedpreference.getUserId(context) // Retrieve the user ID
-//    val daysOfWeek = listOf("S", "M", "T", "W", "T", "F", "S")
-//    val daysInMonth = currentMonth.length(Year.of(currentYear).isLeap)
-//    val startOfMonth = LocalDate.of(currentYear, currentMonth, 1)
-//    val startDayOfWeek = startOfMonth.dayOfWeek.value % 7
-//    val totalCells = (startDayOfWeek + daysInMonth + 6) / 7 * 7
-//
-//    // Format month and year correctly
-//    val monthNumber = currentMonth.value.toString().padStart(2, '0')
-//    val dateString = "$monthNumber-$currentYear"
-//
-//    // State to hold the calendar data
-//    var calendarData by remember { mutableStateOf<Map<String, String>>(emptyMap()) }
-//
-//    // Fetch calendar data using Retrofit
-//    LaunchedEffect(currentMonth, currentYear, userId) {
-//        userId?.let {
-//            Log.d(TAG, "Requesting calendar data for userId: $it, date: $dateString")
-//
-//            RetrofitClient.apiService.getCalendarForMonth(it, dateString)
-//                .enqueue(object : Callback<CalendarResponse> {
-//                    override fun onResponse(
-//                        call: Call<CalendarResponse>,
-//                        response: Response<CalendarResponse>
-//                    ) {
-//                        if (response.isSuccessful) {
-//                            val responseBody = response.body()
-//                            Log.d(TAG, "API Response: $responseBody")
-//                            calendarData = responseBody?.calendar ?: emptyMap()
-//                            Log.d(TAG, "Parsed Calendar Data: $calendarData")
-//                        } else {
-//                            Log.e(TAG, "API Error: ${response.errorBody()?.string()}")
-//                        }
-//                    }
-//
-//                    override fun onFailure(call: Call<CalendarResponse>, t: Throwable) {
-//                        Log.e(TAG, "API Failure: ${t.message}")
-//                    }
-//                })
-//        } ?: run {
-//            Log.e(TAG, "User ID is null")
-//        }
-//    }
-//
-//    Column(
-//        modifier = modifier
-//            .background(Color.White)
-//            .padding(0.dp) // Remove any extra padding
-//    ) {
-//        // Header Row with Days of Week
-//        Row(
-//            modifier = Modifier
-//                .fillMaxWidth()
-//                .background(Color(0xFFDDDDDD)) // Light gray background for header
-//                .padding(vertical = 4.dp)
-//        ) {
-//            daysOfWeek.forEach { day ->
-//                Text(
-//                    text = day,
-//                    modifier = Modifier
-//                        .weight(1f)
-//                        .padding(4.dp), // Adjust padding to fit smaller size
-//                    fontWeight = FontWeight.SemiBold,
-//                    textAlign = TextAlign.Center,
-//                    fontSize = 12.sp // Adjust font size for smaller header
-//                )
-//            }
-//        }
-//
-//        // Calendar Days
-//        for (rowIndex in 0 until totalCells / 7) {
-//            Row(
-//                modifier = Modifier
-//                    .fillMaxWidth()
-//                    .height(43.dp)
-//            ) {
-//                for (columnIndex in 0 until 7) {
-//                    val dayIndex = rowIndex * 7 + columnIndex - startDayOfWeek + 1
-//                    if (dayIndex in 1..daysInMonth) {
-//                        // Adjust dateString to the format "dd-MM"
-//                        val dayString = "${dayIndex.toString().padStart(2, '0')}-$monthNumber"
-//                        Log.d(TAG, "day-string: $dayString")
-//
-//                        val location = calendarData[dayString] ?: "Unknown"
-//                        val location2 = calendarData[dayString]
-//                        Log.d(TAG, "Location2: $location2")
-//                        Log.d(TAG, "CustomCalendar: Date: $dayString, Location: $location")
-//
-//                        Box(
-//                            modifier = Modifier
-//                                .weight(1f)
-//                                .aspectRatio(1f) // Ensures each cell is square
-//                                .padding(1.dp) // Adjust padding to make boxes smaller
-//                                .clickable { onDateSelected(dayString) },
-//                            contentAlignment = Alignment.Center
-//                        ) {
-//                            Text(
-//                                text = "$dayIndex\n$location",
-//                                color = if (location == "Home") Color.Black else Color.Blue,
-//                                fontSize = 15.sp, // Adjust font size for smaller days
-//                                textAlign = TextAlign.Center
-//                            )
-//                        }
-//                    } else {
-//                        Box(
-//                            modifier = Modifier
-//                                .weight(1f)
-//                                .aspectRatio(1f) // Empty box for padding
-//                        )
-//                    }
-//                }
-//            }
-//        }
-//        Spacer(modifier = Modifier.height(8.dp)) // Adjusted height for smaller spacing
-//    }
-//}
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun CustomCalendar(
@@ -210,7 +82,7 @@ fun CustomCalendar(
 
     // State to hold the calendar data
     var calendarData by remember { mutableStateOf<Map<String, String>>(emptyMap()) }
-    Log.d(TAG,"calandarData $calendarData ")
+    Log.d(TAG,"calendarData $calendarData ")
     // Fetch calendar data using Retrofit
     LaunchedEffect(currentMonth, currentYear, userId) {
         userId?.let {
@@ -341,18 +213,6 @@ fun CustomCalendar(
         Spacer(modifier = Modifier.height(8.dp)) // Adjusted height for smaller spacing
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
 
 @RequiresApi(Build.VERSION_CODES.O)
 fun getCurrentDate(): String {

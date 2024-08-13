@@ -41,7 +41,7 @@ import com.example.myapplication.manager.TeamsScheduleScreen
 import com.example.myapplication.notifications.ui.theme.NotificationScreen
 import com.example.yourapp.ui.MyRequestsPage
 import com.example.myapplication.Screens
-
+import com.example.myapplication.manager.ManagerRequest
 
 
 @Composable
@@ -114,9 +114,12 @@ fun NavigationScreen() {
                     CustomBottomNavigationBar(
                         selectedScreen = selectedScreen,
                         onScreenSelected = { screen ->
-                            selectedScreen = screen
-                            navController.navigate(screen) {
-                                popUpTo(screen) { inclusive = true }
+                            if (selectedScreen != screen) {
+                                selectedScreen = screen
+                                navController.navigate(screen) {
+                                    launchSingleTop = true
+                                    restoreState = true
+                                }
                             }
                         },
                         additionalIcon = {
@@ -125,9 +128,12 @@ fun NavigationScreen() {
                                 iconId = if (selectedScreen == Screens.TeamsSchedule.screen) R.drawable.teamsgreen else R.drawable.teamsgray,
                                 contentDescription = "Teams Schedule",
                                 onClick = {
-                                    selectedScreen = Screens.TeamsSchedule.screen
-                                    navController.navigate(Screens.TeamsSchedule.screen) {
-                                        popUpTo(Screens.TeamsSchedule.screen) { inclusive = true }
+                                    if (selectedScreen != Screens.TeamsSchedule.screen) {
+                                        selectedScreen = Screens.TeamsSchedule.screen
+                                        navController.navigate(Screens.TeamsSchedule.screen) {
+                                            launchSingleTop = true
+                                            restoreState = true
+                                        }
                                     }
                                 }
                             )
@@ -137,9 +143,12 @@ fun NavigationScreen() {
                     CustomBottomNavigationBar(
                         selectedScreen = selectedScreen,
                         onScreenSelected = { screen ->
-                            selectedScreen = screen
-                            navController.navigate(screen) {
-                                popUpTo(screen) { inclusive = true }
+                            if (selectedScreen != screen) {
+                                selectedScreen = screen
+                                navController.navigate(screen) {
+                                    launchSingleTop = true
+                                    restoreState = true
+                                }
                             }
                         }
                     )
@@ -166,13 +175,27 @@ fun NavigationScreen() {
                 val context = LocalContext.current
                 Finallayout(context)
             }
-            composable(Screens.Chatbot.screen) { ChatScreen() }
-            composable(Screens.Notification.screen) { NotificationScreen() }
-            composable(Screens.Requests.screen) { MyRequestsPage() }
+            composable(Screens.Chatbot.screen) {
+                selectedScreen = Screens.Chatbot.screen
+                ChatScreen()
+            }
+            composable(Screens.Notification.screen) {
+                selectedScreen = Screens.Notification.screen
+                NotificationScreen()
+            }
+            composable(Screens.Requests.screen) {
+                if (isManager)
+                    ManagerRequest()
+                else
+                    MyRequestsPage()
+
+            } // Show MyRequestsPage for all users
+
             composable(Screens.TeamsSchedule.screen) { TeamsScheduleScreen() }
         }
     }
 }
+
 
 
 

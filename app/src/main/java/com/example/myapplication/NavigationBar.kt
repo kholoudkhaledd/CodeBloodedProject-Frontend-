@@ -37,11 +37,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.myapplication.calander.Finallayout
+import com.example.myapplication.manager.ManagerRequest
 import com.example.myapplication.manager.TeamsScheduleScreen
 import com.example.myapplication.notifications.ui.theme.NotificationScreen
 import com.example.yourapp.ui.MyRequestsPage
-import com.example.myapplication.Screens
-import com.example.myapplication.manager.ManagerRequest
 
 
 @Composable
@@ -191,7 +190,10 @@ fun NavigationScreen() {
 
             } // Show MyRequestsPage for all users
 
-            composable(Screens.TeamsSchedule.screen) { TeamsScheduleScreen() }
+            composable(Screens.TeamsSchedule.screen) {
+                val context = LocalContext.current
+
+                TeamsScheduleScreen(context ) }
         }
     }
 }

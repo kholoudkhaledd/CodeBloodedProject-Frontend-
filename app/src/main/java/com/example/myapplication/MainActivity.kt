@@ -19,8 +19,7 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             MyApplicationTheme {
-//                NavigationScreen()
-                Viewteamsschedule()
+                NavigationScreen()
             }
         }
     }

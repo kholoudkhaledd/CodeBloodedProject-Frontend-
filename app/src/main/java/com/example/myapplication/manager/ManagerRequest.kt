@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -35,7 +34,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -43,39 +41,39 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.myapplication.R
 import com.example.myapplication.RetrofitClient
-import com.example.myapplication.Sharedpreference
 import com.example.myapplication.UpdateStatusModel
 import com.example.yourapp.ui.Request
 import com.example.yourapp.ui.RequestStatus
+import com.example.yourapp.ui.StatusBox
+import com.example.yourapp.ui.formatDate
 import com.example.yourapp.ui.timeAgo
-//import com.example.yourapp.ui.fetchRequests
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.time.Duration
-import java.time.Instant
-import java.time.ZoneId
-import java.time.format.DateTimeFormatter
+//import java.time.Duration
+//import java.time.Instant
+//import java.time.ZoneId
+//import java.time.format.DateTimeFormatter
 
-@RequiresApi(Build.VERSION_CODES.S)
-fun timeAgo(timestamp: String): String {
-
-    // Assuming timestamp is in "yyyy-MM-dd HH:mm:ss" format
-    val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").withZone(ZoneId.systemDefault())
-    val requestTime = Instant.from(formatter.parse(timestamp))
-    val now = Instant.now()
-    val duration = Duration.between(requestTime, now)
-    val seconds = duration.toSeconds()
-
-    return when {
-        seconds < 60 -> "$seconds seconds ago"
-        seconds < 3600 -> "${seconds / 60} minutes ago"
-        seconds < 86400 -> "${seconds / 3600} hours ago"
-        seconds < 604800 -> "${seconds / 86400} days ago"
-        seconds < 2419200 -> "${seconds / 604800} weeks ago"
-        else -> "${seconds / 2419200} months ago"
-    }
-}
+//@RequiresApi(Build.VERSION_CODES.S)
+//fun timeAgo(timestamp: String): String {
+//
+//    // Assuming timestamp is in "yyyy-MM-dd HH:mm:ss" format
+//    val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").withZone(ZoneId.systemDefault())
+//    val requestTime = Instant.from(formatter.parse(timestamp))
+//    val now = Instant.now()
+//    val duration = Duration.between(requestTime, now)
+//    val seconds = duration.toSeconds()
+//
+//    return when {
+//        seconds < 60 -> "$seconds seconds ago"
+//        seconds < 3600 -> "${seconds / 60} minutes ago"
+//        seconds < 86400 -> "${seconds / 3600} hours ago"
+//        seconds < 604800 -> "${seconds / 86400} days ago"
+//        seconds < 2419200 -> "${seconds / 604800} weeks ago"
+//        else -> "${seconds / 2419200} months ago"
+//    }
+//}
 
 private fun fetchRequests(userId: String, onResult: (List<Request>) -> Unit) {
     RetrofitClient.apiService.getAllRequests().enqueue(object : Callback<List<Request>> {
@@ -96,6 +94,7 @@ private fun fetchRequests(userId: String, onResult: (List<Request>) -> Unit) {
     })
 }
 
+@RequiresApi(Build.VERSION_CODES.S)
 @Composable
 fun ManagerRequest() {
     val context = LocalContext.current
@@ -152,7 +151,7 @@ fun ManagerRequest() {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFF5F5F5)),
+            .background(Color(0xFFECECEC)),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Card(
@@ -164,7 +163,7 @@ fun ManagerRequest() {
         ) {
             Column(
                 modifier = Modifier
-                    .padding(16.dp)
+                    .padding(32.dp)
                     .fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
@@ -184,7 +183,7 @@ fun ManagerRequest() {
                     items(requestList) { request ->
                         Divider(
                             modifier = Modifier
-                                .padding(vertical = 8.dp)
+                                .padding(vertical = 16.dp)
                                 .alpha(0.5f)
                         )
                         RequestItem(
@@ -192,7 +191,6 @@ fun ManagerRequest() {
                             onApproveRequest = { approveRequest(request) },
                             onDenyRequest = { denyRequest(request) }
                         )
-                        Spacer(modifier = Modifier.height(16.dp))
                     }
                 }
             }
@@ -200,6 +198,7 @@ fun ManagerRequest() {
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.S)
 @Composable
 fun RequestItem(
     request: Request,
@@ -218,7 +217,7 @@ fun RequestItem(
             Text(
                 text = request.username, // Display the username here
                 fontSize = 18.sp,
-                fontWeight = FontWeight.Medium,
+                fontWeight = FontWeight.Bold,
                 color = Color.Black,
                 textAlign = TextAlign.Start,
             )
@@ -235,7 +234,7 @@ fun RequestItem(
         }
         Spacer(modifier = Modifier.height(4.dp))
         Text(
-            text = "Request to change date from ${request.changeDayFrom} to ${request.changeDayTo}. Request ID: ${request.id}",
+            text = "Request to swap work locations between the ${formatDate(request.changeDayFrom)} & the ${formatDate(request.changeDayTo)}",
             fontWeight = FontWeight.Medium,
             fontSize = 16.sp
         )
@@ -243,38 +242,39 @@ fun RequestItem(
 
         if (!isApproved && !isDenied) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Icon(
-                    painter = painterResource(id = R.drawable.icon_check),
-                    contentDescription = "Approve Request",
-                    tint = Color.Unspecified,
-                    modifier = Modifier
-                        .size(24.dp)
-                        .clickable {
-                            onApproveRequest(request)
-                        }
-                )
-                Spacer(modifier = Modifier.width(16.dp))
+
                 Icon(
                     painter = painterResource(id = R.drawable.icon_deny),
                     contentDescription = "Deny Request",
                     tint = Color.Unspecified,
                     modifier = Modifier
-                        .size(24.dp)
+                        .size(40.dp)
                         .clickable {
                             onDenyRequest(request)
                         }
                 )
+                Spacer(modifier = Modifier.width(8.dp))
+                Icon(
+                    painter = painterResource(id = R.drawable.icon_check),
+                    contentDescription = "Approve Request",
+                    tint = Color.Unspecified,
+                    modifier = Modifier
+                        .size(40.dp)
+                        .clickable {
+                            onApproveRequest(request)
+                        }
+                )
+
             }
         } else {
-            val statusColor = if (isApproved) Color(0xFF19C588) else Color(0xFFF44336)
-            Text(
-                text = if (isApproved) "Approved" else "Denied",
-                color = statusColor,
-                fontWeight = FontWeight.Bold,
-                fontSize = 16.sp
-            )
+            if (isApproved) {
+                StatusBox(text = "Approved", backgroundColor = Color(0xFF19C588))
+            } else{
+                StatusBox(text = "Denied", backgroundColor = Color(0xFFFEB5757))
+            }
         }
     }
 }
+
 
 

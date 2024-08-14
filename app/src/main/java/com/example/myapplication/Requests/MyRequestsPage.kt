@@ -121,7 +121,7 @@ fun MyRequestsPage() {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFF5F5F5)), //colors
+            .background(Color(0xFFECECEC)),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Card(
@@ -253,7 +253,7 @@ fun RequestItem(request: Request, onCancelRequest: (Request) -> Unit) {
                 StatusBox(text = "Approved", backgroundColor = Color(0xFF19C588))
             }
             RequestStatus.DENIED -> {
-                StatusBox(text = "Denied", backgroundColor = Color(0xFFF44336))
+                StatusBox(text = "Denied", backgroundColor = Color(0xFFFEB5757))
             }
         }
     }

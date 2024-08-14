@@ -6,7 +6,9 @@ import android.content.Context
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -28,9 +30,11 @@ import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Divider
+import androidx.compose.material3.DividerDefaults.color
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
+import androidx.compose.material3.SnackbarDefaults.color
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -43,10 +47,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.myapplication.R
 import com.example.myapplication.RetrofitClient
 import com.example.myapplication.calander.CalendarResponse
 import com.example.myapplication.calander.Indication
@@ -62,6 +68,7 @@ import java.time.Year
 data class TeamsCalendarResponse(
     val calendar: Map<String, String> // Adjusted to match the JSON structure
 )
+
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun TeamsScheduleScreen(context: Context) {
@@ -87,12 +94,11 @@ fun TeamsScheduleScreen(context: Context) {
             }
         })
     }
-
-    Box(
+    Column(
         modifier = Modifier
-            .padding(vertical = 15.dp)
-            .clip(RoundedCornerShape(20.dp))
-            .background(Color.White)
+            .fillMaxSize()
+            .background(Color(0xFFECECEC)),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Column(
             modifier = Modifier
@@ -100,7 +106,6 @@ fun TeamsScheduleScreen(context: Context) {
                 .clip(RoundedCornerShape(10.dp))
                 .background(Color.White)
         ) {
-
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.Center
@@ -126,27 +131,33 @@ fun TeamsScheduleScreen(context: Context) {
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .background(Color.LightGray)
-                            .clip(RoundedCornerShape(8.dp))
+                            .height(50.dp)
+                            .background(Color(0xFFF6F6F6))
+                            .clip(RoundedCornerShape(10.dp))
+                            .border(1.dp, Color(0xFFE8E8E8), RoundedCornerShape(10.dp))
                             .padding(vertical = 5.dp, horizontal = 10.dp)
                             .clickable { expanded = true }
                     ) {
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
-                            modifier = Modifier.fillMaxWidth()
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .align(Alignment.Center)
                         ) {
                             Text(
                                 text = selectedName ?: "Select team member",
-                                color = Color.Black,
+                                fontWeight = FontWeight.SemiBold,
+                                fontSize = 16.sp,
+                                color = Color(0xFFBDBDBD),
                                 modifier = Modifier
                                     .weight(1f)
-                                    .padding(end = 8.dp)
+                                    .padding(start = 8.dp, end = 8.dp)
                             )
 
-                            Icon(
-                                imageVector = Icons.Filled.KeyboardArrowDown,
+                            Image(
+                                painter = painterResource(id = R.drawable.icondropdown),
                                 contentDescription = "Dropdown Icon",
-                                modifier = Modifier.size(20.dp)
+                                modifier = Modifier.size(14.dp)
                             )
                         }
                     }
@@ -174,7 +185,8 @@ fun TeamsScheduleScreen(context: Context) {
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .clip(RoundedCornerShape(10.dp))
+                        .background(Color(0xFFECECEC))
+                        .clip(RoundedCornerShape(10.dp)),
                 ) {
                     CalendarPerEmployee(context, selectedName!!)
                 }
@@ -194,16 +206,6 @@ fun CalendarPerEmployee(context: Context, selectedName: String) {
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-//        item {
-//            Box(
-//                modifier = Modifier
-//                    .background(Color(0xFFECECEC))
-//                    .fillMaxWidth()
-//                    .padding(vertical = 20.dp, horizontal = 20.dp)
-//            ) {
-//                Text("Click on day to change between office&home")
-//            }
-//        }
 
         item {
             Box(
@@ -218,17 +220,6 @@ fun CalendarPerEmployee(context: Context, selectedName: String) {
             }
         }
 
-//        item {
-//            Button(
-//                onClick = { /* Handle submit action */ },
-//                colors = ButtonDefaults.buttonColors(Color.LightGray),
-//                modifier = Modifier
-//                    .fillMaxWidth()
-//                    .padding(vertical = 10.dp, horizontal = 10.dp)
-//            ) {
-//                Text("Save")
-//            }
-//        }
     }
 }
 

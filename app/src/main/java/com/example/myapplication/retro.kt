@@ -4,9 +4,9 @@ import com.example.myapplication.calander.CalendarResponse
 import com.example.yourapp.ui.Request
 import retrofit2.Call
 import retrofit2.http.Body
-import retrofit2.http.POST
 import retrofit2.http.DELETE
 import retrofit2.http.GET
+import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
 
@@ -40,10 +40,19 @@ interface ApiService {
 
     @PUT("update_status/{document_id}")
     fun updateStatus(@Path("document_id") documentId: String, @Body statusUpdate: UpdateStatusModel): Call<Void>
-    
+
     @GET("view_schedule/{userId}/{date}")
     fun getCalendarForMonth(
         @Path("userId") userId: String,
         @Path("date") date: String
     ): Call<CalendarResponse>
+    @GET("view_teams_schedule/{Name}/{date}")
+    fun getCalendarForTeam(
+        @Path("Name") name: String,
+        @Path("date") date: String
+    ): Call<CalendarResponse>
+
+    @GET("get_all_usernames") // Replace with your actual endpoint
+    fun getAllUsernames(): Call<List<String>>
+
 }

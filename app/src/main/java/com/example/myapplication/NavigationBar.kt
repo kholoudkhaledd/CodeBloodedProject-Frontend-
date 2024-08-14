@@ -195,7 +195,10 @@ fun NavigationScreen() {
             }
             composable(Screens.TeamsSchedule.screen) {
                 selectedScreen = Screens.TeamsSchedule.screen
-                TeamsScheduleScreen()
+
+                val context = LocalContext.current
+
+                TeamsScheduleScreen(context)
             }
         }
     }

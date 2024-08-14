@@ -1,12 +1,10 @@
 package com.example.myapplication
 
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.os.Build
 import android.util.Log
-import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import retrofit2.Call
+import retrofit2.Callback
 
 
 class PushNotificationService: FirebaseMessagingService() {
@@ -21,8 +19,36 @@ class PushNotificationService: FirebaseMessagingService() {
             Log.d("PushNotificationService", "Message Notification Body: ${it.body}")
         }
     }
+
+    fun updateNotificationToken(userId: String, notifToken: String) {
+        val tokenUpdate = notifTokenModel(notifToken)
+
+        RetrofitClient.apiService.update_notif_token(userId, tokenUpdate).enqueue(object :
+            Callback<Void> {
+            override fun onResponse(call: Call<Void>, response: retrofit2.Response<Void>) {
+                if (response.isSuccessful) {
+                    Log.d("updateNotificationToken", "Notification token updated successfully")
+                } else {
+                    Log.e("updateNotificationToken", "Failed to update notification token: ${response.code()}")
+                }
+            }
+
+            override fun onFailure(call: Call<Void>, t: Throwable) {
+                Log.e("updateNotificationToken", "Error updating notification token", t)
+            }
+        })
+    }
+
+
     override fun onNewToken(token: String) {
         super.onNewToken(token)
+        val userID = Sharedpreference.getUserId(this.baseContext)
+
+        if (userID != null) {
+            updateNotificationToken(userID, token)
+        }
+
         Log.d("PushNotificationService", "Refreshed token: $token")
+
     }
 }

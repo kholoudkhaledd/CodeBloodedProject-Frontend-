@@ -21,6 +21,7 @@ data class LoginResponse(
 
 data class CreateRequest(val userID: String, val changeDayFrom: String, val changeDayTo: String, val Status: String, val timeStamp: String)
 data class UpdateStatusModel(val Status: String)
+data class notifTokenModel (val notifToken: String)
 
 
 interface ApiService {
@@ -40,8 +41,14 @@ interface ApiService {
     fun deleteRequest(@Path("request_id") requestId: String): Call<Void>
 
     @PUT("update_status/{document_id}")
-    fun updateStatus(@Path("document_id") documentId: String, @Body statusUpdate: UpdateStatusModel): Call<Void>
-    
+    fun updateStatus(@Path("document_id") documentId: String, @Body statusUpdate: UpdateStatusModel)
+    : Call<Void>
+
+    @PUT("update_notif_token/{uid}")
+    fun update_notif_token(@Path("uid") userId: String, @Body notifToken: notifTokenModel)
+    : Call<Void>
+
+
     @GET("view_schedule/{userId}/{date}")
     fun getCalendarForMonth(
         @Path("userId") userId: String,

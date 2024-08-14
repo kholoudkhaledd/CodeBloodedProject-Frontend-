@@ -1,6 +1,7 @@
 package com.example.myapplication
 
 import com.example.myapplication.calander.CalendarResponse
+import com.example.myapplication.notifications.ui.theme.NotificationData
 import com.example.yourapp.ui.Request
 import retrofit2.Call
 import retrofit2.http.Body
@@ -37,4 +38,9 @@ interface ApiService {
         @Path("userId") userId: String,
         @Path("date") date: String
     ): Call<CalendarResponse>
+
+    @GET("view_notification/{uid}")
+        fun getNotifications(@Path("uid") userId: String): Call<List<NotificationData>>
+    
+
 }

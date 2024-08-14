@@ -5,9 +5,9 @@ import com.example.myapplication.notifications.ui.theme.NotificationData
 import com.example.yourapp.ui.Request
 import retrofit2.Call
 import retrofit2.http.Body
-import retrofit2.http.POST
 import retrofit2.http.DELETE
 import retrofit2.http.GET
+import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
 
@@ -51,5 +51,13 @@ interface ApiService {
     @GET("view_notification/{uid}")
         fun getNotifications(@Path("uid") userId: String): Call<List<NotificationData>>
     
+    @GET("view_teams_schedule/{Name}/{date}")
+    fun getCalendarForTeam(
+        @Path("Name") name: String,
+        @Path("date") date: String
+    ): Call<CalendarResponse>
+
+        @GET("get_all_usernames") // Replace with your actual endpoint
+        fun getAllUsernames(): Call<List<String>>
 
 }

@@ -54,7 +54,7 @@ fun CustomBottomNavigationBar(
         modifier = Modifier
             .fillMaxWidth()
             .background(Color(0xFFECECEC))
-            .height(80.dp)
+            .height(90.dp)
             .clip(RoundedCornerShape(32.dp))
     ) {
         Row(
@@ -69,14 +69,22 @@ fun CustomBottomNavigationBar(
                 selected = selectedScreen == Screens.Home.screen,
                 iconId = if (selectedScreen == Screens.Home.screen) R.drawable.calendergreen else R.drawable.calendergray,
                 contentDescription = "Home",
-                onClick = { onScreenSelected(Screens.Home.screen) }
+                onClick = {
+                    if (selectedScreen != Screens.Home.screen) {
+                        onScreenSelected(Screens.Home.screen)
+                    }
+                }
             )
             // Chatbot button
             BarIcon(
                 selected = selectedScreen == Screens.Chatbot.screen,
                 iconId = if (selectedScreen == Screens.Chatbot.screen) R.drawable.chatggreen else R.drawable.chatgray,
                 contentDescription = "Chatbot",
-                onClick = { onScreenSelected(Screens.Chatbot.screen) }
+                onClick = {
+                    if (selectedScreen != Screens.Chatbot.screen) {
+                        onScreenSelected(Screens.Chatbot.screen)
+                    }
+                }
             )
             additionalIcon?.invoke()
 
@@ -85,19 +93,27 @@ fun CustomBottomNavigationBar(
                 selected = selectedScreen == Screens.Requests.screen,
                 iconId = if (selectedScreen == Screens.Requests.screen) R.drawable.requestgreen else R.drawable.requestgray,
                 contentDescription = "Requests",
-                onClick = { onScreenSelected(Screens.Requests.screen) }
+                onClick = {
+                    if (selectedScreen != Screens.Requests.screen) {
+                        onScreenSelected(Screens.Requests.screen)
+                    }
+                }
             )
             // Notifications button
             BarIcon(
                 selected = selectedScreen == Screens.Notification.screen,
                 iconId = if (selectedScreen == Screens.Notification.screen) R.drawable.notifygreen else R.drawable.notifygray,
                 contentDescription = "Notifications",
-                onClick = { onScreenSelected(Screens.Notification.screen) }
+                onClick = {
+                    if (selectedScreen != Screens.Notification.screen) {
+                        onScreenSelected(Screens.Notification.screen)
+                    }
+                }
             )
-            // Optionally add the extra icon for managers
         }
     }
 }
+
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -110,19 +126,19 @@ fun NavigationScreen() {
     Scaffold(
         bottomBar = {
             if (selectedScreen !in listOf(Screens.SplashScreen.screen, Screens.Login.screen)) {
-                if (isManager) {
-                    CustomBottomNavigationBar(
-                        selectedScreen = selectedScreen,
-                        onScreenSelected = { screen ->
-                            if (selectedScreen != screen) {
-                                selectedScreen = screen
-                                navController.navigate(screen) {
-                                    launchSingleTop = true
-                                    restoreState = true
-                                }
+                CustomBottomNavigationBar(
+                    selectedScreen = selectedScreen,
+                    onScreenSelected = { screen ->
+                        if (selectedScreen != screen) {
+                            selectedScreen = screen
+                            navController.navigate(screen) {
+                                launchSingleTop = true
+                                restoreState = true
                             }
-                        },
-                        additionalIcon = {
+                        }
+                    },
+                    additionalIcon = {
+                        if (isManager) {
                             BarIcon(
                                 selected = selectedScreen == Screens.TeamsSchedule.screen,
                                 iconId = if (selectedScreen == Screens.TeamsSchedule.screen) R.drawable.teamsgreen else R.drawable.teamsgray,
@@ -138,21 +154,8 @@ fun NavigationScreen() {
                                 }
                             )
                         }
-                    )
-                } else {
-                    CustomBottomNavigationBar(
-                        selectedScreen = selectedScreen,
-                        onScreenSelected = { screen ->
-                            if (selectedScreen != screen) {
-                                selectedScreen = screen
-                                navController.navigate(screen) {
-                                    launchSingleTop = true
-                                    restoreState = true
-                                }
-                            }
-                        }
-                    )
-                }
+                    }
+                )
             }
         }
     ) { paddingValues ->
@@ -184,17 +187,20 @@ fun NavigationScreen() {
                 NotificationScreen()
             }
             composable(Screens.Requests.screen) {
+                selectedScreen = Screens.Requests.screen
                 if (isManager)
                     ManagerRequest()
                 else
                     MyRequestsPage()
-
-            } // Show MyRequestsPage for all users
-
-            composable(Screens.TeamsSchedule.screen) { TeamsScheduleScreen() }
+            }
+            composable(Screens.TeamsSchedule.screen) {
+                selectedScreen = Screens.TeamsSchedule.screen
+                TeamsScheduleScreen()
+            }
         }
     }
 }
+
 
 
 
@@ -230,7 +236,7 @@ fun BarIcon(
             modifier = Modifier
                 .align(Alignment.Center)
                 .size(size) // Apply animated size
-                .padding(bottom = 8.dp),
+                .padding(bottom = 7.dp),
             tint = if (selected) Color(0xFF76B31B) else Color(0xFF8F8EA2)
         )
 
@@ -238,7 +244,7 @@ fun BarIcon(
             Box(
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
-                    .size(4.dp)
+                    .size(5.dp)
                     .background(Color(0xFF76B31B), shape = CircleShape)
             )
         }

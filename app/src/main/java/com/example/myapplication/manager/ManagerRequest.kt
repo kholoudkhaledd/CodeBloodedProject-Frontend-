@@ -1,6 +1,8 @@
 package com.example.myapplication.manager
 
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -36,6 +38,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.myapplication.R
@@ -44,10 +47,35 @@ import com.example.myapplication.Sharedpreference
 import com.example.myapplication.UpdateStatusModel
 import com.example.yourapp.ui.Request
 import com.example.yourapp.ui.RequestStatus
+import com.example.yourapp.ui.timeAgo
 //import com.example.yourapp.ui.fetchRequests
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.time.Duration
+import java.time.Instant
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
+
+@RequiresApi(Build.VERSION_CODES.S)
+fun timeAgo(timestamp: String): String {
+
+    // Assuming timestamp is in "yyyy-MM-dd HH:mm:ss" format
+    val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").withZone(ZoneId.systemDefault())
+    val requestTime = Instant.from(formatter.parse(timestamp))
+    val now = Instant.now()
+    val duration = Duration.between(requestTime, now)
+    val seconds = duration.toSeconds()
+
+    return when {
+        seconds < 60 -> "$seconds seconds ago"
+        seconds < 3600 -> "${seconds / 60} minutes ago"
+        seconds < 86400 -> "${seconds / 3600} hours ago"
+        seconds < 604800 -> "${seconds / 86400} days ago"
+        seconds < 2419200 -> "${seconds / 604800} weeks ago"
+        else -> "${seconds / 2419200} months ago"
+    }
+}
 
 private fun fetchRequests(userId: String, onResult: (List<Request>) -> Unit) {
     RetrofitClient.apiService.getAllRequests().enqueue(object : Callback<List<Request>> {
@@ -124,8 +152,7 @@ fun ManagerRequest() {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFF5F5F5))
-            .statusBarsPadding(),
+            .background(Color(0xFFF5F5F5)),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Card(
@@ -183,12 +210,29 @@ fun RequestItem(
     val isDenied = request.status == RequestStatus.DENIED
 
     Column(modifier = Modifier.fillMaxWidth()) {
-        Text(
-            text = request.time,
-            fontSize = 16.sp,
-            fontWeight = FontWeight.Medium,
-            color = Color.LightGray
-        )
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ){
+            Text(
+                text = request.username, // Display the username here
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Medium,
+                color = Color.Black,
+                textAlign = TextAlign.Start,
+            )
+            Text(
+                text = timeAgo(request.time), // Use the timeAgo function here
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Medium,
+                color = Color.LightGray,
+                textAlign = TextAlign.End
+
+
+            )
+
+        }
         Spacer(modifier = Modifier.height(4.dp))
         Text(
             text = "Request to change date from ${request.changeDayFrom} to ${request.changeDayTo}. Request ID: ${request.id}",

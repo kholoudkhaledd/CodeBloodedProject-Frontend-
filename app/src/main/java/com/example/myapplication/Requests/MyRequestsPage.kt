@@ -2,6 +2,7 @@ package com.example.yourapp.ui
 
 import SharedViewModel
 import android.content.Context
+import android.os.Build
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -31,13 +32,70 @@ import retrofit2.Callback
 import retrofit2.Response
 import com.google.gson.annotations.SerializedName
 import android.util.Log
+import androidx.annotation.RequiresApi
+import java.time.Duration
+
+import java.time.Instant
+import java.time.LocalDate
+
+import java.time.ZoneId
+
+import java.time.format.DateTimeFormatter
+
+import java.time.temporal.ChronoUnit
+import java.util.Locale
+
+@RequiresApi(Build.VERSION_CODES.S)
+fun formatDate(dateString: String): String {
+    // Parse the date from the format "yyyy-MM-dd"
+    val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ENGLISH)
+    val date = LocalDate.parse(dateString, formatter)
+
+    // Extract the day, month, and year
+    val day = date.dayOfMonth
+    val month = date.month.name.lowercase().replaceFirstChar { it.uppercase() }
+
+    // Determine the correct suffix for the day
+    val suffix = when (day) {
+        1, 21, 31 -> "st"
+        2, 22 -> "nd"
+        3, 23 -> "rd"
+        else -> "th"
+    }
+
+    // Return the formatted date as "21st of August"
+    return "$day$suffix of $month"
+}
+
+@RequiresApi(Build.VERSION_CODES.S)
+fun timeAgo(timestamp: String): String {
+
+    // Assuming timestamp is in "yyyy-MM-dd HH:mm:ss" format
+    val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").withZone(ZoneId.systemDefault())
+    val requestTime = Instant.from(formatter.parse(timestamp))
+    val now = Instant.now()
+    val duration = Duration.between(requestTime, now)
+    val seconds = duration.toSeconds()
+
+    return when {
+        seconds < 60 -> "$seconds sec ago"
+        seconds < 3600 -> "${seconds / 60}m ago"
+        seconds < 86400 -> "${seconds / 3600} hours ago"
+        seconds < 604800 -> "${seconds / 86400} days ago"
+        seconds < 2419200 -> "${seconds / 604800} weeks ago"
+        else -> "${seconds / 2419200} months ago"
+    }
+}
+
 
 data class Request(
     @SerializedName("requestID") val id: String = "",
     @SerializedName("timeStamp") val time: String = "",
     @SerializedName("changeDayFrom") val changeDayFrom: String = "",
     @SerializedName("changeDayTo") val changeDayTo: String = "",
-    @SerializedName("Status") var status: RequestStatus = RequestStatus.PENDING
+    @SerializedName("Status") var status: RequestStatus = RequestStatus.PENDING,
+    @SerializedName("username") val username: String = ""
+
 )
 
 enum class RequestStatus {
@@ -46,6 +104,7 @@ enum class RequestStatus {
     @SerializedName("Denied") DENIED
 }
 
+@RequiresApi(Build.VERSION_CODES.S)
 @Composable
 fun MyRequestsPage() {
     val context = LocalContext.current // Get the current Context
@@ -63,7 +122,6 @@ fun MyRequestsPage() {
         modifier = Modifier
             .fillMaxSize()
             .background(Color(0xFFF5F5F5)), //colors
-//            .statusBarsPadding(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Card(
@@ -75,7 +133,7 @@ fun MyRequestsPage() {
         ) {
             Column(
                 modifier = Modifier
-                    .padding(16.dp)
+                    .padding(20.dp)
                     .fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
@@ -133,6 +191,8 @@ private fun fetchRequests(userId: String, onResult: (List<Request>) -> Unit) {
     })
 }
 
+
+
 private fun deleteRequest(requestId: String, onResult: () -> Unit) {
     RetrofitClient.apiService.deleteRequest(requestId).enqueue(object : Callback<Void> {
         override fun onResponse(call: Call<Void>, response: Response<Void>) {
@@ -149,26 +209,24 @@ private fun deleteRequest(requestId: String, onResult: () -> Unit) {
     })
 }
 
+
+@RequiresApi(Build.VERSION_CODES.S)
 @Composable
 fun RequestItem(request: Request, onCancelRequest: (Request) -> Unit) {
     Column(modifier = Modifier.fillMaxWidth()) {
         Text(
-            text = request.time,
+            text = timeAgo(request.time), // Use the timeAgo function here
             fontSize = 16.sp,
             fontWeight = FontWeight.Medium,
             color = Color.LightGray
         )
         Spacer(modifier = Modifier.height(4.dp))
         Text(
-            text = "From: ${request.changeDayFrom}",
-            fontWeight = FontWeight.Medium,
+            text = "Request to swap your scheduled work locations between the ${formatDate(request.changeDayFrom)} & the ${formatDate(request.changeDayTo)}",
+            fontWeight = FontWeight.Normal,
             fontSize = 16.sp
         )
-        Text(
-            text = "To: ${request.changeDayTo}",
-            fontWeight = FontWeight.Medium,
-            fontSize = 16.sp
-        )
+
         Spacer(modifier = Modifier.height(12.dp))
         when (request.status) {
             RequestStatus.PENDING -> {
@@ -200,6 +258,8 @@ fun RequestItem(request: Request, onCancelRequest: (Request) -> Unit) {
         }
     }
 }
+
+
 
 @Composable
 fun StatusBox(text: String, backgroundColor: Color) {

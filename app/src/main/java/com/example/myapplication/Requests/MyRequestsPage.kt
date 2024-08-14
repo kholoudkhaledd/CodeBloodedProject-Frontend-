@@ -37,7 +37,7 @@ data class Request(
     @SerializedName("timeStamp") val time: String = "",
     @SerializedName("changeDayFrom") val changeDayFrom: String = "",
     @SerializedName("changeDayTo") val changeDayTo: String = "",
-    @SerializedName("Status") val status: RequestStatus = RequestStatus.PENDING
+    @SerializedName("Status") var status: RequestStatus = RequestStatus.PENDING
 )
 
 enum class RequestStatus {

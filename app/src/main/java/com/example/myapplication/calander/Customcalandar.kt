@@ -196,7 +196,8 @@ fun CustomCalendar(
                                 text = "$dayIndex",  // Display only the day number
                                 color = backgroundColor, // Text color for better contrast
                                 fontSize = 15.sp, // Adjust font size for smaller days
-                                textAlign = TextAlign.Center
+                                textAlign = TextAlign.Center,
+                                fontWeight = FontWeight.SemiBold
                             )
                         }
 

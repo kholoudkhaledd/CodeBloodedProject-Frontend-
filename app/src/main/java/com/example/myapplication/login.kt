@@ -6,7 +6,14 @@ import android.content.Context
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
@@ -16,9 +23,9 @@ import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -36,6 +43,8 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.messaging.FirebaseMessaging
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -180,6 +189,19 @@ fun loginUser(
                     Log.d(TAG, "UID: " + Sharedpreference.getUserId(context))
                     Log.d(TAG, "User Position: $userPosition") // Log the user position
 
+                    FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+                        if (!task.isSuccessful) {
+                            Log.w(TAG, "Fetching FCM registration token failed", task.exception)
+                            return@OnCompleteListener
+                        }
+
+                        // Get new FCM registration token
+                        val token = task.result
+                        updateNotificationToken(it.uid, token)
+
+                    })
+
+
                     Toast.makeText(context, "Login successful. Welcome back ${loginResponse.username}!", Toast.LENGTH_LONG).show()
                     onResult(true, userPosition)  // Pass position to onResult
                 }
@@ -196,6 +218,24 @@ fun loginUser(
     })
 }
 
+fun updateNotificationToken(userId: String, notifToken: String) {
+    val tokenUpdate = notifTokenModel(notifToken)
+
+    RetrofitClient.apiService.update_notif_token(userId, tokenUpdate).enqueue(object :
+        Callback<Void> {
+        override fun onResponse(call: Call<Void>, response: retrofit2.Response<Void>) {
+            if (response.isSuccessful) {
+                Log.d("updateNotificationToken", "Notification token updated successfully")
+            } else {
+                Log.e("updateNotificationToken", "Failed to update notification token: ${response.code()}")
+            }
+        }
+
+        override fun onFailure(call: Call<Void>, t: Throwable) {
+            Log.e("updateNotificationToken", "Error updating notification token", t)
+        }
+    })
+}
 
 class PasswordVisualTransformation : VisualTransformation {
     override fun filter(text: AnnotatedString): TransformedText {

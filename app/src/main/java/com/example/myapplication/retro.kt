@@ -1,6 +1,7 @@
 package com.example.myapplication
 
 import com.example.myapplication.calander.CalendarResponse
+import com.example.myapplication.notifications.ui.theme.NotificationData
 import com.example.yourapp.ui.Request
 import retrofit2.Call
 import retrofit2.http.Body
@@ -20,6 +21,7 @@ data class LoginResponse(
 
 data class CreateRequest(val userID: String, val changeDayFrom: String, val changeDayTo: String, val Status: String, val timeStamp: String)
 data class UpdateStatusModel(val Status: String)
+data class notifTokenModel (val notifToken: String)
 
 
 interface ApiService {
@@ -39,13 +41,23 @@ interface ApiService {
     fun deleteRequest(@Path("request_id") requestId: String): Call<Void>
 
     @PUT("update_status/{document_id}")
-    fun updateStatus(@Path("document_id") documentId: String, @Body statusUpdate: UpdateStatusModel): Call<Void>
+    fun updateStatus(@Path("document_id") documentId: String, @Body statusUpdate: UpdateStatusModel)
+    : Call<Void>
+
+    @PUT("update_notif_token/{uid}")
+    fun update_notif_token(@Path("uid") userId: String, @Body notifToken: notifTokenModel)
+    : Call<Void>
+
 
     @GET("view_schedule/{userId}/{date}")
     fun getCalendarForMonth(
         @Path("userId") userId: String,
         @Path("date") date: String
     ): Call<CalendarResponse>
+
+    @GET("view_notification/{uid}")
+        fun getNotifications(@Path("uid") userId: String): Call<List<NotificationData>>
+    
     @GET("view_teams_schedule/{Name}/{date}")
     fun getCalendarForTeam(
         @Path("Name") name: String,

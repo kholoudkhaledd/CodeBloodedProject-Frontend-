@@ -484,16 +484,16 @@ fun CalendarViewScreenManager(context: Context,selectedName: String) {
                     .fillMaxWidth()
                     .padding(vertical = 5.dp)
             ) {
-        CustomCalendarManager(
-            currentMonth = currentMonth,
-            currentYear = currentYear,
-            selectedDate = selectedDate,
-            onDateSelected = { date ->
-                selectedDate = date
-            },
-            context = context,
-            userName = selectedName
-        )
+                CustomCalendarManager(
+                    currentMonth = currentMonth,
+                    currentYear = currentYear,
+                    selectedDate = selectedDate,
+                    onDateSelected = { date ->
+                        selectedDate = date
+                    },
+                    context = context,
+                    userName = selectedName
+                )
             }
 
             Divider(

@@ -64,7 +64,7 @@ interface ApiService {
         @Path("date") date: String
     ): Call<CalendarResponse>
 
-        @GET("get_all_usernames") // Replace with your actual endpoint
-        fun getAllUsernames(): Call<List<String>>
+    @GET("get_all_usernames") // Replace with your actual endpoint
+    fun getAllUsernames(): Call<List<String>>
 
 }

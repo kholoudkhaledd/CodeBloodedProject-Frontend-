@@ -180,7 +180,7 @@ fun loginUser(
                 loginResponse?.let {
                     Sharedpreference.saveUserId(context, loginResponse.uid)
                     Sharedpreference.saveUserName(context, loginResponse.username)
-
+                    Sharedpreference.saveUserToken(context, loginResponse.token_id)
                     sharedViewModel.setUserInfo(it.uid)
 
                     // Get user position from the response

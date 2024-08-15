@@ -39,4 +39,10 @@ object Sharedpreference {
     fun getUserToken(context: Context): String? {
         return getSharedPreferences(context).getString(KEY_USER_TOKEN, null)
     }
+    fun removeUserToken(context: Context) {
+        val editor = getSharedPreferences(context).edit()
+        editor.remove(KEY_USER_TOKEN)
+        editor.apply() // or editor.commit()
+    }
+
 }

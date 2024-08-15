@@ -4,9 +4,11 @@ import com.example.myapplication.calander.CalendarResponse
 import com.example.myapplication.notifications.ui.theme.NotificationData
 import com.example.yourapp.ui.Request
 import retrofit2.Call
+import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
+import retrofit2.http.Header
 import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
@@ -15,7 +17,8 @@ data class LoginRequest(val email: String, val password: String)
 data class LoginResponse(
     val uid: String,
     val username: String,
-    val position: String?
+    val position: String?,
+    val token_id: String
 )
 
 
@@ -66,5 +69,7 @@ interface ApiService {
 
     @GET("get_all_usernames") // Replace with your actual endpoint
     fun getAllUsernames(): Call<List<String>>
+    @POST("/checktoken/")
+    suspend fun checkToken(@Header("Authorization") token: String): Response<String>
 
 }

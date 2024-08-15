@@ -25,6 +25,7 @@ uiToolingPreview = "1.0.1"
 firebaseCommonKtx = "21.0.0"
 firebaseDatabaseKtx = "21.0.0"
 playServicesCast = "21.5.0"
+firebaseMessagingKtx = "24.0.0"
 
 [libraries]
 accompanist-glide = { module = "com.google.accompanist:accompanist-glide", version.ref = "accompanistGlide" }
@@ -59,6 +60,7 @@ ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview", versio
 firebase-common-ktx = { group = "com.google.firebase", name = "firebase-common-ktx", version.ref = "firebaseCommonKtx" }
 firebase-database-ktx = { group = "com.google.firebase", name = "firebase-database-ktx", version.ref = "firebaseDatabaseKtx" }
 play-services-cast = { group = "com.google.android.gms", name = "play-services-cast", version.ref = "playServicesCast" }
+firebase-messaging-ktx = { group = "com.google.firebase", name = "firebase-messaging-ktx", version.ref = "firebaseMessagingKtx" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

@@ -55,6 +55,7 @@ import androidx.compose.ui.unit.sp
 import com.example.myapplication.R
 import com.example.myapplication.RetrofitClient
 import com.example.myapplication.calander.CalendarResponse
+import com.example.myapplication.calander.CustomCalendar
 import com.example.myapplication.calander.Indication
 import com.example.myapplication.calander.getCurrentDate
 import com.example.myapplication.ui.theme.Darkblue
@@ -225,8 +226,7 @@ fun CalendarPerEmployee(context: Context, selectedName: String) {
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun CustomCalendarManager(
-    modifier: Modifier = Modifier,
+fun ManagerCalendar(
     currentMonth: Month,
     currentYear: Int,
     selectedDate: String,
@@ -234,146 +234,17 @@ fun CustomCalendarManager(
     context: Context,
     userName: String
 ) {
-    val daysOfWeek = listOf("S", "M", "T", "W", "T", "F", "S")
-    val daysInMonth = currentMonth.length(Year.of(currentYear).isLeap)
-    val startOfMonth = LocalDate.of(currentYear, currentMonth, 1)
-    val startDayOfWeek = startOfMonth.dayOfWeek.value % 7
-    val totalCells = (startDayOfWeek + daysInMonth + 6) / 7 * 7
-
-    val monthNumber = currentMonth.value.toString().padStart(2, '0')
-    val dateString = "$monthNumber-$currentYear"
-
-    var calendarData by remember { mutableStateOf<Map<String, String>>(emptyMap()) }
-    Log.d(ContentValues.TAG, "calendarData $calendarData")
-
-    LaunchedEffect(currentMonth, currentYear, userName) {
-        RetrofitClient.apiService.getCalendarForTeam(userName, dateString)
-            .enqueue(object : Callback<CalendarResponse> {
-                override fun onResponse(
-                    call: Call<CalendarResponse>,
-                    response: Response<CalendarResponse>
-                ) {
-                    if (response.isSuccessful) {
-                        val responseBody = response.body()
-                        Log.d(ContentValues.TAG, "API Response: $responseBody")
-                        calendarData = responseBody?.calendar ?: emptyMap()
-
-                        calendarData.forEach { (date, location) ->
-                            Log.d(ContentValues.TAG, "Calendar Data: Date: $date, Location: $location")
-                        }
-                    } else {
-                        Log.e(ContentValues.TAG, "API Error: ${response.errorBody()?.string()}")
-                    }
-                }
-
-                override fun onFailure(call: Call<CalendarResponse>, t: Throwable) {
-                    Log.e(ContentValues.TAG, "API Failure: ${t.message}")
-                }
-            })
-    }
-
-    Column(
-        modifier = modifier
-            .background(Color.White)
-            .padding(0.dp)
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(Color.White)
-                .padding(vertical = 4.dp)
-        ) {
-            daysOfWeek.forEach { day ->
-                Text(
-                    text = day,
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(4.dp),
-                    fontWeight = FontWeight.Bold,
-                    textAlign = TextAlign.Center,
-                    fontSize = 16.sp
-                )
-            }
-        }
-
-        for (rowIndex in 0 until totalCells / 7) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(43.dp)
-            ) {
-                for (columnIndex in 0 until 7) {
-                    val dayIndex = rowIndex * 7 + columnIndex - startDayOfWeek + 1
-                    if (dayIndex in 1..daysInMonth) {
-                        val dayString = "${dayIndex.toString().padStart(2, '0')}-${currentMonth.name.take(3).lowercase().replaceFirstChar { it.uppercase() }}"
-
-                        val location = calendarData[dayString]
-
-                        val backgroundColor = when (location) {
-                            "Home" -> GreenJC
-                            "Office" -> Darkblue
-                            else -> Color.Gray
-                        }
-
-                        Box(
-                            modifier = Modifier
-                                .weight(1f)
-                                .aspectRatio(1f)
-                                .padding(1.dp)
-                                .clickable { onDateSelected(dayString) }
-                                .background(Color.White),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Text(
-                                text = "$dayIndex",
-                                color = backgroundColor,
-                                fontSize = 15.sp,
-                                textAlign = TextAlign.Center
-                            )
-                        }
-
-                    } else {
-                        Box(
-                            modifier = Modifier
-                                .weight(1f)
-                                .aspectRatio(1f)
-                        )
-                    }
-                }
-            }
-        }
-        Spacer(modifier = Modifier.height(8.dp))
-    }
+    CustomCalendar(
+        currentMonth = currentMonth,
+        currentYear = currentYear,
+        selectedDate = selectedDate,
+        onDateSelected = onDateSelected,
+        context = context,
+        userName = userName,
+        isManager = true
+    )
 }
 
-//@RequiresApi(Build.VERSION_CODES.O)
-//@Composable
-//fun CalendarViewScreenManager(context: Context, selectedName: String) {
-//    var selectedDate by remember { mutableStateOf(getCurrentDate()) }
-//    var currentMonth by remember { mutableStateOf(LocalDate.now().month) }
-//    var currentYear by remember { mutableStateOf(LocalDate.now().year) }
-//
-//    Column(
-//        modifier = Modifier
-//            .background(Color.White)
-//            .clip(RoundedCornerShape(25.dp))
-//    ) {
-//        val currentMonthAndYear = "${currentMonth.name.lowercase().capitalize()} $currentYear"
-//
-//        Indication()
-//
-//        CustomCalendarManager(
-//            currentMonth = currentMonth,
-//            currentYear = currentYear,
-//            selectedDate = selectedDate,
-//            onDateSelected = { date ->
-//                selectedDate = date
-//            },
-//            context = context,
-//            userName = selectedName
-//        )
-//    }
-//}
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun CalendarViewScreenManager(context: Context,selectedName: String) {
@@ -475,7 +346,7 @@ fun CalendarViewScreenManager(context: Context,selectedName: String) {
                     .fillMaxWidth()
                     .padding(vertical = 5.dp)
             ) {
-                CustomCalendarManager(
+                ManagerCalendar(
                     currentMonth = currentMonth,
                     currentYear = currentYear,
                     selectedDate = selectedDate,

@@ -21,13 +21,17 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.KeyboardArrowRight
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -51,6 +55,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -79,6 +84,11 @@ fun TeamsScheduleScreen(context: Context) {
     var isLoading by remember { mutableStateOf(true) }
     var selectedName by remember { mutableStateOf<String?>(null) }
     var expanded by remember { mutableStateOf(false) }
+
+    // State for managing work-from-home and work-from-office days
+    var firstTwoWeeksDays by remember { mutableStateOf<Int?>(null) }
+    var secondTwoWeeksDays by remember { mutableStateOf<Int?>(null) }
+    var validationMessage by remember { mutableStateOf<String?>(null) }
 
     LaunchedEffect(Unit) {
         RetrofitClient.apiService.getAllUsernames().enqueue(object : Callback<List<String>> {
@@ -110,81 +120,88 @@ fun TeamsScheduleScreen(context: Context) {
                 .fillMaxWidth(), // Adjust padding as needed
             colors = CardDefaults.cardColors(containerColor = Color.White),
         ) {
-            Column(
+            LazyColumn(
                 modifier = Modifier
                     .padding(20.dp)
                     .background(Color.White)
-                    .fillMaxWidth(),
-                horizontalAlignment = Alignment.CenterHorizontally
+                    .fillMaxWidth()
             ) {
-                Text(
-                    text = "Team Schedule",
-                    fontWeight = FontWeight.SemiBold,
-                    fontSize = 24.sp,
-                    modifier = Modifier
-                        .padding(bottom = 20.dp),
-                    textAlign = TextAlign.Center
-                )
-
-                if (isLoading) {
-                    CircularProgressIndicator(modifier = Modifier.align(Alignment.CenterHorizontally))
-                } else {
-                    Box(
+                item {
+                    Text(
+                        text = "Team Schedule",
+                        fontWeight = FontWeight.SemiBold,
+                        fontSize = 24.sp,
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = 10.dp)
-                            .clip(RoundedCornerShape(10.dp))
-                            .border(1.dp, Color(0xFFE8E8E8), RoundedCornerShape(10.dp))
-                    ) {
+                            .padding(bottom = 20.dp),
+                        textAlign = TextAlign.Center
+                    )
+                }
+
+                item {
+                    if (isLoading) {
+                        CircularProgressIndicator(modifier = Modifier.align(Alignment.CenterHorizontally))
+                    } else {
                         Box(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .height(50.dp)
-                                .background(Color(0xFFF6F6F6))
+                                .padding(vertical = 10.dp)
                                 .clip(RoundedCornerShape(10.dp))
-                                .clickable { expanded = true }
+                                .border(1.dp, Color(0xFFE8E8E8), RoundedCornerShape(10.dp))
                         ) {
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically,
+                            Box(
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .padding(horizontal = 10.dp)
+                                    .height(50.dp)
+                                    .background(Color(0xFFF6F6F6))
+                                    .clip(RoundedCornerShape(10.dp))
+                                    .clickable { expanded = true }
                             ) {
-                                Text(
-                                    text = selectedName ?: "Select team member",
-                                    fontWeight = FontWeight.SemiBold,
-                                    fontSize = 16.sp,
-                                    color = Color(0xFFBDBDBD),
-                                    modifier = Modifier.weight(1f)
-                                )
-                                Image(
-                                    painter = painterResource(id = R.drawable.icondropdown),
-                                    contentDescription = "Dropdown Icon",
-                                    modifier = Modifier.size(14.dp)
-                                )
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(horizontal = 10.dp)
+                                ) {
+                                    Text(
+                                        text = selectedName ?: "Select team member",
+                                        fontWeight = FontWeight.SemiBold,
+                                        fontSize = 16.sp,
+                                        color = Color(0xFFBDBDBD),
+                                        modifier = Modifier.weight(1f)
+                                    )
+                                    Image(
+                                        painter = painterResource(id = R.drawable.icondropdown),
+                                        contentDescription = "Dropdown Icon",
+                                        modifier = Modifier.size(14.dp)
+                                    )
+                                }
                             }
-                        }
 
-                        DropdownMenu(
-                            expanded = expanded,
-                            onDismissRequest = { expanded = false },
-                            modifier = Modifier.fillMaxWidth()
-                        ) {
-                            namesList.forEach { name ->
-                                DropdownMenuItem(
-                                    text = { Text(name, color = Color.Black) },
-                                    onClick = {
-                                        selectedName = name
-                                        expanded = false
-                                    },
-                                    modifier = Modifier.background(Color.White)
-                                )
+                            DropdownMenu(
+                                expanded = expanded,
+                                onDismissRequest = { expanded = false },
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                namesList.forEach { name ->
+                                    DropdownMenuItem(
+                                        text = { Text(name, color = Color.Black) },
+                                        onClick = {
+                                            selectedName = name
+                                            expanded = false
+                                        },
+                                        modifier = Modifier.background(Color.White)
+                                    )
+                                }
                             }
                         }
                     }
+                }
 
+                item {
                     Spacer(modifier = Modifier.height(15.dp))
+                }
 
+                item {
                     if (selectedName != null) {
                         Box(
                             modifier = Modifier
@@ -196,16 +213,119 @@ fun TeamsScheduleScreen(context: Context) {
                         }
                     }
                 }
+
+                item {
+                    Spacer(modifier = Modifier.height(20.dp))
+                }
+
+                item {
+                    Column(
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(10.dp))
+                            .background(Color.White)
+                            .border(1.dp, Color(0xFFE8E8E8), RoundedCornerShape(10.dp))
+                            .padding(15.dp)
+                    ) {
+                        Text(
+                            text = "Change team's schedule",
+                            fontWeight = FontWeight.SemiBold,
+                            fontSize = 16.sp,
+                            modifier = Modifier.padding(bottom = 10.dp)
+                        )
+
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            Text(text = "First 2 weeks:", fontSize = 14.sp)
+                            Spacer(modifier = Modifier.width(10.dp))
+                            WorkDaysInput(
+                                value = firstTwoWeeksDays,
+                                onValueChange = {
+                                    firstTwoWeeksDays = it
+                                    validationMessage = null
+                                }
+                            )
+                        }
+
+                        Spacer(modifier = Modifier.height(10.dp))
+
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            Text(text = "Second 2 weeks:", fontSize = 14.sp)
+                            Spacer(modifier = Modifier.width(10.dp))
+                            WorkDaysInput(
+                                value = secondTwoWeeksDays,
+                                onValueChange = {
+                                    secondTwoWeeksDays = it
+                                    validationMessage = null
+                                }
+                            )
+                        }
+
+                        Spacer(modifier = Modifier.height(10.dp))
+
+                        Button(
+                            onClick = {
+                                if (firstTwoWeeksDays != null && secondTwoWeeksDays != null) {
+                                    val totalDays =
+                                        (firstTwoWeeksDays ?: 0) + (secondTwoWeeksDays ?: 0)
+                                    if (totalDays == 5) {
+                                        // Handle the valid case, e.g., submit the data
+                                        println("Valid schedule: $firstTwoWeeksDays days first 2 weeks, $secondTwoWeeksDays days second 2 weeks")
+                                    } else {
+                                        validationMessage = "Total days must sum up to 5."
+                                    }
+                                } else {
+                                    validationMessage = "Please enter values for both periods."
+                                }
+                            },
+                            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF76B31B)),
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            Text(text = "Submit", fontSize = 16.sp)
+                        }
+
+                        validationMessage?.let {
+                            Text(
+                                text = it,
+                                color = Color.Red,
+                                fontSize = 14.sp,
+                                modifier = Modifier.padding(top = 10.dp)
+                            )
+                        }
+                    }
+                }
             }
         }
     }
 }
 
+@Composable
+fun WorkDaysInput(value: Int?, onValueChange: (Int?) -> Unit) {
+    var text by remember { mutableStateOf(value?.toString() ?: "") }
+
+    // Handle text input
+    androidx.compose.material3.TextField(
+        value = text,
+        onValueChange = {
+            text = it
+            onValueChange(it.toIntOrNull())
+        },
+        keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
+        label = { Text("Days") },
+        modifier = Modifier.width(100.dp)
+    )
+}
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun CalendarPerEmployee(context: Context, selectedName: String) {
-    LazyColumn(
+    Column(
         modifier = Modifier
             .fillMaxSize()
             .background(Color.White)
@@ -214,7 +334,6 @@ fun CalendarPerEmployee(context: Context, selectedName: String) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
-        item {
             Box(
                 modifier = Modifier
                     .background(Color.White)
@@ -228,7 +347,7 @@ fun CalendarPerEmployee(context: Context, selectedName: String) {
         }
 
     }
-}
+
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable

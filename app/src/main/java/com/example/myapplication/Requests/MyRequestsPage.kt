@@ -37,6 +37,7 @@ import java.time.Duration
 
 import java.time.Instant
 import java.time.LocalDate
+import java.time.LocalDateTime
 
 import java.time.ZoneId
 
@@ -172,13 +173,23 @@ fun MyRequestsPage() {
     }
 }
 
+
 private fun fetchRequests(userId: String, onResult: (List<Request>) -> Unit) {
     RetrofitClient.apiService.getRequests(userId).enqueue(object : Callback<List<Request>> {
+        @RequiresApi(Build.VERSION_CODES.O)
         override fun onResponse(call: Call<List<Request>>, response: Response<List<Request>>) {
             if (response.isSuccessful) {
-                response.body()?.let {
-                    Log.d("fetchRequests", "Fetched requests: $it")
-                    onResult(it)
+                response.body()?.let { requests ->
+                    val sortedRequests = requests.sortedByDescending { request ->
+                        // Parse the timestamp string into a LocalDateTime object
+                        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+                        val dateTime = LocalDateTime.parse(request.time, formatter)
+
+                        // Convert LocalDateTime to Instant using system default time zone
+                        val instant = dateTime.atZone(ZoneId.systemDefault()).toInstant()
+                        instant
+                    }
+                    onResult(sortedRequests)
                 }
             } else {
                 Log.e("fetchRequests", "Failed to fetch requests: ${response.code()}")
@@ -190,6 +201,8 @@ private fun fetchRequests(userId: String, onResult: (List<Request>) -> Unit) {
         }
     })
 }
+
+
 
 
 

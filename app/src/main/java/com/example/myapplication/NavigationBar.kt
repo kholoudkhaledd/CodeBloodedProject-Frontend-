@@ -184,8 +184,9 @@ fun NavigationScreen() {
             }
             composable(Screens.Notification.screen) {
                 selectedScreen = Screens.Notification.screen
-                NotificationScreen()
+                NotificationScreen(isManager = isManager)
             }
+
             composable(Screens.Requests.screen) {
                 selectedScreen = Screens.Requests.screen
                 if (isManager)

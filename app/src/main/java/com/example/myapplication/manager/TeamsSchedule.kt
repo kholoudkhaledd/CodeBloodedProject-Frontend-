@@ -11,6 +11,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Arrangement.Absolute.Center
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -124,7 +125,8 @@ fun TeamsScheduleScreen(context: Context) {
                 modifier = Modifier
                     .padding(20.dp)
                     .background(Color.White)
-                    .fillMaxWidth()
+                    .fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 item {
                     Text(
@@ -195,10 +197,6 @@ fun TeamsScheduleScreen(context: Context) {
                             }
                         }
                     }
-                }
-
-                item {
-                    Spacer(modifier = Modifier.height(15.dp))
                 }
 
                 item {

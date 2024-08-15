@@ -28,6 +28,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.KeyboardArrowRight
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Divider
 import androidx.compose.material3.DividerDefaults.color
@@ -95,106 +97,110 @@ fun TeamsScheduleScreen(context: Context) {
             }
         })
     }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(Color(0xFFECECEC)),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Column(
+        Card(
+            shape = RoundedCornerShape(20.dp),
             modifier = Modifier
-                .padding(vertical = 15.dp)
-                .clip(RoundedCornerShape(10.dp))
-                .background(Color.White)
+                .fillMaxWidth(), // Adjust padding as needed
+            colors = CardDefaults.cardColors(containerColor = Color.White),
         ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.Center
+            Column(
+                modifier = Modifier
+                    .padding(20.dp)
+                    .background(Color.White)
+                    .fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = "Team schedule",
+                    text = "Team Schedule",
                     fontWeight = FontWeight.SemiBold,
                     fontSize = 24.sp,
-                    modifier = Modifier.padding(vertical = 20.dp)
-                )
-            }
-
-            if (isLoading) {
-                CircularProgressIndicator(modifier = Modifier.align(Alignment.CenterHorizontally))
-            } else {
-                Box(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 10.dp, horizontal = 10.dp)
-                        .wrapContentSize(Alignment.TopStart)
-                        .clip(RoundedCornerShape(10.dp))
-                ) {
+                        .padding(bottom = 20.dp),
+                    textAlign = TextAlign.Center
+                )
+
+                if (isLoading) {
+                    CircularProgressIndicator(modifier = Modifier.align(Alignment.CenterHorizontally))
+                } else {
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(50.dp)
-                            .background(Color(0xFFF6F6F6))
+                            .padding(vertical = 10.dp)
                             .clip(RoundedCornerShape(10.dp))
                             .border(1.dp, Color(0xFFE8E8E8), RoundedCornerShape(10.dp))
-                            .padding(vertical = 5.dp, horizontal = 10.dp)
-                            .clickable { expanded = true }
                     ) {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
+                        Box(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .align(Alignment.Center)
+                                .height(50.dp)
+                                .background(Color(0xFFF6F6F6))
+                                .clip(RoundedCornerShape(10.dp))
+                                .clickable { expanded = true }
                         ) {
-                            Text(
-                                text = selectedName ?: "Select team member",
-                                fontWeight = FontWeight.SemiBold,
-                                fontSize = 16.sp,
-                                color = Color(0xFFBDBDBD),
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
                                 modifier = Modifier
-                                    .weight(1f)
-                                    .padding(start = 8.dp, end = 8.dp)
-                            )
+                                    .fillMaxWidth()
+                                    .padding(horizontal = 10.dp)
+                            ) {
+                                Text(
+                                    text = selectedName ?: "Select team member",
+                                    fontWeight = FontWeight.SemiBold,
+                                    fontSize = 16.sp,
+                                    color = Color(0xFFBDBDBD),
+                                    modifier = Modifier.weight(1f)
+                                )
+                                Image(
+                                    painter = painterResource(id = R.drawable.icondropdown),
+                                    contentDescription = "Dropdown Icon",
+                                    modifier = Modifier.size(14.dp)
+                                )
+                            }
+                        }
 
-                            Image(
-                                painter = painterResource(id = R.drawable.icondropdown),
-                                contentDescription = "Dropdown Icon",
-                                modifier = Modifier.size(14.dp)
-                            )
+                        DropdownMenu(
+                            expanded = expanded,
+                            onDismissRequest = { expanded = false },
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            namesList.forEach { name ->
+                                DropdownMenuItem(
+                                    text = { Text(name, color = Color.Black) },
+                                    onClick = {
+                                        selectedName = name
+                                        expanded = false
+                                    },
+                                    modifier = Modifier.background(Color.White)
+                                )
+                            }
                         }
                     }
 
-                    DropdownMenu(
-                        expanded = expanded,
-                        onDismissRequest = { expanded = false },
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        namesList.forEach { name ->
-                            DropdownMenuItem(
-                                text = { Text(name, color = Color.Black) },
-                                onClick = {
-                                    selectedName = name
-                                    expanded = false
-                                },
-                                modifier = Modifier.background(Color.White)
-                            )
+                    Spacer(modifier = Modifier.height(15.dp))
+
+                    if (selectedName != null) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .background(Color(0xFFECECEC))
+                                .clip(RoundedCornerShape(10.dp))
+                        ) {
+                            CalendarPerEmployee(context, selectedName!!)
                         }
                     }
-                }
-            }
-
-            if (selectedName != null) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(Color(0xFFECECEC))
-                        .clip(RoundedCornerShape(10.dp)),
-                ) {
-                    CalendarPerEmployee(context, selectedName!!)
                 }
             }
         }
     }
 }
+
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -202,8 +208,8 @@ fun CalendarPerEmployee(context: Context, selectedName: String) {
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .padding(vertical = 10.dp)
-            .background(Color(0xFFECECEC)),
+            .background(Color.White)
+            .padding(vertical = 10.dp),
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -211,7 +217,7 @@ fun CalendarPerEmployee(context: Context, selectedName: String) {
         item {
             Box(
                 modifier = Modifier
-                    .background(Color(0xFFECECEC))
+                    .background(Color.White)
                     .fillMaxWidth()
                     .padding(0.dp)
                     .clip(RoundedCornerShape(25.dp))
@@ -255,7 +261,6 @@ fun CalendarViewScreenManager(context: Context,selectedName: String) {
     Column(
         modifier = Modifier
             .background(Color.White)
-            .clip(RoundedCornerShape(25.dp))
     ) {
         val currentMonthAndYear = "${currentMonth.name.lowercase().capitalize()} $currentYear"
 
@@ -266,7 +271,6 @@ fun CalendarViewScreenManager(context: Context,selectedName: String) {
         ) {
             Box(
                 modifier = Modifier
-                    .clip(RoundedCornerShape(20.dp))
                     .fillMaxWidth()
             ) {
                 Text(

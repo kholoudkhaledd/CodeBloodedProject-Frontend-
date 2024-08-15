@@ -50,49 +50,10 @@ import com.example.yourapp.ui.timeAgo
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-//import java.time.Duration
-//import java.time.Instant
-//import java.time.ZoneId
-//import java.time.format.DateTimeFormatter
+import java.time.Instant
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 
-//@RequiresApi(Build.VERSION_CODES.S)
-//fun timeAgo(timestamp: String): String {
-//
-//    // Assuming timestamp is in "yyyy-MM-dd HH:mm:ss" format
-//    val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").withZone(ZoneId.systemDefault())
-//    val requestTime = Instant.from(formatter.parse(timestamp))
-//    val now = Instant.now()
-//    val duration = Duration.between(requestTime, now)
-//    val seconds = duration.toSeconds()
-//
-//    return when {
-//        seconds < 60 -> "$seconds seconds ago"
-//        seconds < 3600 -> "${seconds / 60} minutes ago"
-//        seconds < 86400 -> "${seconds / 3600} hours ago"
-//        seconds < 604800 -> "${seconds / 86400} days ago"
-//        seconds < 2419200 -> "${seconds / 604800} weeks ago"
-//        else -> "${seconds / 2419200} months ago"
-//    }
-//}
-
-private fun fetchRequests(userId: String, onResult: (List<Request>) -> Unit) {
-    RetrofitClient.apiService.getAllRequests().enqueue(object : Callback<List<Request>> {
-        override fun onResponse(call: Call<List<Request>>, response: Response<List<Request>>) {
-            if (response.isSuccessful) {
-                response.body()?.let {
-                    Log.d("fetchRequests", "Fetched requests: $it")
-                    onResult(it)
-                }
-            } else {
-                Log.e("fetchRequests", "Failed to fetch requests: ${response.code()}")
-            }
-        }
-
-        override fun onFailure(call: Call<List<Request>>, t: Throwable) {
-            Log.e("fetchRequests", "Error fetching requests", t)
-        }
-    })
-}
 
 @RequiresApi(Build.VERSION_CODES.S)
 @Composable
@@ -101,7 +62,7 @@ fun ManagerRequest() {
     var requestList by remember { mutableStateOf(listOf<Request>()) }
 
     LaunchedEffect(Unit) {
-        fetchRequests("") { fetchedRequests ->
+        fetchRequests { fetchedRequests ->
             Log.d("ManagerRequest", "Fetched requests: $fetchedRequests")
             requestList = fetchedRequests
         }
@@ -197,6 +158,31 @@ fun ManagerRequest() {
         }
     }
 }
+
+private fun fetchRequests(onResult: (List<Request>) -> Unit) {
+    RetrofitClient.apiService.getAllRequests().enqueue(object : Callback<List<Request>> {
+        @RequiresApi(Build.VERSION_CODES.O)
+        override fun onResponse(call: Call<List<Request>>, response: Response<List<Request>>) {
+            if (response.isSuccessful) {
+                response.body()?.let {
+                    Log.d("fetchRequests", "Fetched requests: $it")
+                    // Sort the requests by timestamp in descending order (newest first)
+                    val sortedRequests = it.sortedByDescending { request ->
+                        Instant.from(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").withZone(ZoneId.systemDefault()).parse(request.time))
+                    }
+                    onResult(sortedRequests)
+                }
+            } else {
+                Log.e("fetchRequests", "Failed to fetch requests: ${response.code()}")
+            }
+        }
+
+        override fun onFailure(call: Call<List<Request>>, t: Throwable) {
+            Log.e("fetchRequests", "Error fetching requests", t)
+        }
+    })
+}
+
 
 @RequiresApi(Build.VERSION_CODES.S)
 @Composable

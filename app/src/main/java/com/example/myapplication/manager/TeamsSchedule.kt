@@ -90,6 +90,7 @@ fun TeamsScheduleScreen(context: Context) {
     var firstTwoWeeksDays by remember { mutableStateOf<Int?>(null) }
     var secondTwoWeeksDays by remember { mutableStateOf<Int?>(null) }
     var validationMessage by remember { mutableStateOf<String?>(null) }
+    val textColor = if(selectedName != null) Color.Black else Color(0xFFBDBDBD)
 
     LaunchedEffect(Unit) {
         RetrofitClient.apiService.getAllUsernames().enqueue(object : Callback<List<String>> {
@@ -109,26 +110,28 @@ fun TeamsScheduleScreen(context: Context) {
         })
     }
 
-    Column(
+    LazyColumn(
         modifier = Modifier
             .fillMaxSize()
             .background(Color(0xFFECECEC)),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        item{
         Card(
             shape = RoundedCornerShape(20.dp),
             modifier = Modifier
-                .fillMaxWidth(), // Adjust padding as needed
+                .fillMaxWidth()
+                .padding(bottom = 20.dp)
+                .clip(RoundedCornerShape(20.dp)), // Adjust padding as needed
             colors = CardDefaults.cardColors(containerColor = Color.White),
         ) {
-            LazyColumn(
+            Column(
                 modifier = Modifier
                     .padding(20.dp)
                     .background(Color.White)
                     .fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                item {
                     Text(
                         text = "Team Schedule",
                         fontWeight = FontWeight.SemiBold,
@@ -137,16 +140,13 @@ fun TeamsScheduleScreen(context: Context) {
                             .padding(bottom = 20.dp),
                         textAlign = TextAlign.Center
                     )
-                }
-
-                item {
                     if (isLoading) {
                         CircularProgressIndicator(modifier = Modifier.align(Alignment.CenterHorizontally))
                     } else {
                         Box(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(vertical = 10.dp)
+                                .padding(vertical = 10.dp, horizontal = 16.dp)
                                 .clip(RoundedCornerShape(10.dp))
                                 .border(1.dp, Color(0xFFE8E8E8), RoundedCornerShape(10.dp))
                         ) {
@@ -163,13 +163,16 @@ fun TeamsScheduleScreen(context: Context) {
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .padding(horizontal = 10.dp)
+                                        .align(Alignment.Center)
+
                                 ) {
                                     Text(
                                         text = selectedName ?: "Select team member",
                                         fontWeight = FontWeight.SemiBold,
                                         fontSize = 16.sp,
-                                        color = Color(0xFFBDBDBD),
-                                        modifier = Modifier.weight(1f)
+                                        color = textColor,
+                                        modifier = Modifier
+                                            .weight(1f)
                                     )
                                     Image(
                                         painter = painterResource(id = R.drawable.icondropdown),
@@ -195,17 +198,17 @@ fun TeamsScheduleScreen(context: Context) {
                                     )
                                 }
                             }
-                        }
+                        }}
                     }
                 }
 
-                item {
                     if (selectedName != null) {
                         Box(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .background(Color(0xFFECECEC))
-                                .clip(RoundedCornerShape(10.dp))
+                                .background(Color.White)
+                                .clip(RoundedCornerShape(20.dp))
+
                         ) {
                             CalendarPerEmployee(context, selectedName!!)
                         }
@@ -213,13 +216,13 @@ fun TeamsScheduleScreen(context: Context) {
                 }
 
                 item {
-                    Spacer(modifier = Modifier.height(20.dp))
+                    Spacer(modifier = Modifier.height(10.dp))
                 }
 
                 item {
                     Column(
                         modifier = Modifier
-                            .clip(RoundedCornerShape(10.dp))
+                            .clip(RoundedCornerShape(20.dp))
                             .background(Color.White)
                             .border(1.dp, Color(0xFFE8E8E8), RoundedCornerShape(10.dp))
                             .padding(15.dp)
@@ -300,8 +303,8 @@ fun TeamsScheduleScreen(context: Context) {
                 }
             }
         }
-    }
-}
+
+
 
 @Composable
 fun WorkDaysInput(value: Int?, onValueChange: (Int?) -> Unit) {
@@ -315,8 +318,10 @@ fun WorkDaysInput(value: Int?, onValueChange: (Int?) -> Unit) {
             onValueChange(it.toIntOrNull())
         },
         keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
-        label = { Text("Days") },
-        modifier = Modifier.width(100.dp)
+        label = { Text("Days:") },
+        modifier = Modifier
+            .width(80.dp)
+            .background(Color(0xFFECECEC))
     )
 }
 
@@ -386,19 +391,6 @@ fun CalendarViewScreenManager(context: Context,selectedName: String) {
                 .padding(vertical = 10.dp)
                 .clip(RoundedCornerShape(50.dp))
         ) {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-            ) {
-                Text(
-                    text = "Working from home/office schedule",
-                    fontSize = 15.sp,
-                    fontWeight = FontWeight.SemiBold,
-                    modifier = Modifier
-                        .padding(vertical = 15.dp, horizontal = 25.dp)
-                )
-            }
-
             Divider(
                 color = Color.LightGray,
                 thickness = 0.5.dp,

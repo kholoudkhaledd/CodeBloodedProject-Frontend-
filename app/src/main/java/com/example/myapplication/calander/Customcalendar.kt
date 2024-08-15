@@ -139,7 +139,9 @@ fun CustomCalendar(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(43.dp)
+                    .height(35.dp)
+                    .weight(0.9f)
+                    .padding(2.dp)
             ) {
                 for (columnIndex in 0 until 7) {
                     val dayIndex = rowIndex * 7 + columnIndex - startDayOfWeek + 1

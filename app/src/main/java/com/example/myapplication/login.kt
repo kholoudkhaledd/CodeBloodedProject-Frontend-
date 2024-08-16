@@ -172,6 +172,9 @@ fun loginUser(
     context: Context, sharedViewModel: SharedViewModel,
     onResult: (Boolean, String) -> Unit
 ) {
+    Sharedpreference.removeUserToken(context)
+    Sharedpreference.removeUserPosition(context)
+
     val loginRequest = LoginRequest(email, password) // Only include email and password
     RetrofitClient.apiService.login(loginRequest).enqueue(object : Callback<LoginResponse> {
         override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
@@ -181,6 +184,7 @@ fun loginUser(
                     Sharedpreference.saveUserId(context, loginResponse.uid)
                     Sharedpreference.saveUserName(context, loginResponse.username)
                     Sharedpreference.saveUserToken(context, loginResponse.token_id)
+                    Sharedpreference.saveUserPosition(context,loginResponse.position)
                     sharedViewModel.setUserInfo(it.uid)
 
                     // Get user position from the response

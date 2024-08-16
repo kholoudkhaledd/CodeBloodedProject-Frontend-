@@ -57,6 +57,7 @@ fun SplashScreen(navController: NavController, sharedViewModel: SharedViewModel)
                 // Handle exceptions (e.g., network error)
                 sharedViewModel.logoSize.value = 150.dp
                 Sharedpreference.removeUserToken(context)
+                Sharedpreference.removeUserPosition(context)
                 navController.navigate(Screens.Login.screen) {
 
                     popUpTo(Screens.SplashScreen.screen) { inclusive = true }
@@ -95,5 +96,3 @@ fun SplashScreen(navController: NavController, sharedViewModel: SharedViewModel)
         }
     }
 }
-
-

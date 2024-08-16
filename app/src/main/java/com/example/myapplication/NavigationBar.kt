@@ -73,7 +73,8 @@ fun CustomBottomNavigationBar(
             // Chatbot button
             BarIcon(
                 selected = selectedScreen == Screens.Chatbot.screen,
-                iconId = if (selectedScreen == Screens.Chatbot.screen) R.drawable.chatggreen else R.drawable.chatgray,
+                iconId = if (selectedScreen == Screens.Chatbot.screen) R.drawable.chatggreen
+                else R.drawable.chatgray,
                 contentDescription = "Chatbot",
                 onClick = { onScreenSelected(Screens.Chatbot.screen) }
             )
@@ -82,18 +83,21 @@ fun CustomBottomNavigationBar(
             // Requests button
             BarIcon(
                 selected = selectedScreen == Screens.Requests.screen,
-                iconId = if (selectedScreen == Screens.Requests.screen) R.drawable.requestgreen else R.drawable.requestgray,
+                iconId = if (selectedScreen == Screens.Requests.screen) R.drawable.requestgreen
+                else R.drawable.requestgray,
                 contentDescription = "Requests",
                 onClick = { onScreenSelected(Screens.Requests.screen) }
             )
             // Notifications button
             BarIcon(
                 selected = selectedScreen == Screens.Notification.screen,
-                iconId = if (selectedScreen == Screens.Notification.screen) R.drawable.notifygreen else R.drawable.notifygray,
+                iconId = if (selectedScreen == Screens.Notification.screen) R.drawable.notifygreen
+                else R.drawable.notifygray,
                 contentDescription = "Notifications",
                 onClick = { onScreenSelected(Screens.Notification.screen) }
             )
-            // Optionally add the extra icon for managers
+
+
         }
     }
 }

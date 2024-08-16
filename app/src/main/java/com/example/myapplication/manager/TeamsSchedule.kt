@@ -90,7 +90,7 @@ fun TeamsScheduleScreen(context: Context) {
     var firstTwoWeeksDays by remember { mutableStateOf<Int?>(null) }
     var secondTwoWeeksDays by remember { mutableStateOf<Int?>(null) }
     var validationMessage by remember { mutableStateOf<String?>(null) }
-    val textColor = if(selectedName != null) Color.Black else Color(0xFFBDBDBD)
+    val textColor = if (selectedName != null) Color.Black else Color(0xFFBDBDBD)
 
     LaunchedEffect(Unit) {
         RetrofitClient.apiService.getAllUsernames().enqueue(object : Callback<List<String>> {
@@ -116,22 +116,22 @@ fun TeamsScheduleScreen(context: Context) {
             .background(Color(0xFFECECEC)),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        item{
-        Card(
-            shape = RoundedCornerShape(20.dp),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 20.dp)
-                .clip(RoundedCornerShape(20.dp)), // Adjust padding as needed
-            colors = CardDefaults.cardColors(containerColor = Color.White),
-        ) {
-            Column(
+        item {
+            Card(
+                shape = RoundedCornerShape(20.dp),
                 modifier = Modifier
-                    .padding(20.dp)
-                    .background(Color.White)
-                    .fillMaxWidth(),
-                horizontalAlignment = Alignment.CenterHorizontally
+                    .fillMaxWidth()
+                    .padding(bottom = 20.dp)
+                    .clip(RoundedCornerShape(20.dp)), // Adjust padding as needed
+                colors = CardDefaults.cardColors(containerColor = Color.White),
             ) {
+                Column(
+                    modifier = Modifier
+                        .padding(20.dp)
+                        .background(Color.White)
+                        .fillMaxWidth(),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
                     Text(
                         text = "Team Schedule",
                         fontWeight = FontWeight.SemiBold,
@@ -198,111 +198,155 @@ fun TeamsScheduleScreen(context: Context) {
                                     )
                                 }
                             }
-                        }}
-                    }
-                }
-
-                    if (selectedName != null) {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .background(Color.White)
-                                .clip(RoundedCornerShape(20.dp))
-
-                        ) {
-                            CalendarPerEmployee(context, selectedName!!)
-                        }
-                    }
-                }
-
-                item {
-                    Spacer(modifier = Modifier.height(10.dp))
-                }
-
-                item {
-                    Column(
-                        modifier = Modifier
-                            .clip(RoundedCornerShape(20.dp))
-                            .background(Color.White)
-                            .border(1.dp, Color(0xFFE8E8E8), RoundedCornerShape(10.dp))
-                            .padding(15.dp)
-                    ) {
-                        Text(
-                            text = "Change team's schedule",
-                            fontWeight = FontWeight.SemiBold,
-                            fontSize = 16.sp,
-                            modifier = Modifier.padding(bottom = 10.dp)
-                        )
-
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                            modifier = Modifier.fillMaxWidth()
-                        ) {
-                            Text(text = "First 2 weeks:", fontSize = 14.sp)
-                            Spacer(modifier = Modifier.width(10.dp))
-                            WorkDaysInput(
-                                value = firstTwoWeeksDays,
-                                onValueChange = {
-                                    firstTwoWeeksDays = it
-                                    validationMessage = null
-                                }
-                            )
-                        }
-
-                        Spacer(modifier = Modifier.height(10.dp))
-
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                            modifier = Modifier.fillMaxWidth()
-                        ) {
-                            Text(text = "Second 2 weeks:", fontSize = 14.sp)
-                            Spacer(modifier = Modifier.width(10.dp))
-                            WorkDaysInput(
-                                value = secondTwoWeeksDays,
-                                onValueChange = {
-                                    secondTwoWeeksDays = it
-                                    validationMessage = null
-                                }
-                            )
-                        }
-
-                        Spacer(modifier = Modifier.height(10.dp))
-
-                        Button(
-                            onClick = {
-                                if (firstTwoWeeksDays != null && secondTwoWeeksDays != null) {
-                                    val totalDays =
-                                        (firstTwoWeeksDays ?: 0) + (secondTwoWeeksDays ?: 0)
-                                    if (totalDays == 5) {
-                                        // Handle the valid case, e.g., submit the data
-                                        println("Valid schedule: $firstTwoWeeksDays days first 2 weeks, $secondTwoWeeksDays days second 2 weeks")
-                                    } else {
-                                        validationMessage = "Total days must sum up to 5."
-                                    }
-                                } else {
-                                    validationMessage = "Please enter values for both periods."
-                                }
-                            },
-                            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF76B31B)),
-                            modifier = Modifier.fillMaxWidth()
-                        ) {
-                            Text(text = "Submit", fontSize = 16.sp)
-                        }
-
-                        validationMessage?.let {
-                            Text(
-                                text = it,
-                                color = Color.Red,
-                                fontSize = 14.sp,
-                                modifier = Modifier.padding(top = 10.dp)
-                            )
                         }
                     }
                 }
             }
+
+            if (selectedName != null) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(Color.White)
+                        .clip(RoundedCornerShape(20.dp))
+
+                ) {
+                    CalendarPerEmployee(context, selectedName!!)
+                }
+            }
         }
+
+        item {
+            Spacer(modifier = Modifier.height(10.dp))
+        }
+
+        item {
+            Column(
+                modifier = Modifier
+                    .clip(RoundedCornerShape(20.dp))
+                    .background(Color.White)
+                    .border(1.dp, Color(0xFFE8E8E8), RoundedCornerShape(10.dp))
+                    .padding(15.dp)
+            ) {
+                Text(
+                    text = "Change team's schedule",
+                    fontWeight = FontWeight.SemiBold,
+                    fontSize = 16.sp,
+                    modifier = Modifier.padding(bottom = 10.dp)
+                )
+
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text(text = "First 2 weeks:", fontSize = 14.sp)
+                    Spacer(modifier = Modifier.width(10.dp))
+                    WorkDaysInput(
+                        value = firstTwoWeeksDays,
+                        onValueChange = {
+                            firstTwoWeeksDays = it
+                            validationMessage = null
+                        }
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(10.dp))
+
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text(text = "Second 2 weeks:", fontSize = 14.sp)
+                    Spacer(modifier = Modifier.width(10.dp))
+                    WorkDaysInput(
+                        value = secondTwoWeeksDays,
+                        onValueChange = {
+                            secondTwoWeeksDays = it
+                            validationMessage = null
+                        }
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(10.dp))
+                ///////////////
+                //Continue here
+                /////////////////
+
+
+                Button(
+
+                    onClick = {
+                        if (firstTwoWeeksDays != null && secondTwoWeeksDays != null) {
+                            val totalDays =
+                                (firstTwoWeeksDays ?: 0) + (secondTwoWeeksDays ?: 0)
+                            if (totalDays != 0) {
+                                // Handle the valid case, e.g., submit the data
+                                println("Valid schedule: $firstTwoWeeksDays days for 2 weeks, $secondTwoWeeksDays days for other 2 weeks")
+                                changeTeamSchedule(
+                                    firstTwoWeeksDays!!,
+                                    secondTwoWeeksDays!!
+                                )
+
+                            }
+                        } else {
+                            validationMessage = "enter numbers for both patterns"
+                        }
+                    },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color(
+                            0xFF76B31B
+                        )
+                    ),
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text(text = "Submit", fontSize = 16.sp)
+                }
+            }
+
+            validationMessage?.let {
+                Text(
+                    text = it,
+                    color = Color.Red,
+                    fontSize = 14.sp,
+                    modifier = Modifier.padding(top = 10.dp)
+                )
+            }
+        }
+    }
+}
+
+
+
+
+
+
+
+fun changeTeamSchedule(officeDays1:Int, officeDays2:Int){
+//    println("OFFICE DAYS 1"+officeDays1.toString())
+//    println("OFFICE DAYS 2"+officeDays2.toString())
+    RetrofitClient.apiService.updateTeamSchedule(officeDays1,officeDays2)
+        .enqueue(object:Callback<Void>{
+            override fun onResponse(
+                call: Call<Void>,
+                response: Response<Void>
+            ) {
+                if (response.isSuccessful) {
+                    println("Success")
+                } else {
+                    val errorBody = response.errorBody()?.string()
+                    println("Error: ${response.code()}, Body: $errorBody")
+                }
+            }
+
+            override fun onFailure(call: Call<Void>, t: Throwable) {
+                t.printStackTrace()
+                println("Request Failed: ${t.message}")
+            }
+        })
+}
+
 
 
 

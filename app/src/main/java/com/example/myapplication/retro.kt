@@ -1,6 +1,7 @@
 package com.example.myapplication
 
 import com.example.myapplication.calander.CalendarResponse
+import com.example.myapplication.manager.TeamsCalendarResponse
 import com.example.myapplication.notifications.ui.theme.NotificationData
 import com.example.yourapp.ui.Request
 import retrofit2.Call
@@ -12,6 +13,7 @@ import retrofit2.http.Header
 import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 data class LoginRequest(val email: String, val password: String)
 data class LoginResponse(
@@ -49,7 +51,8 @@ interface ApiService {
     : Call<Void>
 
     @PUT("update_notif_token/{uid}")
-    fun update_notif_token(@Path("uid") userId: String, @Body notifToken: notifTokenModel)
+    fun update_notif_token(
+        @Path("uid") userId: String, @Body notifToken: notifTokenModel)
     : Call<Void>
 
 
@@ -73,5 +76,12 @@ interface ApiService {
     fun getAllUsernames(): Call<List<String>>
     @POST("/checktoken/")
     suspend fun checkToken(@Header("Authorization") token: String): Response<String>
+
+    @POST("generate_monthly_schedule/")
+    fun updateTeamSchedule(
+        @Query("officeDays1") officeDays1: Int,
+        @Query("officeDays2") officeDays2: Int
+    ): Call<Void>
+
 
 }

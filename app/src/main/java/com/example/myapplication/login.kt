@@ -73,7 +73,7 @@ fun LoginScreen(
     )
     Column(
         modifier = Modifier
-            .padding(20.dp), // Add padding to avoid content sticking to the edges
+            .padding(start = 20.dp, end = 20.dp, bottom = 130.dp), // Add padding to avoid content sticking to the edges
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center // Center vertically
     ) {

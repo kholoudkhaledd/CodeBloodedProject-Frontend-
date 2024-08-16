@@ -112,6 +112,7 @@ fun NavigationScreen() {
         ) {
             composable(Screens.SplashScreen.screen) { SplashScreen(navController, sharedViewModel) }
             composable(Screens.Login.screen) {
+                Sharedpreference.clearAppData(context)
                 val context = LocalContext.current
                 LoginScreen(navController, context, sharedViewModel) { success, position ->
                     // Handle post-login logic here if needed

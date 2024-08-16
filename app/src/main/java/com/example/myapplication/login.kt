@@ -172,6 +172,8 @@ fun loginUser(
     context: Context, sharedViewModel: SharedViewModel,
     onResult: (Boolean, String) -> Unit
 ) {
+    Sharedpreference.clearAppData(context)
+
     Sharedpreference.removeUserToken(context)
     Sharedpreference.removeUserPosition(context)
 

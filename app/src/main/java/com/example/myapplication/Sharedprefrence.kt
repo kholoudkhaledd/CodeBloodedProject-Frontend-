@@ -8,6 +8,8 @@ object Sharedpreference {
     private const val KEY_USER_ID = "user_id"
     private const val KEY_USER_TOKEN = "user_token"
     private const val KEY_User_Name = "user_name"
+
+    private const val KEY_User_Position = "user_position"
     private fun getSharedPreferences(context: Context): SharedPreferences {
         return context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
     }
@@ -27,6 +29,12 @@ object Sharedpreference {
         editor.putString(KEY_USER_TOKEN, userToken)
         editor.apply()
     }
+    fun saveUserPosition(context: Context, position: String) {
+        val editor = getSharedPreferences(context).edit()
+        editor.putString(KEY_User_Position, position)
+        editor.apply()
+    }
+
 
     fun getUserId(context: Context): String? {
         return getSharedPreferences(context).getString(KEY_USER_ID, null)
@@ -39,9 +47,17 @@ object Sharedpreference {
     fun getUserToken(context: Context): String? {
         return getSharedPreferences(context).getString(KEY_USER_TOKEN, null)
     }
+    fun getUserPosition(context: Context): String? {
+        return getSharedPreferences(context).getString(KEY_User_Position, null)
+    }
     fun removeUserToken(context: Context) {
         val editor = getSharedPreferences(context).edit()
         editor.remove(KEY_USER_TOKEN)
+        editor.apply() // or editor.commit()
+    }
+    fun removeUserPosition(context: Context) {
+        val editor = getSharedPreferences(context).edit()
+        editor.remove(KEY_User_Position)
         editor.apply() // or editor.commit()
     }
 

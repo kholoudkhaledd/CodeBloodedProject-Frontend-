@@ -269,26 +269,39 @@ fun TeamsScheduleScreen(context: Context) {
                         }
 
                         Spacer(modifier = Modifier.height(10.dp))
+                        ///////////////
+                        //Continue here
+                        /////////////////
 
-                        Button(
-                            onClick = {
-                                if (firstTwoWeeksDays != null && secondTwoWeeksDays != null) {
-                                    val totalDays =
-                                        (firstTwoWeeksDays ?: 0) + (secondTwoWeeksDays ?: 0)
-                                    if (totalDays == 5) {
-                                        // Handle the valid case, e.g., submit the data
-                                        println("Valid schedule: $firstTwoWeeksDays days first 2 weeks, $secondTwoWeeksDays days second 2 weeks")
+
+                            Button(
+
+                                onClick = {
+                                    if (firstTwoWeeksDays != null && secondTwoWeeksDays != null) {
+                                        val totalDays =
+                                            (firstTwoWeeksDays ?: 0) + (secondTwoWeeksDays ?: 0)
+                                        if (totalDays != 0) {
+                                            // Handle the valid case, e.g., submit the data
+                                            println("Valid schedule: $firstTwoWeeksDays days for 2 weeks, $secondTwoWeeksDays days for other 2 weeks")
+                                            changeTeamSchedule(
+                                                firstTwoWeeksDays!!,
+                                                secondTwoWeeksDays!!
+                                            )
+
+                                        }
                                     } else {
-                                        validationMessage = "Total days must sum up to 5."
+                                        validationMessage= "enter numbers for both patterns"
                                     }
-                                } else {
-                                    validationMessage = "Please enter values for both periods."
-                                }
-                            },
-                            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF76B31B)),
-                            modifier = Modifier.fillMaxWidth()
-                        ) {
-                            Text(text = "Submit", fontSize = 16.sp)
+                                },
+                                colors = ButtonDefaults.buttonColors(
+                                    containerColor = Color(
+                                        0xFF76B31B
+                                    )
+                                ),
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                Text(text = "Submit", fontSize = 16.sp)
+                            }
                         }
 
                         validationMessage?.let {
@@ -303,6 +316,39 @@ fun TeamsScheduleScreen(context: Context) {
                 }
             }
         }
+<<<<<<< Updated upstream
+
+
+=======
+    }
+
+
+
+fun changeTeamSchedule(officeDays1:Int, officeDays2:Int){
+//    println("OFFICE DAYS 1"+officeDays1.toString())
+//    println("OFFICE DAYS 2"+officeDays2.toString())
+    RetrofitClient.apiService.updateTeamSchedule(officeDays1,officeDays2)
+        .enqueue(object:Callback<Void>{
+            override fun onResponse(
+                call: Call<Void>,
+                response: Response<Void>
+            ) {
+                if (response.isSuccessful) {
+                    println("Success")
+                } else {
+                    val errorBody = response.errorBody()?.string()
+                    println("Error: ${response.code()}, Body: $errorBody")
+                }
+            }
+
+            override fun onFailure(call: Call<Void>, t: Throwable) {
+                t.printStackTrace()
+                println("Request Failed: ${t.message}")
+            }
+        })
+}
+>>>>>>> Stashed changes
+
 
 
 

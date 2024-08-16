@@ -53,11 +53,12 @@ interface ApiService {
     : Call<Void>
 
 
-    @GET("view_schedule/{userId}/{date}")
+    @GET("view_schedule/{date}")
     fun getCalendarForMonth(
-        @Path("userId") userId: String,
-        @Path("date") date: String
+        @Path("date") date: String,
+        @Header("Authorization") token: String
     ): Call<CalendarResponse>
+
 
     @GET("view_notification/{uid}")
         fun getNotifications(@Path("uid") userId: String): Call<List<NotificationData>>

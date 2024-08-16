@@ -84,11 +84,16 @@ fun CustomCalendar(
     val apiService = RetrofitClient.apiService
 
     LaunchedEffect(currentMonth, currentYear, userId, userName) {
+        val token = ("Bearer " + Sharedpreference.getUserToken(context))
+        if (token.isEmpty()) {
+            // If the token is not available, return early to avoid making the API call
+            Log.e(TAG, "Token is missing, cannot make API call")
+            return@LaunchedEffect
+        }
         val call = if (isManager && userName != null) {
             apiService.getCalendarForTeam(userName, dateString)
         } else {
-            val userIdNotNull = userId ?: return@LaunchedEffect
-            apiService.getCalendarForMonth(userIdNotNull, dateString)
+            apiService.getCalendarForMonth(dateString, token)
         }
 
         call.enqueue(object : Callback<CalendarResponse> {

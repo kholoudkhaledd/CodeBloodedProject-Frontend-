@@ -8,7 +8,6 @@ import retrofit2.Callback
 
 
 class PushNotificationService: FirebaseMessagingService() {
-
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         super.onMessageReceived(remoteMessage)
         Log.d("PushNotificationService", "From: ${remoteMessage.from}")
@@ -19,7 +18,6 @@ class PushNotificationService: FirebaseMessagingService() {
             Log.d("PushNotificationService", "Message Notification Body: ${it.body}")
         }
     }
-
     fun updateNotificationToken(userId: String, notifToken: String) {
         val tokenUpdate = notifTokenModel(notifToken)
 

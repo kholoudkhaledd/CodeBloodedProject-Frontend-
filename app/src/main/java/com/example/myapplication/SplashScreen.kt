@@ -34,7 +34,6 @@ fun SplashScreen(navController: NavController, sharedViewModel: SharedViewModel)
 
     LaunchedEffect(Unit) {
         delay(2500) // Adjust delay as needed
-
         scope.launch {
             try {
                 // Your Retrofit client
@@ -48,6 +47,7 @@ fun SplashScreen(navController: NavController, sharedViewModel: SharedViewModel)
                     }
                 } else {
                     // Token is invalid or expired, navigate to Login Screen
+                    Sharedpreference.clearAll(context)
                     sharedViewModel.logoSize.value = 150.dp
                     navController.navigate(Screens.Login.screen) {
                         popUpTo(Screens.SplashScreen.screen) { inclusive = true }
@@ -56,8 +56,7 @@ fun SplashScreen(navController: NavController, sharedViewModel: SharedViewModel)
             } catch (e: Exception) {
                 // Handle exceptions (e.g., network error)
                 sharedViewModel.logoSize.value = 150.dp
-                Sharedpreference.removeUserToken(context)
-                Sharedpreference.removeUserPosition(context)
+
                 navController.navigate(Screens.Login.screen) {
 
                     popUpTo(Screens.SplashScreen.screen) { inclusive = true }

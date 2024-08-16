@@ -37,11 +37,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.myapplication.calander.Finallayout
+import com.example.myapplication.manager.ManagerRequest
 import com.example.myapplication.manager.TeamsScheduleScreen
 import com.example.myapplication.notifications.ui.theme.NotificationScreen
 import com.example.yourapp.ui.MyRequestsPage
-import com.example.myapplication.Screens
-import com.example.myapplication.manager.ManagerRequest
 
 
 @Composable
@@ -121,8 +120,8 @@ fun NavigationScreen() {
     val navController = rememberNavController()
     val sharedViewModel: SharedViewModel = viewModel()
     var selectedScreen by remember { mutableStateOf(Screens.SplashScreen.screen) }
-    var isManager by remember { mutableStateOf(false) }
-
+    val position =Sharedpreference.getUserPosition(context = LocalContext.current)
+    var isManager = position.equals("Manager", ignoreCase = true)
     Scaffold(
         bottomBar = {
             if (selectedScreen !in listOf(Screens.SplashScreen.screen, Screens.Login.screen)) {
@@ -170,7 +169,7 @@ fun NavigationScreen() {
             composable(Screens.Login.screen) {
                 val context = LocalContext.current
                 LoginScreen(navController, context, sharedViewModel) { success, position ->
-                    isManager = position.equals("Manager", ignoreCase = true)
+//                    isManager = position.equals("Manager", ignoreCase = true)
                 }
             }
             composable(Screens.Home.screen) {

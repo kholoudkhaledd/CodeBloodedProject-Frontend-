@@ -40,7 +40,7 @@ fun SplashScreen(navController: NavController, sharedViewModel: SharedViewModel)
     val context = LocalContext.current
     var startAnimation by remember { mutableStateOf(false) }
     val scope = rememberCoroutineScope()
-    val token = Sharedpreference.getUserToken(context)
+    val token = Sharedpreference.getUserToken(context) // Assuming you have a method in SharedViewModel to retrieve the token
 
     LaunchedEffect(Unit) {
         delay(1000)
@@ -49,23 +49,29 @@ fun SplashScreen(navController: NavController, sharedViewModel: SharedViewModel)
 
         scope.launch {
             try {
+                // Your Retrofit client
                 val response = apiService.checkToken("Bearer $token")
 
                 if (response.isSuccessful) {
+                    // Token is valid, navigate to Home Screen
                     sharedViewModel.logoSize.value = 150.dp
                     navController.navigate(Screens.Home.screen) {
                         popUpTo(Screens.SplashScreen.screen) { inclusive = true }
                     }
                 } else {
+                    // Token is invalid or expired, navigate to Login Screen
                     sharedViewModel.logoSize.value = 150.dp
                     navController.navigate(Screens.Login.screen) {
                         popUpTo(Screens.SplashScreen.screen) { inclusive = true }
                     }
                 }
             } catch (e: Exception) {
+                // Handle exceptions (e.g., network error)
                 sharedViewModel.logoSize.value = 150.dp
                 Sharedpreference.removeUserToken(context)
+                Sharedpreference.removeUserPosition(context)
                 navController.navigate(Screens.Login.screen) {
+
                     popUpTo(Screens.SplashScreen.screen) { inclusive = true }
                 }
             }

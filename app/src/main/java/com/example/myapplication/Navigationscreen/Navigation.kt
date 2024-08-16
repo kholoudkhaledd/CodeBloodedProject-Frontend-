@@ -36,6 +36,10 @@ import com.example.myapplication.manager.ManagerRequest
 import com.example.myapplication.manager.TeamsScheduleScreen
 import com.example.myapplication.notifications.ui.theme.NotificationScreen
 import com.example.yourapp.ui.MyRequestsPage
+import android.content.Intent
+import com.example.myapplication.MainActivity // Adjust the package name as needed
+import android.app.Activity
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @RequiresApi(Build.VERSION_CODES.O)
@@ -44,23 +48,25 @@ fun NavigationScreen() {
     val navController = rememberNavController()
     val sharedViewModel: SharedViewModel = viewModel()
     var selectedScreen by remember { mutableStateOf(Screens.SplashScreen.screen) }
-    val position = Sharedpreference.getUserPosition(context = LocalContext.current)
-    val isManager = position.equals("Manager", ignoreCase = true)
     val context = LocalContext.current
-    Log.d("ismangarnavbar", "Man: $isManager")
+
+    // Using mutableStateOf to dynamically track the user's position
+    var isManager by remember { mutableStateOf(Sharedpreference.getUserPosition(context).equals("Manager", ignoreCase = true)) }
+
+    Log.d("isManagerNavbar", "Man: $isManager")
 
     Scaffold(
         topBar = {
             if (selectedScreen !in listOf(Screens.SplashScreen.screen, Screens.Login.screen)) {
                 TopAppBar(
-                    title = { Text(text = "Your App Title") },
+                    title = { Text(text = "") },
                     actions = {
                         IconButton(onClick = {
                             Sharedpreference.clearAll(context)
-                            navController.navigate(Screens.Login.screen) {
-                                popUpTo(Screens.SplashScreen.screen) { inclusive = true }
-                                popUpTo(0) // Clears the entire back stack
-                            }
+                            val intent = Intent(context, MainActivity::class.java)
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+                            context.startActivity(intent)
+                            (context as Activity).finish()
                         }) {
                             Icon(imageVector = Icons.Default.ExitToApp, contentDescription = "Logout")
                         }
@@ -112,15 +118,19 @@ fun NavigationScreen() {
         ) {
             composable(Screens.SplashScreen.screen) { SplashScreen(navController, sharedViewModel) }
             composable(Screens.Login.screen) {
-                Sharedpreference.clearAppData(context)
-                val context = LocalContext.current
                 LoginScreen(navController, context, sharedViewModel) { success, position ->
                     // Handle post-login logic here if needed
+                    if (success) {
+                        // Update the isManager state based on the new position
+                        isManager = position.equals("Manager", ignoreCase = true)
+                        navController.navigate(Screens.Home.screen) {
+                            popUpTo(Screens.SplashScreen.screen) { inclusive = true }
+                        }
+                    }
                 }
             }
             composable(Screens.Home.screen) {
                 selectedScreen = Screens.Home.screen
-                val context = LocalContext.current
                 Finallayout(context)
             }
             composable(Screens.Chatbot.screen) {
@@ -141,12 +151,10 @@ fun NavigationScreen() {
             }
             composable(Screens.TeamsSchedule.screen) {
                 selectedScreen = Screens.TeamsSchedule.screen
-
-                val context = LocalContext.current
-
                 TeamsScheduleScreen(context)
             }
         }
     }
 }
+
 

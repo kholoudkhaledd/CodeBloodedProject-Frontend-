@@ -172,10 +172,10 @@ fun loginUser(
     context: Context, sharedViewModel: SharedViewModel,
     onResult: (Boolean, String) -> Unit
 ) {
-    Sharedpreference.clearAppData(context)
+    Sharedpreference.clearAll(context)
+    Log.d(TAG, "context before login: " + context)
 
-    Sharedpreference.removeUserToken(context)
-    Sharedpreference.removeUserPosition(context)
+
 
     val loginRequest = LoginRequest(email, password) // Only include email and password
     RetrofitClient.apiService.login(loginRequest).enqueue(object : Callback<LoginResponse> {

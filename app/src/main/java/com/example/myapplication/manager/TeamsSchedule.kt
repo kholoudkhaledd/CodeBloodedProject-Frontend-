@@ -35,6 +35,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CheckboxDefaults.colors
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Divider
 import androidx.compose.material3.DividerDefaults.color
@@ -43,6 +44,8 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.SnackbarDefaults.color
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextFieldColors
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -54,6 +57,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -217,15 +221,14 @@ fun TeamsScheduleScreen(context: Context) {
         }
 
         item {
-            Spacer(modifier = Modifier.height(10.dp))
+            Spacer(modifier = Modifier.height(15.dp))
         }
 
         item {
             Column(
                 modifier = Modifier
-                    .clip(RoundedCornerShape(20.dp))
+                    .clip(RoundedCornerShape(32.dp))
                     .background(Color.White)
-                    .border(1.dp, Color(0xFFE8E8E8), RoundedCornerShape(10.dp))
                     .padding(15.dp)
             ) {
                 Text(
@@ -270,10 +273,6 @@ fun TeamsScheduleScreen(context: Context) {
                 }
 
                 Spacer(modifier = Modifier.height(10.dp))
-                ///////////////
-                //Continue here
-                /////////////////
-
 
                 Button(
 
@@ -314,14 +313,12 @@ fun TeamsScheduleScreen(context: Context) {
                 )
             }
         }
+
+        item {
+            Spacer(modifier = Modifier.height(20.dp))
+        }
     }
 }
-
-
-
-
-
-
 
 fun changeTeamSchedule(officeDays1:Int, officeDays2:Int){
 //    println("OFFICE DAYS 1"+officeDays1.toString())
@@ -347,27 +344,45 @@ fun changeTeamSchedule(officeDays1:Int, officeDays2:Int){
         })
 }
 
-
-
-
 @Composable
-fun WorkDaysInput(value: Int?, onValueChange: (Int?) -> Unit) {
+fun WorkDaysInput(value: Int?, onValueChange: (Int?) -> Unit, disabledContainerColor: Color = Color(0xFFECECEC)) {
     var text by remember { mutableStateOf(value?.toString() ?: "") }
+    var isEditing by remember { mutableStateOf(false) }
 
-    // Handle text input
-    androidx.compose.material3.TextField(
-        value = text,
-        onValueChange = {
-            text = it
-            onValueChange(it.toIntOrNull())
-        },
-        keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
-        label = { Text("Days:") },
+    Box(
         modifier = Modifier
             .width(80.dp)
             .background(Color(0xFFECECEC))
-    )
+            .clip(RoundedCornerShape(8.dp))
+            .padding(8.dp)
+            .clickable { isEditing = true } // Enable editing on click
+    ) {
+        if (isEditing) {
+            androidx.compose.material3.TextField(
+                value = text,
+                onValueChange = {
+                    text = it
+                    onValueChange(it.toIntOrNull())
+                },
+                keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
+                modifier = Modifier.fillMaxWidth()
+                    .background(Color(0xFFECECEC)),
+                singleLine = true,
+                textStyle = androidx.compose.ui.text.TextStyle(fontSize = 14.sp)
+            )
+        } else {
+            Text(
+                text = text.ifEmpty { "Enter days" },
+                fontSize = 14.sp,
+                color = Color.DarkGray,
+                modifier = Modifier.fillMaxWidth()
+                    .background(Color(0xFFECECEC))
+                ,
+            )
+        }
+    }
 }
+
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -375,6 +390,7 @@ fun CalendarPerEmployee(context: Context, selectedName: String) {
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .clip(RoundedCornerShape(25.dp))
             .background(Color.White)
             .padding(vertical = 10.dp),
         verticalArrangement = Arrangement.Top,
@@ -426,6 +442,7 @@ fun CalendarViewScreenManager(context: Context,selectedName: String) {
 
     Column(
         modifier = Modifier
+            .clip(RoundedCornerShape(25.dp))
             .background(Color.White)
     ) {
         val currentMonthAndYear = "${currentMonth.name.lowercase().capitalize()} $currentYear"
@@ -445,6 +462,7 @@ fun CalendarViewScreenManager(context: Context,selectedName: String) {
 
             Box(
                 modifier = Modifier
+                    .clip(RoundedCornerShape(25.dp))
                     .background(Color.White)
                     .fillMaxWidth()
             ) {
@@ -500,6 +518,7 @@ fun CalendarViewScreenManager(context: Context,selectedName: String) {
             Box(
                 modifier = Modifier
                     .weight(1f)
+                    .clip(RoundedCornerShape(25.dp))
                     .fillMaxWidth()
                     .padding(vertical = 5.dp)
             ) {

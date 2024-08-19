@@ -39,10 +39,16 @@ import com.example.yourapp.ui.MyRequestsPage
 import android.content.Intent
 import com.example.myapplication.MainActivity // Adjust the package name as needed
 import android.app.Activity
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.Arrangement
+
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.size
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 
 
 @RequiresApi(Build.VERSION_CODES.S)
@@ -62,26 +68,31 @@ fun NavigationScreen() {
     Scaffold(
         topBar = {
             if (selectedScreen in Screens.Home.screen) {
-                Text(text = "Logout",)
 
-                Spacer(modifier = Modifier.size(5.dp))
+                Row(
+                    ){
+                    TopAppBar(
+                        modifier = Modifier.height(70.dp),
+                        title = {
+                            Text(text = "")
+                        },
+                        actions = {
+                            IconButton(onClick = {
+                                Sharedpreference.clearAll(context)
+                                val intent = Intent(context, MainActivity::class.java)
+                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+                                context.startActivity(intent)
+                                (context as Activity).finish()
+                            }) {
 
-                TopAppBar(
-                    modifier = Modifier.height(70.dp),
-                    title = { Text(text = "") },
-                    actions = {
-                        IconButton(onClick = {
-                            Sharedpreference.clearAll(context)
-                            val intent = Intent(context, MainActivity::class.java)
-                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
-                            context.startActivity(intent)
-                            (context as Activity).finish()
-                        }) {
-                            
-                            Icon(imageVector = Icons.Default.ExitToApp, contentDescription = "Logout")
+                                Icon(imageVector = Icons.Default.ExitToApp, contentDescription = "Logout", tint = Color(0xFF76B31B))
+                            }
                         }
-                    }
-                )
+                    )
+
+                }
+
+
             }
         },
         bottomBar = {

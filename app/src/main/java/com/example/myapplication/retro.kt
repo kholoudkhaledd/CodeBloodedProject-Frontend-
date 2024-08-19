@@ -1,7 +1,6 @@
 package com.example.myapplication
 
 import com.example.myapplication.calander.CalendarResponse
-import com.example.myapplication.manager.TeamsCalendarResponse
 import com.example.myapplication.notifications.ui.theme.NotificationData
 import com.example.yourapp.ui.Request
 import retrofit2.Call
@@ -28,6 +27,8 @@ data class LoginResponse(
 data class CreateRequest(val userID: String, val changeDayFrom: String, val changeDayTo: String, val Status: String, val timeStamp: String)
 data class UpdateStatusModel(val Status: String)
 data class notifTokenModel (val notifToken: String)
+data class MessageRequest(val message: String)
+data class MessageResponse(val message: String)
 
 
 interface ApiService {
@@ -83,5 +84,7 @@ interface ApiService {
         @Query("officeDays2") officeDays2: Int
     ): Call<Void>
 
+    @POST("chatbot/{uid}")
+    suspend fun sendMessage(@Path("uid") uid: String, @Body request: String): Response<MessageResponse>
 
 }

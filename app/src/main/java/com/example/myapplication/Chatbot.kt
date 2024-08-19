@@ -32,6 +32,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -50,18 +51,51 @@ fun ChatScreen() {
     val listState = rememberLazyListState()
     val coroutineScope = rememberCoroutineScope()
     val keyboardController = LocalSoftwareKeyboardController.current
+    var uid = Sharedpreference.getUserId(LocalContext.current)
 
     fun sendMessage() {
         if (message.isNotBlank()) {
+            // Add the user's message to the chat
             messages = messages + ChatMessage(message, true)
-            messages = messages + ChatMessage("Hello, I am your ChatBot. How can I assist you today?", false)
-            message = ""
+            // Create an instance of RetrofitClient
+
+            // Launch a coroutine to handle the API call
             coroutineScope.launch {
-                listState.animateScrollToItem(messages.size - 1)
+                try {
+                    val temp = message
+                    message = ""
+
+                    // Call the API and get the response
+                    val response = uid?.let { RetrofitClient.apiService.sendMessage(it, temp) }
+
+                    // Handle the response
+                    if (response != null) {
+                        if (response.isSuccessful) {
+                            val botResponse = response.body()
+                            val botMessage = botResponse?.message ?: "Sorry, I didn't understand that."
+                            messages = messages + ChatMessage(botMessage, false)
+                        } else {
+                            // Handle API error
+                            messages = messages + ChatMessage("Sorry, something went wrong. Please try again.", false)
+                        }
+                    }
+
+                    // Clear the input message
+
+                    // Scroll to the bottom of the chat
+                    listState.animateScrollToItem(messages.size - 1)
+
+                } catch (e: Exception) {
+                    // Handle network errors or other exceptions
+                    messages = messages + ChatMessage("An error occurred: ${e.message}", false)
+                } finally {
+                    // Hide the keyboard
+                    keyboardController?.hide()
+                }
             }
-            keyboardController?.hide()
         }
     }
+
 
     val iconRes = if (message.isNotBlank()) R.drawable.send2 else R.drawable.send
 
@@ -113,6 +147,7 @@ fun ChatScreen() {
                     TextField(
                         value = message,
                         onValueChange = { message = it },
+                        singleLine = true,
                         placeholder = { Text(text = "Message here...", fontSize = 16.sp, color = Color(0xFFBDBDBD), lineHeight = 17.sp)},
                         modifier = Modifier
                             .fillMaxWidth()

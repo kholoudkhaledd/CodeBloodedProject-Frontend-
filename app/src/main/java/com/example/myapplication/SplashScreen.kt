@@ -33,6 +33,9 @@ import com.example.myapplication.RetrofitClient.apiService
 import com.skydoves.landscapist.glide.GlideImage
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import android.content.Intent
+import com.example.myapplication.MainActivity // Adjust the package name as needed
+import android.app.Activity
 
 
 @Composable
@@ -67,9 +70,11 @@ fun SplashScreen(navController: NavController, sharedViewModel: SharedViewModel)
                 }
             } catch (e: Exception) {
                 // Handle exceptions (e.g., network error)
-                sharedViewModel.logoSize.value = 150.dp
-                Sharedpreference.removeUserToken(context)
-                Sharedpreference.removeUserPosition(context)
+                Sharedpreference.clearAll(context)
+                val intent = Intent(context, MainActivity::class.java)
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+                context.startActivity(intent)
+                (context as Activity).finish()
                 navController.navigate(Screens.Login.screen) {
 
                     popUpTo(Screens.SplashScreen.screen) { inclusive = true }

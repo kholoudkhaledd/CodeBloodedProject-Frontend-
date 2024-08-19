@@ -60,13 +60,5 @@ object Sharedpreference {
         editor.remove(KEY_User_Position)
         editor.apply() // or editor.commit()
     }
-    fun clearAll(context: Context) {
-        val sharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
-        val editor = sharedPreferences.edit()
-        editor.clear()
-        editor.apply()
-    }
-
-
 
 }

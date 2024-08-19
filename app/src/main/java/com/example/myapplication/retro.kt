@@ -48,12 +48,12 @@ interface ApiService {
 
     @PUT("update_status/{document_id}")
     fun updateStatus(@Path("document_id") documentId: String, @Body statusUpdate: UpdateStatusModel)
-    : Call<Void>
+            : Call<Void>
 
     @PUT("update_notif_token/{uid}")
     fun update_notif_token(
         @Path("uid") userId: String, @Body notifToken: notifTokenModel)
-    : Call<Void>
+            : Call<Void>
 
 
     @GET("view_schedule/{date}")
@@ -64,8 +64,8 @@ interface ApiService {
 
 
     @GET("view_notification/{uid}")
-        fun getNotifications(@Path("uid") userId: String): Call<List<NotificationData>>
-    
+    fun getNotifications(@Path("uid") userId: String): Call<List<NotificationData>>
+
     @GET("view_teams_schedule/{Name}/{date}")
     fun getCalendarForTeam(
         @Path("Name") name: String,

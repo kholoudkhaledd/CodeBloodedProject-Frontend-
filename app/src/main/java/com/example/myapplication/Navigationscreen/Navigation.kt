@@ -39,10 +39,14 @@ import com.example.yourapp.ui.MyRequestsPage
 import android.content.Intent
 import com.example.myapplication.MainActivity // Adjust the package name as needed
 import android.app.Activity
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.size
+import androidx.compose.ui.unit.dp
 
 
+@RequiresApi(Build.VERSION_CODES.S)
 @OptIn(ExperimentalMaterial3Api::class)
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun NavigationScreen() {
     val navController = rememberNavController()
@@ -57,8 +61,13 @@ fun NavigationScreen() {
 
     Scaffold(
         topBar = {
-            if (selectedScreen !in listOf(Screens.SplashScreen.screen, Screens.Login.screen)) {
+            if (selectedScreen in Screens.Home.screen) {
+                Text(text = "Logout",)
+
+                Spacer(modifier = Modifier.size(5.dp))
+
                 TopAppBar(
+                    modifier = Modifier.height(70.dp),
                     title = { Text(text = "") },
                     actions = {
                         IconButton(onClick = {
@@ -68,6 +77,7 @@ fun NavigationScreen() {
                             context.startActivity(intent)
                             (context as Activity).finish()
                         }) {
+                            
                             Icon(imageVector = Icons.Default.ExitToApp, contentDescription = "Logout")
                         }
                     }

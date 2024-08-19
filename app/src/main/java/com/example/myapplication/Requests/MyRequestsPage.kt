@@ -42,31 +42,48 @@ import java.time.LocalDateTime
 import java.time.ZoneId
 
 import java.time.format.DateTimeFormatter
+import java.time.format.DateTimeParseException
 
 import java.time.temporal.ChronoUnit
 import java.util.Locale
 
 @RequiresApi(Build.VERSION_CODES.S)
 fun formatDate(dateString: String): String {
-    // Parse the date from the format "yyyy-MM-dd"
-    val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ENGLISH)
-    val date = LocalDate.parse(dateString, formatter)
+    // Define possible date formats
+    val possibleDateFormats = listOf(
+        "yyyy-MM-dd", // Expected format
+        "dd-MM-yyyy"  // Alternate format
+    )
 
-    // Extract the day, month, and year
-    val day = date.dayOfMonth
-    val month = date.month.name.lowercase().replaceFirstChar { it.uppercase() }
+    for (format in possibleDateFormats) {
+        try {
+            // Parse the date from the format
+            val formatter = DateTimeFormatter.ofPattern(format, Locale.ENGLISH)
+            val date = LocalDate.parse(dateString, formatter)
 
-    // Determine the correct suffix for the day
-    val suffix = when (day) {
-        1, 21, 31 -> "st"
-        2, 22 -> "nd"
-        3, 23 -> "rd"
-        else -> "th"
+            // Extract the day, month, and year
+            val day = date.dayOfMonth
+            val month = date.month.name.lowercase().replaceFirstChar { it.uppercase() }
+
+            // Determine the correct suffix for the day
+            val suffix = when (day) {
+                1, 21, 31 -> "st"
+                2, 22 -> "nd"
+                3, 23 -> "rd"
+                else -> "th"
+            }
+
+            // Return the formatted date as "21st of August"
+            return "$day$suffix of $month"
+        } catch (e: Exception) {
+            // If parsing fails, continue to the next format
+        }
     }
 
-    // Return the formatted date as "21st of August"
-    return "$day$suffix of $month"
+    // If none of the formats work, return the original date string
+    return dateString
 }
+
 
 @RequiresApi(Build.VERSION_CODES.S)
 fun timeAgo(timestamp: String): String {
@@ -181,13 +198,23 @@ private fun fetchRequests(userId: String, onResult: (List<Request>) -> Unit) {
             if (response.isSuccessful) {
                 response.body()?.let { requests ->
                     val sortedRequests = requests.sortedByDescending { request ->
-                        // Parse the timestamp string into a LocalDateTime object
-                        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
-                        val dateTime = LocalDateTime.parse(request.time, formatter)
+                        // Check if the timestamp is not empty or null
+                        if (request.time.isNotEmpty()) {
+                            try {
+                                // Parse the timestamp string into a LocalDateTime object
+                                val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+                                val dateTime = LocalDateTime.parse(request.time, formatter)
 
-                        // Convert LocalDateTime to Instant using system default time zone
-                        val instant = dateTime.atZone(ZoneId.systemDefault()).toInstant()
-                        instant
+                                // Convert LocalDateTime to Instant using system default time zone
+                                dateTime.atZone(ZoneId.systemDefault()).toInstant()
+                            } catch (e: DateTimeParseException) {
+                                Log.e("fetchRequests", "Failed to parse timestamp: ${request.time}")
+                                Instant.MIN // Fallback for sorting purposes if parsing fails
+                            }
+                        } else {
+                            Log.e("fetchRequests", "Empty timestamp for request ID: ${request.id}")
+                            Instant.MIN // Fallback for sorting purposes if time is empty
+                        }
                     }
                     onResult(sortedRequests)
                 }
@@ -201,6 +228,7 @@ private fun fetchRequests(userId: String, onResult: (List<Request>) -> Unit) {
         }
     })
 }
+
 
 
 

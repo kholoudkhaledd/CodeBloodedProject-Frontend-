@@ -51,6 +51,7 @@ import retrofit2.Response
 import android.view.View
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalView
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
@@ -62,14 +63,14 @@ fun LoginScreen(
     sharedViewModel: SharedViewModel,
     onLoginResult: (Boolean, String) -> Unit
 ) {
-    // Get the current activity's window
-    val window = (context as Activity).window
+
+    // Get the current view
+    val view = LocalView.current
 
     LaunchedEffect(Unit) {
-        // Set the system UI visibility flags to hide the status and navigation bars
-        val insetsController = WindowInsetsControllerCompat(window, window.decorView)
-        insetsController.hide(WindowInsetsCompat.Type.systemBars())
-        insetsController.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+        // Get the WindowInsetsController and hide the system bars
+        val windowInsetsController = ViewCompat.getWindowInsetsController(view)
+        windowInsetsController?.hide(WindowInsetsCompat.Type.statusBars() or WindowInsetsCompat.Type.navigationBars())
     }
 
     // Your existing login screen code
@@ -178,6 +179,17 @@ fun LoginScreen(
             )
         }
     }
+
+    LaunchedEffect(navController) {
+        navController.currentBackStackEntryFlow.collect { entry ->
+            if (entry.destination.route != Screens.Login.screen) {
+                // Show the system bars again when navigating away from the login screen
+                val windowInsetsController = ViewCompat.getWindowInsetsController(view)
+                windowInsetsController?.show(WindowInsetsCompat.Type.statusBars() or WindowInsetsCompat.Type.navigationBars())
+            }
+        }
+    }
+
 }
 
 

@@ -36,6 +36,10 @@ import kotlinx.coroutines.launch
 import android.content.Intent
 import com.example.myapplication.MainActivity // Adjust the package name as needed
 import android.app.Activity
+import androidx.compose.ui.platform.LocalView
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
 
 
 @Composable
@@ -44,26 +48,41 @@ fun SplashScreen(navController: NavController, sharedViewModel: SharedViewModel)
     var startAnimation by remember { mutableStateOf(false) }
     val scope = rememberCoroutineScope()
     val token = Sharedpreference.getUserToken(context) // Assuming you have a method in SharedViewModel to retrieve the token
+    val view = LocalView.current
 
     LaunchedEffect(Unit) {
+
+        val windowInsetsController = ViewCompat.getWindowInsetsController(view)
+        windowInsetsController?.let {
+            it.hide(WindowInsetsCompat.Type.systemBars())
+            it.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+        }
+
         delay(1000)
         startAnimation = true
         delay(1000)
 
+        // When navigating away from the splash screen, show the system bars again
         scope.launch {
             try {
                 // Your Retrofit client
                 val response = apiService.checkToken("Bearer $token")
 
                 if (response.isSuccessful) {
-                    // Token is valid, navigate to Home Screen
                     sharedViewModel.logoSize.value = 150.dp
+
+                    // Show system bars again before navigating
+                    windowInsetsController?.show(WindowInsetsCompat.Type.systemBars())
+
                     navController.navigate(Screens.Home.screen) {
                         popUpTo(Screens.SplashScreen.screen) { inclusive = true }
                     }
                 } else {
-                    // Token is invalid or expired, navigate to Login Screen
                     sharedViewModel.logoSize.value = 150.dp
+
+                    // Show system bars again before navigating
+                    windowInsetsController?.show(WindowInsetsCompat.Type.systemBars())
+
                     navController.navigate(Screens.Login.screen) {
                         popUpTo(Screens.SplashScreen.screen) { inclusive = true }
                     }
@@ -75,13 +94,17 @@ fun SplashScreen(navController: NavController, sharedViewModel: SharedViewModel)
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
                 context.startActivity(intent)
                 (context as Activity).finish()
-                navController.navigate(Screens.Login.screen) {
 
+                // Show system bars again before navigating
+                windowInsetsController?.show(WindowInsetsCompat.Type.systemBars())
+
+                navController.navigate(Screens.Login.screen) {
                     popUpTo(Screens.SplashScreen.screen) { inclusive = true }
                 }
             }
         }
     }
+
 
     Box(
         modifier = Modifier

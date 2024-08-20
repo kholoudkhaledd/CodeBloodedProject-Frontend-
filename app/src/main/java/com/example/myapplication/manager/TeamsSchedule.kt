@@ -239,7 +239,7 @@ fun TeamsScheduleScreen(context: Context) {
                     text = "Change team's schedule",
                     fontWeight = FontWeight.SemiBold,
                     fontSize = 16.sp,
-                    modifier = Modifier.padding(bottom = 10.dp)
+                    modifier = Modifier.padding(bottom = 10.dp, top = 10.dp)
                 )
 
                 Column(

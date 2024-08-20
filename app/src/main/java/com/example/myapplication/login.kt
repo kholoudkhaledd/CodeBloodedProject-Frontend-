@@ -1,6 +1,7 @@
 package com.example.myapplication
 
 import SharedViewModel
+import android.app.Activity
 import android.content.ContentValues.TAG
 import android.content.Context
 import android.util.Log
@@ -8,7 +9,6 @@ import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -48,14 +48,31 @@ import com.google.firebase.messaging.FirebaseMessaging
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import android.view.View
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.layout.ContentScale
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
 
 @Composable
 fun LoginScreen(
     navController: NavController,
     context: Context,
     sharedViewModel: SharedViewModel,
-    onLoginResult: (Boolean, String) -> Unit // Include onLoginResult callback
+    onLoginResult: (Boolean, String) -> Unit
 ) {
+    // Get the current activity's window
+    val window = (context as Activity).window
+
+    LaunchedEffect(Unit) {
+        // Set the system UI visibility flags to hide the status and navigation bars
+        val insetsController = WindowInsetsControllerCompat(window, window.decorView)
+        insetsController.hide(WindowInsetsCompat.Type.systemBars())
+        insetsController.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+    }
+
+    // Your existing login screen code
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     val isTextFieldNotEmpty by remember {
@@ -66,29 +83,27 @@ fun LoginScreen(
     Image(
         painter = painterResource(id = R.drawable.img),
         contentDescription = "Background",
+        contentScale = ContentScale.Crop,
         modifier = Modifier
             .fillMaxSize()
-            .aspectRatio(0.3f)
-            .alpha(0.9f)
     )
     Column(
         modifier = Modifier
-            .padding(start = 20.dp, end = 20.dp, bottom = 130.dp), // Add padding to avoid content sticking to the edges
+            .padding(start = 20.dp, end = 20.dp, bottom = 130.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center // Center vertically
+        verticalArrangement = Arrangement.Center
     ) {
         Image(
             painter = painterResource(id = R.drawable.deloittelogo),
             contentDescription = "Deloitte Logo",
             modifier = Modifier
-//                .size(247.dp)
-                .padding(bottom = 32.dp) // Add space below the logo
+                .padding(bottom = 32.dp)
         )
         Text(
             text = "Login",
             color = Color.White,
             style = LocalTextStyle.current.copy(fontSize = 25.sp),
-            modifier = Modifier.padding(bottom = 32.dp) // Add space between title and text fields
+            modifier = Modifier.padding(bottom = 32.dp)
         )
         TextField(
             value = email,
@@ -139,8 +154,8 @@ fun LoginScreen(
                             navController.navigate(Screens.Home.screen) {
                                 popUpTo(Screens.Login.screen) { inclusive = true }
                             }
-                            onLoginResult(success, position) // Pass position to onLoginResult
-                            Log.d(TAG, "User position after login: $position") // Log the user's position
+                            onLoginResult(success, position)
+                            Log.d(TAG, "User position after login: $position")
                         } else {
                             Toast.makeText(context, "Login failed", Toast.LENGTH_SHORT).show()
                         }
@@ -164,6 +179,7 @@ fun LoginScreen(
         }
     }
 }
+
 
 
 

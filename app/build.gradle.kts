@@ -103,6 +103,15 @@ dependencies {
     implementation("com.google.firebase:firebase-analytics")
     implementation("com.google.firebase:firebase-messaging")
 
+    dependencies {
+        implementation ("androidx.compose.ui:ui:1.4.3")
+        implementation ("androidx.compose.material3:material3:1.0.1")
+        implementation ("androidx.compose.ui:ui-tooling-preview:1.4.3")
+        implementation ("androidx.compose.ui:ui-tooling:1.4.3")
+        implementation ("androidx.compose.foundation:foundation:1.4.3")
+    }
+
+
 
 
 }

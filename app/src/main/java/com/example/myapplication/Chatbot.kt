@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -15,6 +16,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -40,6 +42,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.launch
+
+import androidx.compose.ui.input.key.onKeyEvent
+import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.input.key.nativeKeyCode
+import androidx.compose.ui.input.key.KeyEvent
+import androidx.compose.ui.input.key.key
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
+
 
 data class ChatMessage(val message: String, val isUserMessage: Boolean)
 
@@ -88,9 +99,6 @@ fun ChatScreen() {
                 } catch (e: Exception) {
                     // Handle network errors or other exceptions
                     messages = messages + ChatMessage("An error occurred: ${e.message}", false)
-                } finally {
-                    // Hide the keyboard
-                    keyboardController?.hide()
                 }
             }
         }
@@ -142,16 +150,29 @@ fun ChatScreen() {
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp)
                         .padding(bottom = 16.dp)
-                        .height(50.dp)
+                        .height(54.dp)
                 ) {
                     TextField(
                         value = message,
                         onValueChange = { message = it },
                         singleLine = true,
-                        placeholder = { Text(text = "Message here...", fontSize = 16.sp, color = Color(0xFFBDBDBD), lineHeight = 17.sp)},
+                        placeholder = { Text(text = "Message here...",
+                            fontSize = 16.sp,
+                            color = Color(0xFFBDBDBD),
+                            lineHeight = 24.sp,
+                            textAlign = TextAlign.Center,
+                        )},
                         modifier = Modifier
                             .fillMaxWidth()
-                            .background(Color(0xFFE0E0E0), shape = RoundedCornerShape(24.dp)),
+                            .background(Color(0xFFE0E0E0), shape = RoundedCornerShape(24.dp))
+                            .onKeyEvent { keyEvent ->
+                                if (keyEvent.key == Key.Enter) {
+                                    sendMessage()
+                                    true
+                                } else {
+                                    false
+                                }
+                            },
                         colors = TextFieldDefaults.textFieldColors(
                             containerColor = Color.Transparent,
                             focusedIndicatorColor = Color.Transparent,
@@ -161,19 +182,20 @@ fun ChatScreen() {
                         trailingIcon = {
                             IconButton(
                                 onClick = { sendMessage() },
-                                modifier = Modifier
-                                    .size(30.dp)
+                                modifier = Modifier.size(30.dp)
                             ) {
                                 Icon(
                                     painter = painterResource(id = iconRes),
                                     contentDescription = "Send",
                                     tint = Color.Unspecified,
-                                    modifier = Modifier
-                                        .size(30.dp)
+                                    modifier = Modifier.size(30.dp)
                                 )
                             }
-                        }
+                        },
+                        keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Text)
                     )
+
+
                 }
             }
         }

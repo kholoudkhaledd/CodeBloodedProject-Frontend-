@@ -108,6 +108,7 @@ fun CustomCalendar(
         modifier = modifier
             .background(Color.White)
             .padding(0.dp)
+
     ) {
         // Header Row with Days of Week
         Row(

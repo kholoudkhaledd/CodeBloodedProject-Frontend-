@@ -41,9 +41,11 @@ import androidx.compose.material3.Divider
 import androidx.compose.material3.DividerDefaults.color
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.SnackbarDefaults.color
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldColors
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
@@ -89,6 +91,8 @@ fun TeamsScheduleScreen(context: Context) {
     var isLoading by remember { mutableStateOf(true) }
     var selectedName by remember { mutableStateOf<String?>(null) }
     var expanded by remember { mutableStateOf(false) }
+    var isButtonClicked by remember { mutableStateOf(false) }
+
 
     // State for managing work-from-home and work-from-office days
     var firstTwoWeeksDays by remember { mutableStateOf<Int?>(null) }
@@ -126,7 +130,7 @@ fun TeamsScheduleScreen(context: Context) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = 20.dp)
-                    .clip(RoundedCornerShape(20.dp)), // Adjust padding as needed
+                    .clip(RoundedCornerShape(32.dp)), // Adjust padding as needed
                 colors = CardDefaults.cardColors(containerColor = Color.White),
             ) {
                 Column(
@@ -211,8 +215,7 @@ fun TeamsScheduleScreen(context: Context) {
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .background(Color.White)
-                        .clip(RoundedCornerShape(20.dp))
+                        .clip(RoundedCornerShape(32.dp))
 
                 ) {
                     CalendarPerEmployee(context, selectedName!!)
@@ -229,7 +232,8 @@ fun TeamsScheduleScreen(context: Context) {
                 modifier = Modifier
                     .clip(RoundedCornerShape(32.dp))
                     .background(Color.White)
-                    .padding(15.dp)
+                    .padding(start = 30.dp, end = 30.dp )
+
             ) {
                 Text(
                     text = "Change team's schedule",
@@ -238,13 +242,15 @@ fun TeamsScheduleScreen(context: Context) {
                     modifier = Modifier.padding(bottom = 10.dp)
                 )
 
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    modifier = Modifier.fillMaxWidth()
+                Column(
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(10.dp))
+                        .border(1.dp, Color(0xFFE8E8E8), RoundedCornerShape(10.dp))
+                        .background(Color(0xFFF6F6F6))
+                        .height(50.dp)
+                        .padding(8.dp)
+                        .fillMaxWidth()
                 ) {
-                    Text(text = "First 2 weeks:", fontSize = 14.sp)
-                    Spacer(modifier = Modifier.width(10.dp))
                     WorkDaysInput(
                         value = firstTwoWeeksDays,
                         onValueChange = {
@@ -256,13 +262,15 @@ fun TeamsScheduleScreen(context: Context) {
 
                 Spacer(modifier = Modifier.height(10.dp))
 
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    modifier = Modifier.fillMaxWidth()
+                Column(
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(10.dp))
+                        .border(1.dp, Color(0xFFE8E8E8), RoundedCornerShape(10.dp))
+                        .background(Color(0xFFF6F6F6))
+                        .height(50.dp)
+                        .padding(8.dp)
+                        .fillMaxWidth()
                 ) {
-                    Text(text = "Second 2 weeks:", fontSize = 14.sp)
-                    Spacer(modifier = Modifier.width(10.dp))
                     WorkDaysInput(
                         value = secondTwoWeeksDays,
                         onValueChange = {
@@ -275,7 +283,6 @@ fun TeamsScheduleScreen(context: Context) {
                 Spacer(modifier = Modifier.height(10.dp))
 
                 Button(
-
                     onClick = {
                         if (firstTwoWeeksDays != null && secondTwoWeeksDays != null) {
                             val totalDays =
@@ -288,17 +295,20 @@ fun TeamsScheduleScreen(context: Context) {
                                     secondTwoWeeksDays!!
                                 )
 
+                                isButtonClicked = true
+                                firstTwoWeeksDays = null
+                                secondTwoWeeksDays = null
+
                             }
                         } else {
                             validationMessage = "enter numbers for both patterns"
                         }
                     },
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = Color(
-                            0xFF76B31B
-                        )
+                        containerColor = if (isButtonClicked) Color.Gray else Color(0xFF76B31B)
                     ),
                     modifier = Modifier.fillMaxWidth()
+                        .clip(RoundedCornerShape(100.dp))
                 ) {
                     Text(text = "Submit", fontSize = 16.sp)
                 }
@@ -312,6 +322,8 @@ fun TeamsScheduleScreen(context: Context) {
                     modifier = Modifier.padding(top = 10.dp)
                 )
             }
+
+
         }
 
         item {
@@ -346,42 +358,47 @@ fun changeTeamSchedule(officeDays1:Int, officeDays2:Int){
 
 @Composable
 fun WorkDaysInput(value: Int?, onValueChange: (Int?) -> Unit, disabledContainerColor: Color = Color(0xFFECECEC)) {
-    var text by remember { mutableStateOf(value?.toString() ?: "") }
-    var isEditing by remember { mutableStateOf(false) }
+    var text by remember { mutableStateOf(value?.toString() ?: "Enter office days for first 2 weeks") }
+    var expanded by remember { mutableStateOf(false) }
 
     Box(
         modifier = Modifier
-            .width(80.dp)
-            .background(Color(0xFFECECEC))
+            .fillMaxWidth()
+            .height(40.dp)  // Make the input thinner
+            .background(Color(0xFFF6F6F6))
             .clip(RoundedCornerShape(8.dp))
-            .padding(8.dp)
-            .clickable { isEditing = true } // Enable editing on click
+            .clickable { expanded = true }
+            .padding(horizontal = 16.dp, vertical = 8.dp)
     ) {
-        if (isEditing) {
-            androidx.compose.material3.TextField(
-                value = text,
-                onValueChange = {
-                    text = it
-                    onValueChange(it.toIntOrNull())
-                },
-                keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
-                modifier = Modifier.fillMaxWidth()
-                    .background(Color(0xFFECECEC)),
-                singleLine = true,
-                textStyle = androidx.compose.ui.text.TextStyle(fontSize = 14.sp)
-            )
-        } else {
-            Text(
-                text = text.ifEmpty { "Enter days" },
-                fontSize = 14.sp,
-                color = Color.DarkGray,
-                modifier = Modifier.fillMaxWidth()
-                    .background(Color(0xFFECECEC))
-                ,
-            )
+        Text(
+            text = text,
+            fontSize = 14.sp,
+            color = if (text == "Enter office days for second 2 weeks") Color(0xFFBDBDBD) else Color(0xFFBDBDBD)
+        )
+
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false },
+            modifier = Modifier
+                .width(50.dp)
+                .background(Color.White)
+                .align(Alignment.CenterEnd)
+        ) {
+            (0..5).forEach { day ->
+                DropdownMenuItem(
+                    text = { Text(day.toString()) },
+                    onClick = {
+                        text = day.toString()
+                        onValueChange(day)
+                        expanded = false
+                    }
+                )
+            }
         }
     }
 }
+
+
 
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -450,7 +467,7 @@ fun CalendarViewScreenManager(context: Context,selectedName: String) {
         Column(
             modifier = Modifier
                 .padding(vertical = 10.dp)
-                .clip(RoundedCornerShape(50.dp))
+                .clip(RoundedCornerShape(25.dp))
         ) {
             Divider(
                 color = Color.LightGray,

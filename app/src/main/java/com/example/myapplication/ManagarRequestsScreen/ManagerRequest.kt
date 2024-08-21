@@ -1,4 +1,4 @@
-package com.example.myapplication.manager
+package com.example.myapplication.ManagarRequestsScreen
 
 import android.os.Build
 import android.util.Log

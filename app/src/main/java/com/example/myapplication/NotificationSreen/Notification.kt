@@ -1,4 +1,4 @@
-package com.example.myapplication.notifications.ui.theme
+package com.example.myapplication.NotificationSreen
 
 import android.os.Build
 import androidx.annotation.RequiresApi

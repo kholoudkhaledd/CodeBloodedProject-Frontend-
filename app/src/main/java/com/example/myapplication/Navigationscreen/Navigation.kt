@@ -37,8 +37,8 @@ import com.example.myapplication.Sharedpreference
 import com.example.myapplication.Teamschedulescreen.TeamsScheduleScreen
 import com.example.myapplication.calander.Finallayout
 import com.example.myapplication.chatbotscreen.ChatScreen
-import com.example.myapplication.manager.ManagerRequest
-import com.example.myapplication.notifications.ui.theme.NotificationScreen
+import com.example.myapplication.ManagarRequestsScreen.ManagerRequest
+import com.example.myapplication.NotificationSreen.NotificationScreen
 import com.example.myapplication.splashandlogin.LoginScreen
 import com.example.myapplication.splashandlogin.SplashScreen
 import com.example.myapplication.ui.theme.greenlogoutcolor

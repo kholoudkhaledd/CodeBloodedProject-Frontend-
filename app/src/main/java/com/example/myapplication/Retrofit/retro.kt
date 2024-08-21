@@ -2,7 +2,7 @@ package com.example.myapplication.Retrofit
 
 import com.example.myapplication.Requests.Request
 import com.example.myapplication.calander.CalendarResponse
-import com.example.myapplication.notifications.ui.theme.NotificationData
+import com.example.myapplication.NotificationSreen.NotificationData
 import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.Body

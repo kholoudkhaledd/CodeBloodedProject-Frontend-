@@ -1,4 +1,4 @@
-package com.example.myapplication.notifications.ui.theme
+package com.example.myapplication.NotificationSreen
 
 import android.util.Log
 import com.example.myapplication.Retrofit.RetrofitClient

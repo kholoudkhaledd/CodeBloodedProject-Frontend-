@@ -60,7 +60,6 @@ fun ChatScreen() {
     val coroutineScope = rememberCoroutineScope()
     val keyboardController = LocalSoftwareKeyboardController.current
     var uid = Sharedpreference.getUserId(LocalContext.current)
-
     fun sendMessage() {
         if (message.isNotBlank()) {
             // Add the user's message to the chat

@@ -14,74 +14,96 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
+import com.example.myapplication.Retrofit.RetrofitClient
 import com.example.myapplication.ui.theme.lightgraycolor
 
-
-
+data class DayScheduleResponse(
+    val day: String,
+    val location: String
+)
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun Finallayout(context: Context) {
+    val currentDate = getCurrentDate()
+    val (location, setLocation) = remember { mutableStateOf("Loading...") }
+
+    // Extract the day, month, and year from currentDate
+    val (day, month, year) = currentDate.split("-")
+
+    // Fetch data when the composable is first displayed
+    LaunchedEffect(Unit) {
+        try {
+            val response = RetrofitClient.apiService.getDaySchedule(month, day, year)
+            setLocation(response.location)
+        } catch (e: Exception) {
+            setLocation("Error: ${e.message}")
+        }
+    }
+
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .background(lightgraycolor
-            ),
+            .background(lightgraycolor),
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-                    item {
-                        // User Info Section
-                        Box(
-                            modifier = Modifier
-                                .background(lightgraycolor)
-                                .fillMaxWidth()
-                                .padding(top = 20.dp)
-                                .padding(horizontal = 25.dp)
-                        ) {
-                            UserInfo(context)
-                        }
-                    }
-
-                    item {
-                        // Display if home or office Section
-                        Box(
-                            modifier = Modifier
-                                .background(lightgraycolor)
-                                .fillMaxWidth()
-                                .padding(vertical = 10.dp)
-                        ) {
-                            Displayifhomeoroffice("Home")
-                        }
-                    }
-
-                    item {
-                        // Calendar View Screen
-                        Box(
-                            modifier = Modifier
-                                .background(lightgraycolor)
-                                .fillMaxWidth()
-                                .padding(0.dp)
-                                .clip(RoundedCornerShape(25.dp))
-                                .height(450.dp)
-                        ) {
-                            CalendarViewScreen(context)
-                        }
-                    }
-
-                    item {
-                        // Requests Section
-                        Box(
-                            modifier = Modifier
-                                .background(lightgraycolor)
-                                .fillMaxWidth()
-                                .padding(vertical = 0.dp)
-                        ) {
-                            RequestsSection()
-                        }
-                    }
-                }
+        item {
+            // User Info Section
+            Box(
+                modifier = Modifier
+                    .background(lightgraycolor)
+                    .fillMaxWidth()
+                    .padding(top = 20.dp)
+                    .padding(horizontal = 25.dp)
+            ) {
+                UserInfo(context)
             }
+        }
+
+        item {
+            // Display if home or office Section
+            Box(
+                modifier = Modifier
+                    .background(lightgraycolor)
+                    .fillMaxWidth()
+                    .padding(vertical = 10.dp)
+            ) {
+                Displayifhomeoroffice(place = location)
+            }
+        }
+
+        item {
+            // Calendar View Screen
+            Box(
+                modifier = Modifier
+                    .background(lightgraycolor)
+                    .fillMaxWidth()
+                    .padding(0.dp)
+                    .clip(RoundedCornerShape(25.dp))
+                    .height(450.dp)
+            ) {
+                CalendarViewScreen(context)
+            }
+        }
+
+        item {
+            // Requests Section
+            Box(
+                modifier = Modifier
+                    .background(lightgraycolor)
+                    .fillMaxWidth()
+                    .padding(vertical = 0.dp)
+            ) {
+                RequestsSection()
+            }
+        }
+    }
+}
+

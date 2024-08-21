@@ -4,7 +4,6 @@ import android.content.ContentValues.TAG
 import android.content.Context
 import android.os.Build
 import android.util.Log
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -40,11 +39,6 @@ import retrofit2.Response
 import java.time.LocalDate
 import java.time.Month
 import java.time.Year
-data class CalendarData(
-    val date: String,
-    val location: String
-)
-
 data class CalendarResponse(
     val calendar: Map<String, String> // Adjusted to match the JSON structure
 )
@@ -86,7 +80,6 @@ fun CustomCalendar(
         } else {
             apiService.getCalendarForMonth(dateString, token)
         }
-
         call.enqueue(object : Callback<CalendarResponse> {
             override fun onResponse(
                 call: Call<CalendarResponse>,
@@ -101,8 +94,6 @@ fun CustomCalendar(
 
             override fun onFailure(call: Call<CalendarResponse>, t: Throwable) {
                 Log.e(TAG, "API Failure: ${t.message}")
-            Toast.makeText(context, "Try Again", Toast.LENGTH_SHORT).show()
-
             }
         })
     }

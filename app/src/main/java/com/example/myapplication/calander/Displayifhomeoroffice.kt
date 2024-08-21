@@ -20,7 +20,7 @@ import com.example.myapplication.ui.theme.GreenJC
 // LABEL HOME OR OFFICE
 @Composable
 fun Displayifhomeoroffice(place: String) {
-    val backgroundColor = if (place == "Home") GreenJC else Color.Red // Adjust colors as need
+    val backgroundColor = GreenJC // Adjust colors as need
     Log.d("Place", place)
     Surface(
         modifier = Modifier
@@ -31,12 +31,10 @@ fun Displayifhomeoroffice(place: String) {
         contentColor = Color.White
     ) {
         Text(
-            text = "Today you are working from $place",
+            text = $place",
             fontSize = 16.sp,
             modifier = Modifier
                 .padding(vertical = 12.dp, horizontal = 18.dp)
         )
     }
 }
-
-

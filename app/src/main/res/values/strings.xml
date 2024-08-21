@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name" >My Application</string>
     <string name="Notification">My Application</string>
+    <string name="work_schedule">Working from home/office schedule</string>
+   <string name="schedule_today"> Today you are working from</string>
+
 </resources>

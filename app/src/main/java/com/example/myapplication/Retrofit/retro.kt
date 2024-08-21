@@ -89,10 +89,12 @@ interface ApiService {
     @POST("chatbot/{uid}")
     suspend fun sendMessage(@Path("uid") uid: String, @Body request: String): Response<MessageResponse>
 
-    @GET("/view_schedule/{month}/{day}/{current_year}")
+    @GET("/view_scheduletoday/{month}/{day}/{current_year}")
     suspend fun getDaySchedule(
         @Path("month") month: String,
         @Path("day") day: String,
-        @Path("current_year") year: String
+        @Path("current_year") year: String,
+        @Header("Authorization") token: String
+
     ): DayScheduleResponse
 }

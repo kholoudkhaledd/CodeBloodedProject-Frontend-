@@ -1,17 +1,13 @@
 package com.example.myapplication.chatbotscreen
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -49,10 +45,8 @@ import androidx.compose.ui.unit.sp
 import com.example.myapplication.R
 import com.example.myapplication.Retrofit.RetrofitClient
 import com.example.myapplication.Sharedpreference
-import com.example.myapplication.ui.theme.Requestsectionlightgray
 import com.example.myapplication.ui.theme.darkerlightgrey
 import com.example.myapplication.ui.theme.lightgraycolor
-import com.example.myapplication.ui.theme.lightgreenchatbot
 import kotlinx.coroutines.launch
 
 data class ChatMessage(val message: String, val isUserMessage: Boolean)
@@ -205,36 +199,6 @@ fun ChatScreen() {
     }
 }
 
-@Composable
-fun ChatMessageItem(message: String, isUserMessage: Boolean) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 10.dp),
-        horizontalArrangement = if (isUserMessage) Arrangement.End else Arrangement.Start
-    ) {
-        Box(
-            modifier = Modifier
-                .background(
-                    color = if (isUserMessage) lightgreenchatbot else Color(0xFFF6F6F6),
-                    shape = RoundedCornerShape(8.dp)
-                )
-                .border(
-                    1.dp,
-                    color = if (isUserMessage) lightgreenchatbot else Requestsectionlightgray,
-                    shape = RoundedCornerShape(8.dp)
-                )
-                .padding(12.dp)
-                .widthIn(max = 250.dp),
-            contentAlignment = Alignment.Center
-        ) {
-            Text(
-                text = message,
-                color = if (isUserMessage) Color.White else Color.Black
-            )
-        }
-    }
-}
 
 @Preview
 @Composable

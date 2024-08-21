@@ -1,4 +1,4 @@
-package com.example.myapplication.Teamscheduescreen
+package com.example.myapplication.Teamschedulescreen
 
 
 import android.content.Context

@@ -34,7 +34,7 @@ import com.example.myapplication.MainActivity
 import com.example.myapplication.R
 import com.example.myapplication.Screens
 import com.example.myapplication.Sharedpreference
-import com.example.myapplication.Teamscheduescreen.TeamsScheduleScreen
+import com.example.myapplication.Teamschedulescreen.TeamsScheduleScreen
 import com.example.myapplication.calander.Finallayout
 import com.example.myapplication.chatbotscreen.ChatScreen
 import com.example.myapplication.manager.ManagerRequest

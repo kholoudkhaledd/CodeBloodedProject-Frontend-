@@ -1,4 +1,4 @@
-package com.example.myapplication.Teamscheduescreen
+package com.example.myapplication.Teamschedulescreen
 
 import com.example.myapplication.Retrofit.RetrofitClient
 import retrofit2.Call

@@ -17,6 +17,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.myapplication.R
 import com.example.myapplication.Screens
+import com.example.myapplication.ui.theme.lightgraycolor
 
 
 @Composable
@@ -28,7 +29,7 @@ fun CustomBottomNavigationBar(
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .background(Color(0xFFECECEC))
+            .background(lightgraycolor)
             .height(90.dp)
             .clip(RoundedCornerShape(32.dp))
     ) {

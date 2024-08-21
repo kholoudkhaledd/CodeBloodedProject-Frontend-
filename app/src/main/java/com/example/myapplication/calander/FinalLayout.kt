@@ -17,10 +17,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-
 import androidx.compose.ui.unit.dp
-
+import com.example.myapplication.ui.theme.lightgraycolor
 
 
 
@@ -30,7 +28,8 @@ fun Finallayout(context: Context) {
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFECECEC)),
+            .background(lightgraycolor
+            ),
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -38,7 +37,7 @@ fun Finallayout(context: Context) {
                         // User Info Section
                         Box(
                             modifier = Modifier
-                                .background(Color(0xFFECECEC))
+                                .background(lightgraycolor)
                                 .fillMaxWidth()
                                 .padding(top = 20.dp)
                                 .padding(horizontal = 25.dp)
@@ -51,7 +50,7 @@ fun Finallayout(context: Context) {
                         // Display if home or office Section
                         Box(
                             modifier = Modifier
-                                .background(Color(0xFFECECEC))
+                                .background(lightgraycolor)
                                 .fillMaxWidth()
                                 .padding(vertical = 10.dp)
                         ) {
@@ -63,7 +62,7 @@ fun Finallayout(context: Context) {
                         // Calendar View Screen
                         Box(
                             modifier = Modifier
-                                .background(Color(0xFFECECEC))
+                                .background(lightgraycolor)
                                 .fillMaxWidth()
                                 .padding(0.dp)
                                 .clip(RoundedCornerShape(25.dp))
@@ -77,7 +76,7 @@ fun Finallayout(context: Context) {
                         // Requests Section
                         Box(
                             modifier = Modifier
-                                .background(Color(0xFFECECEC))
+                                .background(lightgraycolor)
                                 .fillMaxWidth()
                                 .padding(vertical = 0.dp)
                         ) {

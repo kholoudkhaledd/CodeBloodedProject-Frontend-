@@ -1,11 +1,11 @@
-package com.example.myapplication
+package com.example.myapplication.chatbotscreen
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -34,23 +34,26 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.input.key.key
+import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.myapplication.R
+import com.example.myapplication.Retrofit.RetrofitClient
+import com.example.myapplication.Sharedpreference
+import com.example.myapplication.ui.theme.Requestsectionlightgray
+import com.example.myapplication.ui.theme.darkerlightgrey
+import com.example.myapplication.ui.theme.lightgraycolor
+import com.example.myapplication.ui.theme.lightgreenchatbot
 import kotlinx.coroutines.launch
-
-import androidx.compose.ui.input.key.onKeyEvent
-import androidx.compose.ui.input.key.Key
-import androidx.compose.ui.input.key.nativeKeyCode
-import androidx.compose.ui.input.key.KeyEvent
-import androidx.compose.ui.input.key.key
-import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.style.TextAlign
-
 
 data class ChatMessage(val message: String, val isUserMessage: Boolean)
 
@@ -110,7 +113,7 @@ fun ChatScreen() {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFECECEC))
+            .background(lightgraycolor)
             .padding(vertical = 20.dp)
     ) {
         Card(
@@ -158,7 +161,7 @@ fun ChatScreen() {
                         singleLine = true,
                         placeholder = { Text(text = "Message here...",
                             fontSize = 16.sp,
-                            color = Color(0xFFBDBDBD),
+                            color =darkerlightgrey,
                             lineHeight = 24.sp,
                             textAlign = TextAlign.Center,
                         )},
@@ -213,12 +216,12 @@ fun ChatMessageItem(message: String, isUserMessage: Boolean) {
         Box(
             modifier = Modifier
                 .background(
-                    color = if (isUserMessage) Color(0xFF5DB075) else Color(0xFFF6F6F6),
+                    color = if (isUserMessage) lightgreenchatbot else Color(0xFFF6F6F6),
                     shape = RoundedCornerShape(8.dp)
                 )
                 .border(
                     1.dp,
-                    color = if (isUserMessage) Color(0xFF5DB075) else Color(0xFFE8E8E8),
+                    color = if (isUserMessage) lightgreenchatbot else Requestsectionlightgray,
                     shape = RoundedCornerShape(8.dp)
                 )
                 .padding(12.dp)

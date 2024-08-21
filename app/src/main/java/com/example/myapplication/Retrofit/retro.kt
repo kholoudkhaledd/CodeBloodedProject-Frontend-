@@ -1,8 +1,8 @@
-package com.example.myapplication
+package com.example.myapplication.Retrofit
 
+import com.example.myapplication.Requests.Request
 import com.example.myapplication.calander.CalendarResponse
 import com.example.myapplication.notifications.ui.theme.NotificationData
-import com.example.yourapp.ui.Request
 import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.Body
@@ -53,7 +53,8 @@ interface ApiService {
 
     @PUT("update_notif_token/{uid}")
     fun update_notif_token(
-        @Path("uid") userId: String, @Body notifToken: notifTokenModel)
+        @Path("uid") userId: String, @Body notifToken: notifTokenModel
+    )
     : Call<Void>
 
 

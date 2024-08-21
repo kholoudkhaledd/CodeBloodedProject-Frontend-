@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.example.myapplication.ui.theme.greenicon
 
 @Composable
 fun BarIcon(
@@ -57,7 +58,7 @@ fun BarIcon(
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
                     .size(5.dp)
-                    .background(Color(0xFF76B31B), shape = CircleShape)
+                    .background(greenicon, shape = CircleShape)
             )
         }
     }

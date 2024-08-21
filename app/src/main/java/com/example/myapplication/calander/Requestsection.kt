@@ -1,3 +1,4 @@
+
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
@@ -30,17 +31,19 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.myapplication.CreateRequest
 import com.example.myapplication.R
-import com.example.myapplication.RetrofitClient
+import com.example.myapplication.Retrofit.CreateRequest
+import com.example.myapplication.Retrofit.RetrofitClient
 import com.example.myapplication.Sharedpreference
+import com.example.myapplication.ui.theme.Requestsectionlightgray
+import com.example.myapplication.ui.theme.darkerlightgrey
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Calendar
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -87,7 +90,7 @@ fun RequestsSection() {
                     .padding(vertical = 10.dp, horizontal = 10.dp)
                     .wrapContentSize(Alignment.TopStart)
                     .clip(RoundedCornerShape(8.dp))
-                    .border(1.dp, Color(0xFFE8E8E8), RoundedCornerShape(8.dp))
+                    .border(1.dp, Requestsectionlightgray, RoundedCornerShape(8.dp))
             ) {
                 Box(
                     modifier = Modifier
@@ -104,7 +107,7 @@ fun RequestsSection() {
                         Text(
                             text = selectedDate?.toString() ?: "Select day",
                             fontSize = 14.sp,
-                            color = Color(0xFFBDBDBD),
+                            color = darkerlightgrey,
                             modifier = Modifier
                                 .weight(1f)
                                 .padding(end = 8.dp, start = 8.dp)

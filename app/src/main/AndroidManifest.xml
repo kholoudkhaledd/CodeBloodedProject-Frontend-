@@ -32,7 +32,7 @@
 
 
         <service
-            android:name=".PushNotificationService"
+            android:name=".notifications.ui.theme.PushNotificationService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />

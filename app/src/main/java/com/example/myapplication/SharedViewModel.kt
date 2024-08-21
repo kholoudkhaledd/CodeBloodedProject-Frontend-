@@ -1,10 +1,9 @@
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.yourapp.ui.Request
+import com.example.myapplication.Requests.Request
 
 class SharedViewModel : ViewModel() {
     val logoSize = mutableStateOf(237.dp)

@@ -4,6 +4,7 @@ import android.content.ContentValues.TAG
 import android.content.Context
 import android.os.Build
 import android.util.Log
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -29,7 +30,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.myapplication.RetrofitClient
+import com.example.myapplication.Retrofit.RetrofitClient
 import com.example.myapplication.Sharedpreference
 import com.example.myapplication.ui.theme.Darkblue
 import com.example.myapplication.ui.theme.GreenJC
@@ -100,6 +101,8 @@ fun CustomCalendar(
 
             override fun onFailure(call: Call<CalendarResponse>, t: Throwable) {
                 Log.e(TAG, "API Failure: ${t.message}")
+            Toast.makeText(context, "Try Again", Toast.LENGTH_SHORT).show()
+
             }
         })
     }

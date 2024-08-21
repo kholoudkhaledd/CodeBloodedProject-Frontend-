@@ -1,10 +1,14 @@
 package com.example.myapplication.Navigationscreen
 
 import SharedViewModel
+import android.app.Activity
+import android.content.Intent
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ExitToApp
@@ -21,34 +25,24 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.myapplication.ChatScreen
-import com.example.myapplication.LoginScreen
+import com.example.myapplication.MainActivity
 import com.example.myapplication.R
 import com.example.myapplication.Screens
 import com.example.myapplication.Sharedpreference
-import com.example.myapplication.SplashScreen
+import com.example.myapplication.Teamscheduescreen.TeamsScheduleScreen
 import com.example.myapplication.calander.Finallayout
+import com.example.myapplication.chatbotscreen.ChatScreen
 import com.example.myapplication.manager.ManagerRequest
-import com.example.myapplication.manager.TeamsScheduleScreen
 import com.example.myapplication.notifications.ui.theme.NotificationScreen
+import com.example.myapplication.splashandlogin.LoginScreen
+import com.example.myapplication.splashandlogin.SplashScreen
+import com.example.myapplication.ui.theme.greenlogoutcolor
 import com.example.yourapp.ui.MyRequestsPage
-import android.content.Intent
-import com.example.myapplication.MainActivity // Adjust the package name as needed
-import android.app.Activity
-import androidx.compose.foundation.layout.Arrangement
-
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.height
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontStyle
-import androidx.compose.ui.text.style.TextDecoration
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 
 
 @RequiresApi(Build.VERSION_CODES.S)
@@ -85,7 +79,7 @@ fun NavigationScreen() {
                                 (context as Activity).finish()
                             }) {
 
-                                Icon(imageVector = Icons.Default.ExitToApp, contentDescription = "Logout", tint = Color(0xFF76B31B))
+                                Icon(imageVector = Icons.Default.ExitToApp, contentDescription = "Logout", tint = greenlogoutcolor)
                             }
                         }
                     )

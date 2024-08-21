@@ -32,6 +32,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.myapplication.ui.theme.greenicon
 import java.time.LocalDate
 import java.time.Month
 
@@ -115,7 +116,7 @@ fun CalendarViewScreen(context: Context) {
                     Icon(
                         imageVector = Icons.Filled.KeyboardArrowRight,
                         contentDescription = "Next month",
-                        tint = Color(0xFF76B31B),
+                        tint = greenicon,
                         modifier = Modifier
                             .size(30.dp)
                             .clickable {

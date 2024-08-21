@@ -1,7 +1,8 @@
-package com.example.myapplication
+package com.example.myapplication.splashandlogin
 
 import SharedViewModel
-import androidx.compose.animation.animateContentSize
+import android.app.Activity
+import android.content.Intent
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
@@ -24,22 +25,23 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
-import com.example.myapplication.RetrofitClient.apiService
-import com.skydoves.landscapist.glide.GlideImage
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import android.content.Intent
-import com.example.myapplication.MainActivity // Adjust the package name as needed
-import android.app.Activity
-import androidx.compose.ui.platform.LocalView
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
+import com.example.myapplication.MainActivity
+import com.example.myapplication.R
+import com.example.myapplication.Retrofit.RetrofitClient.apiService
+import com.example.myapplication.Screens
+import com.example.myapplication.Sharedpreference
+import com.skydoves.landscapist.glide.GlideImage
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 
 @Composable
@@ -47,7 +49,8 @@ fun SplashScreen(navController: NavController, sharedViewModel: SharedViewModel)
     val context = LocalContext.current
     var startAnimation by remember { mutableStateOf(false) }
     val scope = rememberCoroutineScope()
-    val token = Sharedpreference.getUserToken(context) // Assuming you have a method in SharedViewModel to retrieve the token
+    val token =
+        Sharedpreference.getUserToken(context) // Assuming you have a method in SharedViewModel to retrieve the token
     val view = LocalView.current
 
     LaunchedEffect(Unit) {
@@ -94,7 +97,6 @@ fun SplashScreen(navController: NavController, sharedViewModel: SharedViewModel)
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
                 context.startActivity(intent)
                 (context as Activity).finish()
-
                 // Show system bars again before navigating
                 windowInsetsController?.show(WindowInsetsCompat.Type.systemBars())
 

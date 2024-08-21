@@ -93,12 +93,13 @@ fun TeamsScheduleScreen(context: Context) {
     var expanded by remember { mutableStateOf(false) }
     var isButtonClicked by remember { mutableStateOf(false) }
 
-
     // State for managing work-from-home and work-from-office days
     var firstTwoWeeksDays by remember { mutableStateOf<Int?>(null) }
     var secondTwoWeeksDays by remember { mutableStateOf<Int?>(null) }
     var validationMessage by remember { mutableStateOf<String?>(null) }
     val textColor = if (selectedName != null) Color.Black else Color(0xFFBDBDBD)
+
+    val sortedNamesList = remember(namesList) { namesList.sorted() } // Sort names whenever namesList changes
 
     LaunchedEffect(Unit) {
         RetrofitClient.apiService.getAllUsernames().enqueue(object : Callback<List<String>> {
@@ -172,7 +173,6 @@ fun TeamsScheduleScreen(context: Context) {
                                         .fillMaxWidth()
                                         .padding(horizontal = 10.dp)
                                         .align(Alignment.Center)
-
                                 ) {
                                     Text(
                                         text = selectedName ?: "Select team member",
@@ -193,16 +193,23 @@ fun TeamsScheduleScreen(context: Context) {
                             DropdownMenu(
                                 expanded = expanded,
                                 onDismissRequest = { expanded = false },
-                                modifier = Modifier.fillMaxWidth()
+                                modifier = Modifier
+                                    .background(Color(0xFFF6F6F6))
+                                    .height(250.dp)
+                                    .width(340.dp)
                             ) {
-                                namesList.forEach { name ->
+                                sortedNamesList.forEach { name ->
                                     DropdownMenuItem(
                                         text = { Text(name, color = Color.Black) },
                                         onClick = {
                                             selectedName = name
                                             expanded = false
                                         },
-                                        modifier = Modifier.background(Color.White)
+                                        modifier = Modifier
+                                            .background(Color(0xFFF6F6F6))
+                                            .border(0.5.dp, Color(0xFFE8E8E8))
+                                            .padding(vertical = 10.dp, horizontal = 16.dp)
+                                            .clip(RoundedCornerShape(10.dp))
                                     )
                                 }
                             }
@@ -216,7 +223,6 @@ fun TeamsScheduleScreen(context: Context) {
                     modifier = Modifier
                         .fillMaxWidth()
                         .clip(RoundedCornerShape(32.dp))
-
                 ) {
                     CalendarPerEmployee(context, selectedName!!)
                 }
@@ -232,7 +238,7 @@ fun TeamsScheduleScreen(context: Context) {
                 modifier = Modifier
                     .clip(RoundedCornerShape(32.dp))
                     .background(Color.White)
-                    .padding(start = 30.dp, end = 30.dp )
+                    .padding(start = 30.dp, end = 30.dp, top = 16.dp, bottom = 16.dp )
 
             ) {
                 Text(
@@ -333,8 +339,6 @@ fun TeamsScheduleScreen(context: Context) {
 }
 
 fun changeTeamSchedule(officeDays1:Int, officeDays2:Int){
-//    println("OFFICE DAYS 1"+officeDays1.toString())
-//    println("OFFICE DAYS 2"+officeDays2.toString())
     RetrofitClient.apiService.updateTeamSchedule(officeDays1,officeDays2)
         .enqueue(object:Callback<Void>{
             override fun onResponse(

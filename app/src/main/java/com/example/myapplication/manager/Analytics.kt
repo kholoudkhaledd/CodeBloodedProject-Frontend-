@@ -10,10 +10,12 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
@@ -67,6 +69,8 @@ fun AnalyticsScreen(context: android.content.Context) {
         })
     }
 
+
+
     // Load data for bar chart (projects count)
     LaunchedEffect(Unit) {
         val call = RetrofitClient.apiService.getMostActiveProjects()
@@ -97,6 +101,126 @@ fun AnalyticsScreen(context: android.content.Context) {
             .background(Color(0xFFECECEC)),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+
+        item {
+            Card(
+                shape = RoundedCornerShape(20.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(32.dp)),
+                colors = CardDefaults.cardColors(containerColor = Color.White),
+            ) {
+                Column(
+                    modifier = Modifier
+                        .padding(20.dp)
+                        .background(Color.White)
+                        .fillMaxWidth(),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(
+                        text = "Analytics",
+                        fontWeight = FontWeight.SemiBold,
+                        fontSize = 24.sp,
+                        modifier = Modifier,
+                        textAlign = TextAlign.Center
+                    )
+
+                    Divider(
+                        modifier = Modifier
+                            .padding(vertical = 16.dp)
+                            .alpha(0.5f)
+                    )
+
+                    if (isLoading) {
+                        CircularProgressIndicator() // Display loading spinner
+                    } else {
+                        mostRequestedDayData?.let { data ->
+                            CustomPieChart(data = data.mapValues { it.value.toFloat() })
+                        }
+
+                    }
+
+
+                }
+            }
+        }
+
+        item {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 16.dp),
+                horizontalArrangement = Arrangement.SpaceEvenly
+            ) {
+                // Card 1
+                Card(
+                    shape = RoundedCornerShape(12.dp),
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(8.dp)
+                        .aspectRatio(1f),  // Ensures the card is square
+                    colors = CardDefaults.cardColors(containerColor = Color.White),
+                ) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(16.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center
+                    ) {
+                        Text(text = "Title 1", fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Text(text = "Placeholder text", fontSize = 14.sp, textAlign = TextAlign.Center)
+                    }
+                }
+
+                // Card 2
+                Card(
+                    shape = RoundedCornerShape(12.dp),
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(8.dp)
+                        .aspectRatio(1f),  // Ensures the card is square
+                    colors = CardDefaults.cardColors(containerColor = Color.White),
+                ) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(16.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center
+                    ) {
+                        Text(text = "Title 2", fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Text(text = "Placeholder text", fontSize = 14.sp, textAlign = TextAlign.Center)
+                    }
+                }
+
+                // Card 3
+                Card(
+                    shape = RoundedCornerShape(12.dp),
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(8.dp)
+                        .aspectRatio(1f),  // Ensures the card is square
+                    colors = CardDefaults.cardColors(containerColor = Color.White),
+                ) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(16.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center
+                    ) {
+                        Text(text = "Title 3", fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Text(text = "Placeholder text", fontSize = 14.sp, textAlign = TextAlign.Center)
+                    }
+                }
+            }
+        }
+
+
         item {
             Card(
                 shape = RoundedCornerShape(20.dp),
@@ -113,30 +237,15 @@ fun AnalyticsScreen(context: android.content.Context) {
                         .fillMaxWidth(),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Text(
-                        text = "Analytics",
-                        fontWeight = FontWeight.SemiBold,
-                        fontSize = 24.sp,
-                        modifier = Modifier
-                            .padding(bottom = 20.dp),
-                        textAlign = TextAlign.Center
-                    )
-
-
 
                     if (isLoading) {
                         CircularProgressIndicator() // Display loading spinner
                     } else {
-                        mostRequestedDayData?.let { data ->
-                            CustomPieChart(data = data.mapValues { it.value.toFloat() })
-                        }
-
-                        Spacer(modifier = Modifier.height(20.dp))
 
                         mostActiveProjectsData?.let { data ->
                             BarChartCard(title = "Requests Per Project", data = data)
                         } ?: run {
-                                CircularProgressIndicator() // Display loading spinner
+                            CircularProgressIndicator() // Display loading spinner
 
                         }
                     }
@@ -144,9 +253,10 @@ fun AnalyticsScreen(context: android.content.Context) {
             }
         }
 
-        item {
-            Spacer(modifier = Modifier.height(20.dp))
-        }
+
+
+
+
     }
 }
 
@@ -273,7 +383,11 @@ fun CustomPieChart(data: Map<String, Float>) {
     }
 
     val pieData = PieData(dataSet).apply {
-        setValueFormatter(PercentFormatter())
+        setValueFormatter(object : PercentFormatter() {
+            override fun getFormattedValue(value: Float): String {
+                return "${super.getFormattedValue(value)}%" // Append the percentage symbol
+            }
+        })
         setValueTextSize(15f)
         setValueTextColor(android.graphics.Color.WHITE)
         setValueTypeface(android.graphics.Typeface.DEFAULT_BOLD)
@@ -322,6 +436,7 @@ fun CustomPieChart(data: Map<String, Float>) {
             .padding(16.dp)
     )
 }
+
 
 
 

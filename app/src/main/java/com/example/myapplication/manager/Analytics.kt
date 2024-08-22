@@ -46,7 +46,7 @@ import com.github.mikephil.charting.animation.Easing
 fun AnalyticsScreen(context: android.content.Context) {
     var mostRequestedDayData by remember { mutableStateOf<Map<String, Int>?>(null) }
     var mostActiveProjectsData by remember { mutableStateOf<Map<String, Int>?>(null) }
-    var isLoading by remember { mutableStateOf(true) } // State to handle loading
+    var isLoading by remember { mutableStateOf(true) }
     var todaysOfficeCapacity by remember { mutableStateOf<Int?>(null) }
     var mostSwappedDay by remember { mutableStateOf<String?>(null) }
 
@@ -88,13 +88,13 @@ fun AnalyticsScreen(context: android.content.Context) {
                 } else {
                     println("API Error: ${response.code()} - ${response.message()}")
                 }
-                isLoading = false // Set loading to false after the response
+                isLoading = false
             }
 
             override fun onFailure(call: Call<Map<String, Int>>, t: Throwable) {
                 println("API Failure: ${t.message}")
                 mostRequestedDayData = mapOf("Error" to 0)
-                isLoading = false // Set loading to false after the failure
+                isLoading = false
             }
         })
     }
@@ -111,13 +111,13 @@ fun AnalyticsScreen(context: android.content.Context) {
                 } else {
                     println("API Error: ${response.code()} - ${response.message()}")
                 }
-                isLoading = false // Set loading to false after the response
+                isLoading = false
             }
 
             override fun onFailure(call: Call<OfficeCapacityResponse>, t: Throwable) {
                 println("API Failure: ${t.message}")
-                todaysOfficeCapacity = null // Handle failure case
-                isLoading = false // Set loading to false after the failure
+                todaysOfficeCapacity = null
+                isLoading = false
             }
         })
     }
@@ -138,13 +138,13 @@ fun AnalyticsScreen(context: android.content.Context) {
                 } else {
                     println("API Error: ${response.code()} - ${response.message()}")
                 }
-                isLoading = false // Set loading to false after the response
+                isLoading = false
             }
 
             override fun onFailure(call: Call<Map<String, Int>>, t: Throwable) {
                 println("API Failure: ${t.message}")
                 mostActiveProjectsData = mapOf("Error" to 0)
-                isLoading = false // Set loading to false after the failure
+                isLoading = false
             }
         })
     }
@@ -238,7 +238,7 @@ fun AnalyticsScreen(context: android.content.Context) {
                     }
                 }
 
-                // Card 2
+                // Card 2 - Icon
                 Card(
                     shape = RoundedCornerShape(12.dp),
                     modifier = Modifier
@@ -264,12 +264,13 @@ fun AnalyticsScreen(context: android.content.Context) {
                     }
                 }
 
+                //Card 3 - Most Swapped Day
                 Card(
                     shape = RoundedCornerShape(12.dp),
                     modifier = Modifier
                         .weight(1f)
                         .padding(8.dp)
-                        .aspectRatio(0.9f),  // Ensures the card is square
+                        .aspectRatio(0.9f),
                     colors = CardDefaults.cardColors(containerColor = Color.White),
                 ) {
                     Column(
@@ -331,10 +332,6 @@ fun AnalyticsScreen(context: android.content.Context) {
             }
         }
 
-
-
-
-
     }
 }
 
@@ -374,18 +371,18 @@ fun BarChartCard(title: String, data: Map<String, Int>) {
 fun BarChart(data: Map<String, Int>) {
     val maxCount = data.values.maxOrNull() ?: 1
     val barWidth = 40.dp
-    val spacing = 23.dp  // Increased spacing
-    val numberTextSize = 18.sp // Increase the size of the numbers on top of the bars
+    val spacing = 23.dp
+    val numberTextSize = 18.sp
     val projectNameTextSize = 14.sp
-    val projectNameSpacing = 12f // Space between the bar and project name
+    val projectNameSpacing = 12f
 
     // Same colors as the pie chart
     val colors = listOf(
-        Color(0xFF74C69D),  // A soft green
-        Color(0xFF52B69A),  // A slightly darker green
-        Color(0xFF40916C),  // A deep green
-        Color(0xFF4EA8DE),  // A calm blue
-        Color(0xFF0077B6)   // A darker blue
+        Color(0xFF74C69D),  // soft green
+        Color(0xFF52B69A),  // slightly darker green
+        Color(0xFF40916C),  // deep green
+        Color(0xFF4EA8DE),  // calm blue
+        Color(0xFF0077B6)   // darker blue
     )
 
     Canvas(modifier = Modifier
@@ -411,7 +408,7 @@ fun BarChart(data: Map<String, Int>) {
                 color = colors[colorIndex % colors.size],  // Cycle through colors
                 topLeft = androidx.compose.ui.geometry.Offset(xOffset, canvasHeight - barHeight - 40f),
                 size = androidx.compose.ui.geometry.Size(barWidth.toPx(), barHeight.toFloat()),
-                cornerRadius = androidx.compose.ui.geometry.CornerRadius(16f, 16f)  // Rounded corners
+                cornerRadius = androidx.compose.ui.geometry.CornerRadius(16f, 16f)
             )
 
             // Draw the request count above the bar
@@ -419,19 +416,19 @@ fun BarChart(data: Map<String, Int>) {
                 val paint = androidx.compose.ui.graphics.Paint().asFrameworkPaint()
                 paint.apply {
                     isAntiAlias = true
-                    textSize = numberTextSize.toPx()  // Increase text size
+                    textSize = numberTextSize.toPx()
                     color = android.graphics.Color.BLACK
                     textAlign = android.graphics.Paint.Align.CENTER
                 }
                 canvas.nativeCanvas.drawText(
                     count.toString(), // Display the count
                     xOffset + barWidth.toPx() / 2,
-                    canvasHeight - barHeight - 55f, // Position above the bar with a little more spacing
+                    canvasHeight - barHeight - 55f, // Position above the bar
                     paint
                 )
             }
 
-            // Draw the project name below the bar
+            // Project name below the bar
             drawIntoCanvas { canvas ->
                 val paint = androidx.compose.ui.graphics.Paint().asFrameworkPaint()
                 paint.apply {
@@ -443,13 +440,13 @@ fun BarChart(data: Map<String, Int>) {
                 canvas.nativeCanvas.drawText(
                     project,
                     xOffset + barWidth.toPx() / 2,
-                    canvasHeight - 5f + projectNameSpacing, // Increase spacing below the bar
+                    canvasHeight - 5f + projectNameSpacing,
                     paint
                 )
             }
 
             xOffset += barWidth.toPx() + barSpacing
-            colorIndex++  // Move to the next color
+            colorIndex++  // Move to next color
         }
     }
 }
@@ -464,36 +461,30 @@ fun CustomPieChart(data: Map<String, Float>) {
     val entries = data.map { PieEntry(it.value, it.key) }
 
     val colors = listOf(
-        Color(0xFF74C69D).toArgb(),  // A soft green
-        Color(0xFF52B69A).toArgb(),  // A slightly darker green
-        Color(0xFF40916C).toArgb(),  // A deep green
-        Color(0xFF4EA8DE).toArgb(),  // A calm blue
-        Color(0xFF0077B6).toArgb()   // A darker blue
+        Color(0xFF74C69D).toArgb(),  // soft green
+        Color(0xFF52B69A).toArgb(),  // darker green
+        Color(0xFF40916C).toArgb(),  // deep green
+        Color(0xFF4EA8DE).toArgb(),  // calm blue
+        Color(0xFF0077B6).toArgb()   // darker blue
     )
 
     val dataSet = PieDataSet(entries, "").apply {
         sliceSpace = 3f
         selectionShift = 5f
         setColors(colors)
-        valueTextSize = 40f  // Attempt to increase the text size for the values on the pie chart
+        valueTextSize = 0f
         valueTextColor = android.graphics.Color.WHITE
     }
 
     val pieData = PieData(dataSet).apply {
-        setValueFormatter(object : PercentFormatter() {
-            override fun getFormattedValue(value: Float): String {
-                return "${value.toInt()}%" // Display the number as an integer with a percentage symbol
-            }
-
-        })
-        setValueTextSize(40f)  // Ensure this matches the valueTextSize above
+        setValueTextSize(0f)
         setValueTextColor(android.graphics.Color.WHITE)
         setValueTypeface(android.graphics.Typeface.DEFAULT_BOLD)
     }
 
     Text(
         text = "Distribution of Days Swapped From",
-        fontSize = 20.sp,  // Increased title size
+        fontSize = 20.sp,
         fontWeight = FontWeight.Bold,
         color = Color.Black,
         modifier = Modifier.padding(bottom = 16.dp)
@@ -512,17 +503,17 @@ fun CustomPieChart(data: Map<String, Float>) {
                 setHoleRadius(58f)
                 setTransparentCircleRadius(61f)
                 setDrawCenterText(true)
-                centerText = "Days Swapped"
+                centerText = " "
                 setDrawEntryLabels(false)
 
-                // Enable and customize the legend
+                // Enable and customize legend
                 legend.isEnabled = true
                 legend.form = com.github.mikephil.charting.components.Legend.LegendForm.CIRCLE
                 legend.orientation = com.github.mikephil.charting.components.Legend.LegendOrientation.VERTICAL
                 legend.horizontalAlignment = com.github.mikephil.charting.components.Legend.LegendHorizontalAlignment.RIGHT
                 legend.verticalAlignment = com.github.mikephil.charting.components.Legend.LegendVerticalAlignment.BOTTOM
-                legend.textSize = 14f  // Increase the legend text size
-                legend.xOffset = -12f // Adjust the offset to move it further to the right
+                legend.textSize = 14f
+                legend.xOffset = -12f
 
                 animateY(1400, Easing.EaseInOutQuad)
                 invalidate()
@@ -534,8 +525,3 @@ fun CustomPieChart(data: Map<String, Float>) {
             .padding(16.dp)
     )
 }
-
-
-
-
-

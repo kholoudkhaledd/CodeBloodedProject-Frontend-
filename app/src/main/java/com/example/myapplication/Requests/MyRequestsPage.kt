@@ -29,9 +29,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.myapplication.R
 import com.example.myapplication.Requests.DeleteRequest
 import com.example.myapplication.Requests.Request
 import com.example.myapplication.Requests.RequestItem
@@ -75,7 +77,7 @@ fun MyRequestsPage() {
                 verticalArrangement = Arrangement.Center
             ) {
                 Text(
-                    text = "My Requests",
+                    text = stringResource(id = R.string.My_Requests),
                     fontSize = 22.sp,
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier

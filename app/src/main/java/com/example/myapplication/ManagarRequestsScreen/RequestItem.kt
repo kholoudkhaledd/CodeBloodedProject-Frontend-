@@ -18,6 +18,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -64,8 +65,9 @@ fun RequestItem(
 
         }
         Spacer(modifier = Modifier.height(4.dp))
+
         Text(
-            text = "Request to swap work locations between the ${formatDate(request.changeDayFrom)} & the ${formatDate(request.changeDayTo)}",
+            text =stringResource(id = R.string.Request_to_swap_work_locations_between_the)+{formatDate(request.changeDayFrom)}+stringResource(id = R.string.and_the)+{formatDate(request.changeDayTo)},
             fontWeight = FontWeight.Medium,
             fontSize = 16.sp
         )
@@ -99,9 +101,9 @@ fun RequestItem(
             }
         } else {
             if (isApproved) {
-                StatusBox(text = "Approved", backgroundColor = Color(0xFF19C588))
+                StatusBox(text = stringResource(id = R.string.Approved), backgroundColor = Color(0xFF19C588))
             } else{
-                StatusBox(text = "Denied", backgroundColor = Color(0xFFFEB5757))
+                StatusBox(text = stringResource(id = R.string.Denied), backgroundColor = Color(0xFFFEB5757))
             }
         }
     }

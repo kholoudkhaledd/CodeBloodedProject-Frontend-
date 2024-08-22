@@ -22,6 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import com.example.myapplication.Retrofit.RetrofitClient
+import com.example.myapplication.Sharedpreference
 import com.example.myapplication.ui.theme.lightgraycolor
 
 data class DayScheduleResponse(
@@ -33,14 +34,13 @@ data class DayScheduleResponse(
 fun Finallayout(context: Context) {
     val currentDate = getCurrentDate()
     val (location, setLocation) = remember { mutableStateOf("Loading...") }
-
     // Extract the day, month, and year from currentDate
-    val (day, month, year) = currentDate.split("-")
-
+    val (day, month, year) = currentDate.split("-").map{it.padStart(2,'0')}
     // Fetch data when the composable is first displayed
     LaunchedEffect(Unit) {
         try {
-            val response = RetrofitClient.apiService.getDaySchedule(month, day, year)
+            val token = ("Bearer " + Sharedpreference.getUserToken(context))
+            val response = RetrofitClient.apiService.getDaySchedule(month, day, year,token)
             setLocation(response.location)
         } catch (e: Exception) {
             setLocation("Error: ${e.message}")

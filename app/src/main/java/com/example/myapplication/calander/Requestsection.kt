@@ -28,6 +28,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -77,7 +78,7 @@ fun RequestsSection() {
         ) {
             // First row with text at the start
             Text(
-                text = "Schedule change requests",
+                text = stringResource(id = R.string.Schedule_change_requests),
                 fontWeight = FontWeight.SemiBold,
                 fontSize = 14.sp,
                 modifier = Modifier.padding(vertical = 10.dp, horizontal = 10.dp)
@@ -105,7 +106,7 @@ fun RequestsSection() {
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         Text(
-                            text = selectedDate?.toString() ?: "Select day",
+                            text = selectedDate?.toString() ?: stringResource(id = R.string.Select_day),
                             fontSize = 14.sp,
                             color = darkerlightgrey,
                             modifier = Modifier
@@ -153,7 +154,7 @@ fun RequestsSection() {
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         Text(
-                            text = changeDate?.toString() ?: "Change to",
+                            text = changeDate?.toString() ?: stringResource(id = R.string.Change_to),
                             fontSize = 14.sp,
                             color = Color(0xFFBDBDBD),
                             modifier = Modifier
@@ -206,7 +207,7 @@ fun RequestsSection() {
                         .clip(RoundedCornerShape(100.dp))
                         .padding(vertical = 10.dp, horizontal = 10.dp)
                 ) {
-                    Text(text = "Submit", fontSize = 16.sp)
+                    Text(text = stringResource(id = R.string.Submit), fontSize = 16.sp)
                 }
             }
         }

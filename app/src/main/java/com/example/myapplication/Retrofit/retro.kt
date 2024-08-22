@@ -1,8 +1,9 @@
 package com.example.myapplication.Retrofit
 
+import com.example.myapplication.NotificationSreen.NotificationData
 import com.example.myapplication.Requests.Request
 import com.example.myapplication.calander.CalendarResponse
-import com.example.myapplication.notifications.ui.theme.NotificationData
+import com.example.myapplication.calander.DayScheduleResponse
 import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.Body
@@ -93,6 +94,7 @@ interface ApiService {
     suspend fun getDaySchedule(
         @Path("month") month: String,
         @Path("day") day: String,
-        @Path("current_year") year: String
+        @Path("current_year") year: String,
+        @Header("Authorization") token: String
     ): DayScheduleResponse
 }

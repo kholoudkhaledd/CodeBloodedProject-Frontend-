@@ -36,6 +36,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.OffsetMapping
@@ -104,7 +105,7 @@ fun LoginScreen(
                 .padding(bottom = 32.dp)
         )
         Text(
-            text = "Login",
+            text = stringResource(id = R.string.Login),
             color = Color.White,
             style = LocalTextStyle.current.copy(fontSize = 25.sp),
             modifier = Modifier.padding(bottom = 32.dp)
@@ -114,7 +115,7 @@ fun LoginScreen(
             onValueChange = { email = it },
             singleLine = true,
             maxLines = 1,
-            label = { Text(text = "Email Address") },
+            label = { Text(text = stringResource(id = R.string.Email_Address)) },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 16.dp),
@@ -125,7 +126,7 @@ fun LoginScreen(
             onValueChange = { password = it },
             singleLine = true,
             maxLines = 1,
-            label = { Text(text = "Password") },
+            label = { Text(text = stringResource(id = R.string.Password)) },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 32.dp),
@@ -177,7 +178,7 @@ fun LoginScreen(
             )
         ) {
             Text(
-                text = "Login",
+                text = stringResource(id = R.string.Login),
                 fontSize = 16.sp
             )
         }

@@ -8,4 +8,6 @@ sealed class Screens(val screen:String){
     data object Requests:Screens(screen = "requests")
     data object Chatbot:Screens(screen = "chatbot")
     data object TeamsSchedule:Screens(screen = "teamsschedule")
+    data object Analytics:Screens(screen = "analytics")
+
 }

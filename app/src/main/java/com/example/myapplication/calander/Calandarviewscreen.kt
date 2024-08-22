@@ -64,7 +64,7 @@ fun CalendarViewScreen(context: Context) {
                     .fillMaxWidth()
             ) {
                 Text(
-                    text = stringResource(id = R.string.work_schedule),
+                    text = stringResource(id= R.string.scheduletext),
                     fontSize = 15.sp,
                     fontWeight = FontWeight.SemiBold,
                     modifier = Modifier

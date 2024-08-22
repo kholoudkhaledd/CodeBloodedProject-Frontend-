@@ -17,6 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -35,7 +36,10 @@ fun RequestItem(request: Request, onCancelRequest: (Request) -> Unit) {
         )
         Spacer(modifier = Modifier.height(4.dp))
         Text(
-            text = "Request to swap your scheduled work locations between the ${formatDate(request.changeDayFrom)} & the ${formatDate(request.changeDayTo)}",
+            //text = "Request to swap your scheduled work locations between the ${formatDate(request.changeDayFrom)} & the ${formatDate(request.changeDayTo)}",
+            text= stringResource(id = R.string.Request_to_swap_your_scheduled_work_locations_between_the)+{formatDate(request.changeDayFrom)}+ stringResource(
+                id = R.string.and_the
+            )+{formatDate(request.changeDayTo)},
             fontWeight = FontWeight.Normal,
             fontSize = 16.sp
         )
@@ -52,7 +56,8 @@ fun RequestItem(request: Request, onCancelRequest: (Request) -> Unit) {
                     )
                     Spacer(modifier = Modifier.width(4.dp))
                     Text(
-                        text = "Cancel Request",
+                        //text = "Cancel Request",
+                        text= stringResource(id = R.string.Cancel_Request),
                         fontWeight = FontWeight.SemiBold,
                         color = Color(0xFF76B31B),
                         fontSize = 16.sp,
@@ -63,10 +68,10 @@ fun RequestItem(request: Request, onCancelRequest: (Request) -> Unit) {
                 }
             }
             RequestStatus.APPROVED -> {
-                StatusBox(text = "Approved", backgroundColor = Color(0xFF19C588))
+                StatusBox(text = stringResource(id = R.string.Approved), backgroundColor = Color(0xFF19C588))
             }
             RequestStatus.DENIED -> {
-                StatusBox(text = "Denied", backgroundColor = Color(0xFFFEB5757))
+                StatusBox(text = stringResource(id = R.string.Denied), backgroundColor = Color(0xFFFEB5757))
             }
         }
     }

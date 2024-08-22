@@ -1,5 +1,6 @@
 package com.example.myapplication.Navigationscreen
 
+import com.example.myapplication.manager.AnalyticsScreen
 import SharedViewModel
 import android.app.Activity
 import android.content.Intent
@@ -37,12 +38,20 @@ import com.example.myapplication.Sharedpreference
 import com.example.myapplication.Teamschedulescreen.TeamsScheduleScreen
 import com.example.myapplication.calander.Finallayout
 import com.example.myapplication.chatbotscreen.ChatScreen
-import com.example.myapplication.manager.ManagerRequest
-import com.example.myapplication.notifications.ui.theme.NotificationScreen
+import com.example.myapplication.ManagarRequestsScreen.ManagerRequest
+import com.example.myapplication.NotificationSreen.NotificationScreen
 import com.example.myapplication.splashandlogin.LoginScreen
 import com.example.myapplication.splashandlogin.SplashScreen
 import com.example.myapplication.ui.theme.greenlogoutcolor
 import com.example.yourapp.ui.MyRequestsPage
+import android.content.Intent
+import com.example.myapplication.MainActivity // Adjust the package name as needed
+import android.app.Activity
+
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.height
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
 
 
 @RequiresApi(Build.VERSION_CODES.S)
@@ -102,7 +111,7 @@ fun NavigationScreen() {
                             }
                         }
                     },
-                    additionalIcon = {
+                    additionalIcon1 = {
                         if (isManager) {
                             BarIcon(
                                 selected = selectedScreen == Screens.TeamsSchedule.screen,
@@ -119,7 +128,26 @@ fun NavigationScreen() {
                                 }
                             )
                         }
+                    },
+                    additionalIcon2 = {
+                        if (isManager) {
+                            BarIcon(
+                                selected = selectedScreen == Screens.Analytics.screen,
+                                iconId = if (selectedScreen == Screens.Analytics.screen) R.drawable.analyticsicon else R.drawable.analyticsicon,
+                                contentDescription = "Teams Schedule",
+                                onClick = {
+                                    if (selectedScreen != Screens.Analytics.screen) {
+                                        selectedScreen = Screens.Analytics.screen
+                                        navController.navigate(Screens.Analytics.screen) {
+                                            launchSingleTop = true
+                                            restoreState = true
+                                        }
+                                    }
+                                }
+                            )
+                        }
                     }
+
                 )
             }
         }
@@ -168,8 +196,16 @@ fun NavigationScreen() {
                 selectedScreen = Screens.TeamsSchedule.screen
                 TeamsScheduleScreen(context)
             }
+
+            composable(Screens.Analytics.screen) {
+                selectedScreen = Screens.Analytics.screen
+                AnalyticsScreen(context)
+            }
+
         }
     }
 }
+
+
 
 

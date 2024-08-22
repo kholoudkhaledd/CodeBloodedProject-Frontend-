@@ -1,13 +1,16 @@
-package com.example.myapplication.notifications.ui.theme
+package com.example.myapplication.NotificationSreen
 
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
-import androidx.compose.ui.graphics.Color
 import com.example.myapplication.R
 import com.example.myapplication.Requests.Request
 import com.example.myapplication.Requests.RequestStatus
 import com.example.myapplication.Retrofit.RetrofitClient
+import com.example.myapplication.ui.theme.greennotfication
+import com.example.myapplication.ui.theme.greennotfication2
+import com.example.myapplication.ui.theme.rednotification
+import com.example.myapplication.ui.theme.rednotification2
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -23,8 +26,8 @@ fun fetchNotifications(userId: String, onResult: (List<NotificationData>) -> Uni
                         .map { request ->
                             NotificationData(
                                 id = request.id,
-                                backgroundColor = if (request.status == RequestStatus.APPROVED) Color(0xFFE8F5E9) else Color(0xFFFFEBEE),
-                                stripeColor = if (request.status == RequestStatus.APPROVED) Color(0xFF19C588) else Color(0xFFF44336),
+                                backgroundColor = if (request.status == RequestStatus.APPROVED) greennotfication else rednotification,
+                                stripeColor = if (request.status == RequestStatus.APPROVED) greennotfication2 else rednotification2,
                                 icon = if (request.status == RequestStatus.APPROVED) R.drawable.icon_check else R.drawable.icon_deny,
                                 text = "Your request to swap from the ${formatDate(request.changeDayFrom)} to the ${formatDate(request.changeDayTo)} was ${request.status.name.lowercase()}.",
                                 time = request.time

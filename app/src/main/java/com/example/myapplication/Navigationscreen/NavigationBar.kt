@@ -17,19 +17,22 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.myapplication.R
 import com.example.myapplication.Screens
-import com.example.myapplication.ui.theme.lightgraycolor
+import com.example.myapplication.ui.theme.BackgroundPagesColor
 
 
 @Composable
 fun CustomBottomNavigationBar(
     selectedScreen: String,
     onScreenSelected: (String) -> Unit,
-    additionalIcon: (@Composable () -> Unit)? = null // Add this parameter
+    additionalIcon1: (@Composable () -> Unit)? = null, // Add this parameter
+    additionalIcon2: (@Composable () -> Unit)? = null // Add this parameter
+
+
 ) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .background(lightgraycolor)
+            .background(BackgroundPagesColor)
             .height(90.dp)
             .clip(RoundedCornerShape(32.dp))
     ) {
@@ -62,7 +65,7 @@ fun CustomBottomNavigationBar(
                     }
                 }
             )
-            additionalIcon?.invoke()
+            additionalIcon1?.invoke()
 
             // Requests button
             BarIcon(
@@ -86,6 +89,10 @@ fun CustomBottomNavigationBar(
                     }
                 }
             )
+
+            additionalIcon2?.invoke()
+
+
         }
     }
 }

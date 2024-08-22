@@ -1,9 +1,9 @@
 package com.example.myapplication.Retrofit
 
+import com.example.myapplication.NotificationSreen.NotificationData
 import com.example.myapplication.Requests.Request
 import com.example.myapplication.calander.CalendarResponse
 import com.example.myapplication.calander.DayScheduleResponse
-import com.example.myapplication.notifications.ui.theme.NotificationData
 import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.Body
@@ -89,12 +89,25 @@ interface ApiService {
     @POST("chatbot/{uid}")
     suspend fun sendMessage(@Path("uid") uid: String, @Body request: String): Response<MessageResponse>
 
-    @GET("/view_scheduletoday/{month}/{day}/{current_year}")
+
+    @GET("/view_schedule/{month}/{day}/{current_year}")
     suspend fun getDaySchedule(
         @Path("month") month: String,
         @Path("day") day: String,
         @Path("current_year") year: String,
         @Header("Authorization") token: String
-
     ): DayScheduleResponse
+    @GET("/most_requested_day")
+    fun getMostRequestedDay(): Call<Map<String, Int>>  // Map of day names to counts
+
+    @GET("/most_active_projects")
+    fun getMostActiveProjects(): Call<Map<String, Int>>
+
+    @GET("/most_active_users")
+    fun getMostActiveUsers(): Call<List<Map<String, Any>>>  // List of users with counts
+
+
+    @POST("managerChatbot/{uid}")
+    suspend fun sendMessageManager(@Path("uid") uid: String, @Body request: String): Response<MessageResponse>
+
 }

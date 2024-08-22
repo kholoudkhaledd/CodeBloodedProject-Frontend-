@@ -45,9 +45,6 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Calendar
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import java.time.DayOfWeek
 
 @RequiresApi(Build.VERSION_CODES.O)

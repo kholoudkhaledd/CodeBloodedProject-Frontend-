@@ -43,13 +43,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.myapplication.R
-import com.example.myapplication.RetrofitClient
-import com.example.myapplication.UpdateStatusModel
-import com.example.yourapp.ui.Request
-import com.example.yourapp.ui.RequestStatus
-import com.example.yourapp.ui.StatusBox
-import com.example.yourapp.ui.formatDate
-import com.example.yourapp.ui.timeAgo
+import com.example.myapplication.Requests.Request
+import com.example.myapplication.Requests.RequestStatus
+import com.example.myapplication.Requests.StatusBox
+import com.example.myapplication.Requests.formatDate
+import com.example.myapplication.Requests.timeAgo
+import com.example.myapplication.Retrofit.RetrofitClient
+import com.example.myapplication.Retrofit.UpdateStatusModel
+
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

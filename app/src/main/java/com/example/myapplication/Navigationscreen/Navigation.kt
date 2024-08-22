@@ -2,8 +2,6 @@ package com.example.myapplication.Navigationscreen
 
 import com.example.myapplication.manager.AnalyticsScreen
 import SharedViewModel
-import android.app.Activity
-import android.content.Intent
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
@@ -31,13 +29,11 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.myapplication.MainActivity
 import com.example.myapplication.R
 import com.example.myapplication.Screens
 import com.example.myapplication.Sharedpreference
 import com.example.myapplication.Teamschedulescreen.TeamsScheduleScreen
 import com.example.myapplication.calander.Finallayout
-import com.example.myapplication.chatbotscreen.ChatScreen
 import com.example.myapplication.ManagarRequestsScreen.ManagerRequest
 import com.example.myapplication.NotificationSreen.NotificationScreen
 import com.example.myapplication.splashandlogin.LoginScreen
@@ -52,6 +48,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.height
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.example.myapplication.ChatScreen
 
 
 @RequiresApi(Build.VERSION_CODES.S)

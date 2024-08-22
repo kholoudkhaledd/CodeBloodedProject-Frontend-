@@ -45,6 +45,10 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Calendar
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import java.time.DayOfWeek
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -63,6 +67,10 @@ fun RequestsSection() {
     // State to manage the visibility of the date picker dialogs
     var showDatePicker by remember { mutableStateOf(false) }
     var showChangeDatePicker by remember { mutableStateOf(false) }
+    var errorMessage by remember { mutableStateOf<String?>(null) }
+
+    fun isWeekend(date: LocalDate?): Boolean { return date?.dayOfWeek in listOf(DayOfWeek.SATURDAY, DayOfWeek.SUNDAY) }
+    fun isValidDate(date: LocalDate?): Boolean { return date != null && !date.isBefore(currentDate) && !isWeekend(date) }
 
     Box(
         modifier = Modifier
@@ -182,26 +190,29 @@ fun RequestsSection() {
 
             Box(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .wrapContentSize(Alignment.TopStart)
+                    .fillMaxWidth() .
+                    wrapContentSize(Alignment.TopStart)
             ) {
                 Button(
                     onClick = {
-                        if (selectedDate != null && changeDate != null) {
-                            createRequest(
-                                userId,
-                                selectedDate!!,
-                                changeDate!!
-                            )
-                            selectedDate = null
-                            changeDate = null
-                        } else {
-                            println("Selected date or change date is null")
+                        errorMessage = when {
+                            selectedDate == null || changeDate == null -> "Selected date or change date is null"
+                            !isValidDate(selectedDate) || !isValidDate(changeDate) -> "Please make sure that neither date is invalid (in the past or on a weekend)."
+                            else -> {
+                                createRequest(userId, selectedDate!!, changeDate!!)
+                                selectedDate = null
+                                changeDate = null
+                                null
+                            }
                         }
                     },
-                    colors = ButtonDefaults.buttonColors(containerColor = if (selectedDate != null && changeDate != null) colorResource(
-                        id = R.color.deloitteGreen
-                    ) else colorResource(id = R.color.coolGray6)),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = if (isValidDate(selectedDate) && isValidDate(changeDate)) {
+                            colorResource(id = R.color.deloitteGreen)
+                        } else {
+                            colorResource(id = R.color.coolGray6)
+                        }
+                    ),
                     modifier = Modifier
                         .fillMaxWidth()
                         .clip(RoundedCornerShape(100.dp))
@@ -209,6 +220,16 @@ fun RequestsSection() {
                 ) {
                     Text(text = stringResource(id = R.string.Submit), fontSize = 16.sp)
                 }
+            }
+            // Display error message below the submit button
+            if (errorMessage != null) {
+                Text(
+                    text = errorMessage!!,
+                    color = Color.Red,
+                    fontSize = 14.sp,
+                    modifier = Modifier.padding(top = 10.dp)
+                )
+
             }
         }
     }

@@ -97,4 +97,17 @@ interface ApiService {
         @Path("current_year") year: String,
         @Header("Authorization") token: String
     ): DayScheduleResponse
+    @GET("/most_requested_day")
+    fun getMostRequestedDay(): Call<Map<String, Int>>  // Map of day names to counts
+
+    @GET("/most_active_projects")
+    fun getMostActiveProjects(): Call<Map<String, Int>>
+
+    @GET("/most_active_users")
+    fun getMostActiveUsers(): Call<List<Map<String, Any>>>  // List of users with counts
+
+
+    @POST("managerChatbot/{uid}")
+    suspend fun sendMessageManager(@Path("uid") uid: String, @Body request: String): Response<MessageResponse>
+
 }

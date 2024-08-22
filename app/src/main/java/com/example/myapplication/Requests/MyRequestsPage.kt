@@ -66,12 +66,12 @@ fun MyRequestsPage() {
             shape = RoundedCornerShape(40.dp),
             modifier = Modifier
                 .fillMaxWidth()
+                .padding(bottom = 20.dp)
                 .background(Color.Transparent),
             colors = CardDefaults.cardColors(containerColor = Color.White),
         ) {
             Column(
                 modifier = Modifier
-                    .padding(20.dp)
                     .fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center

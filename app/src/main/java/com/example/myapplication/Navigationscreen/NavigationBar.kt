@@ -24,7 +24,10 @@ import com.example.myapplication.ui.theme.BackgroundPagesColor
 fun CustomBottomNavigationBar(
     selectedScreen: String,
     onScreenSelected: (String) -> Unit,
-    additionalIcon: (@Composable () -> Unit)? = null // Add this parameter
+    additionalIcon1: (@Composable () -> Unit)? = null, // Add this parameter
+    additionalIcon2: (@Composable () -> Unit)? = null // Add this parameter
+
+
 ) {
     Box(
         modifier = Modifier
@@ -62,7 +65,7 @@ fun CustomBottomNavigationBar(
                     }
                 }
             )
-            additionalIcon?.invoke()
+            additionalIcon1?.invoke()
 
             // Requests button
             BarIcon(
@@ -86,6 +89,10 @@ fun CustomBottomNavigationBar(
                     }
                 }
             )
+
+            additionalIcon2?.invoke()
+
+
         }
     }
 }

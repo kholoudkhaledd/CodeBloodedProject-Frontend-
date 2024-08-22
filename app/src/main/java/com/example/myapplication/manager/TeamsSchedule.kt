@@ -196,7 +196,7 @@ fun TeamsScheduleScreen(context: Context) {
                                 modifier = Modifier
                                     .background(Color(0xFFF6F6F6))
                                     .height(250.dp)
-                                    .width(340.dp)
+                                    .fillMaxWidth()
                             ) {
                                 sortedNamesList.forEach { name ->
                                     DropdownMenuItem(

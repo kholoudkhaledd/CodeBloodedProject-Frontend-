@@ -103,13 +103,25 @@ dependencies {
     implementation("com.google.firebase:firebase-analytics")
     implementation("com.google.firebase:firebase-messaging")
 
-    dependencies {
+
         implementation ("androidx.compose.ui:ui:1.4.3")
         implementation ("androidx.compose.material3:material3:1.0.1")
         implementation ("androidx.compose.ui:ui-tooling-preview:1.4.3")
-        implementation ("androidx.compose.ui:ui-tooling:1.4.3")
-        implementation ("androidx.compose.foundation:foundation:1.4.3")
-    }
+        implementation (libs.androidx.compose.ui.ui.tooling)
+        implementation (libs.androidx.foundation)
+
+
+
+        implementation ("androidx.compose.ui:ui:1.0.0")
+        implementation ("androidx.compose.material:material:1.0.0")
+        implementation ("androidx.compose.ui:ui-tooling:1.0.0")
+        implementation ("androidx.compose.runtime:runtime-livedata:1.0.0")
+        implementation ("androidx.lifecycle:lifecycle-viewmodel-compose:1.0.0")
+
+    implementation ("com.github.PhilJay:MPAndroidChart:v3.1.0") // Use the latest version
+
+
+
 
 
 

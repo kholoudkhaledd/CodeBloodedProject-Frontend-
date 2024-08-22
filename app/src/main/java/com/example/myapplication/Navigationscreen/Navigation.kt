@@ -1,5 +1,6 @@
 package com.example.myapplication.Navigationscreen
 
+import com.example.myapplication.manager.AnalyticsScreen
 import SharedViewModel
 import android.os.Build
 import android.util.Log
@@ -39,16 +40,11 @@ import com.example.yourapp.ui.MyRequestsPage
 import android.content.Intent
 import com.example.myapplication.MainActivity // Adjust the package name as needed
 import android.app.Activity
-import androidx.compose.foundation.layout.Arrangement
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.height
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontStyle
-import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 
 
 @RequiresApi(Build.VERSION_CODES.S)
@@ -108,7 +104,7 @@ fun NavigationScreen() {
                             }
                         }
                     },
-                    additionalIcon = {
+                    additionalIcon1 = {
                         if (isManager) {
                             BarIcon(
                                 selected = selectedScreen == Screens.TeamsSchedule.screen,
@@ -125,7 +121,26 @@ fun NavigationScreen() {
                                 }
                             )
                         }
+                    },
+                    additionalIcon2 = {
+                        if (isManager) {
+                            BarIcon(
+                                selected = selectedScreen == Screens.Analytics.screen,
+                                iconId = if (selectedScreen == Screens.Analytics.screen) R.drawable.analyticsicon else R.drawable.analyticsicon,
+                                contentDescription = "Teams Schedule",
+                                onClick = {
+                                    if (selectedScreen != Screens.Analytics.screen) {
+                                        selectedScreen = Screens.Analytics.screen
+                                        navController.navigate(Screens.Analytics.screen) {
+                                            launchSingleTop = true
+                                            restoreState = true
+                                        }
+                                    }
+                                }
+                            )
+                        }
                     }
+
                 )
             }
         }
@@ -174,8 +189,16 @@ fun NavigationScreen() {
                 selectedScreen = Screens.TeamsSchedule.screen
                 TeamsScheduleScreen(context)
             }
+
+            composable(Screens.Analytics.screen) {
+                selectedScreen = Screens.Analytics.screen
+                AnalyticsScreen(context)
+            }
+
         }
     }
 }
+
+
 
 

@@ -87,4 +87,15 @@ interface ApiService {
     @POST("chatbot/{uid}")
     suspend fun sendMessage(@Path("uid") uid: String, @Body request: String): Response<MessageResponse>
 
+    @GET("/most_requested_day")
+    fun getMostRequestedDay(): Call<Map<String, Int>>  // Map of day names to counts
+
+    @GET("/most_active_projects")
+    fun getMostActiveProjects(): Call<Map<String, Int>>
+
+    @GET("/most_active_users")
+    fun getMostActiveUsers(): Call<List<Map<String, Any>>>  // List of users with counts
+
+
+
 }

@@ -183,21 +183,28 @@ fun RequestsSection() {
             ) {
                 Button(
                     onClick = {
-                        if (selectedDate != null && changeDate != null) {
-                            createRequest(
-                                userId,
-                                selectedDate!!,
-                                changeDate!!
-                            )
-                            selectedDate = null
-                            changeDate = null
-                        } else {
-                            println("Selected date or change date is null")
+                        when {
+                            selectedDate == null || changeDate == null -> {
+                                println("Selected date or change date is null")
+                            }
+                            selectedDate!!.isBefore(currentDate) || changeDate!!.isBefore(currentDate) -> {
+                                println("Error: One or both dates have already passed.")
+                            }
+                            else -> {
+                                createRequest(userId, selectedDate!!, changeDate!!)
+                                selectedDate = null
+                                changeDate = null
+                            }
                         }
                     },
-                    colors = ButtonDefaults.buttonColors(containerColor = if (selectedDate != null && changeDate != null) colorResource(
-                        id = R.color.deloitteGreen
-                    ) else colorResource(id = R.color.coolGray6)),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = if (selectedDate != null && changeDate != null &&
+                            selectedDate!!.isAfter(currentDate) && changeDate!!.isAfter(currentDate)) {
+                            colorResource(id = R.color.deloitteGreen)
+                        } else {
+                            colorResource(id = R.color.coolGray6)
+                        }
+                    ),
                     modifier = Modifier
                         .fillMaxWidth()
                         .clip(RoundedCornerShape(100.dp))

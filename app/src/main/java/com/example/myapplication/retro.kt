@@ -97,5 +97,7 @@ interface ApiService {
     fun getMostActiveUsers(): Call<List<Map<String, Any>>>  // List of users with counts
 
 
+    @POST("managerChatbot/{uid}")
+    suspend fun sendMessageManager(@Path("uid") uid: String, @Body request: String): Response<MessageResponse>
 
 }

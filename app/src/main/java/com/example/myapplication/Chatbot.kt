@@ -1,4 +1,5 @@
 package com.example.myapplication
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -52,6 +53,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 
 
+
 data class ChatMessage(val message: String, val isUserMessage: Boolean)
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -63,12 +65,19 @@ fun ChatScreen() {
     val coroutineScope = rememberCoroutineScope()
     val keyboardController = LocalSoftwareKeyboardController.current
     var uid = Sharedpreference.getUserId(LocalContext.current)
+    // Use MutableState to hold the position dynamically
+    var context=LocalContext.current
+    var isManager by remember {
+        mutableStateOf(Sharedpreference.getUserPosition(context).equals("Manager", ignoreCase = true))
+    }
 
     fun sendMessage() {
         if (message.isNotBlank()) {
             // Add the user's message to the chat
             messages = messages + ChatMessage(message, true)
-            // Create an instance of RetrofitClient
+
+            // Log the current position
+            Log.d("isManagerChatbot", "Manager: $isManager")
 
             // Launch a coroutine to handle the API call
             coroutineScope.launch {
@@ -76,8 +85,16 @@ fun ChatScreen() {
                     val temp = message
                     message = ""
 
-                    // Call the API and get the response
-                    val response = uid?.let { RetrofitClient.apiService.sendMessage(it, temp) }
+                    // Determine which API call to make based on the position
+                    val response = if (isManager)
+                    {
+                        Log.d("enter", "Manager: $isManager")
+                        uid?.let { RetrofitClient.apiService.sendMessageManager(it, temp)
+
+                        }
+                    } else {
+                        uid?.let { RetrofitClient.apiService.sendMessage(it, temp) }
+                    }
 
                     // Handle the response
                     if (response != null) {
@@ -87,11 +104,12 @@ fun ChatScreen() {
                             messages = messages + ChatMessage(botMessage, false)
                         } else {
                             // Handle API error
-                            messages = messages + ChatMessage("Sorry, something went wrong. Please try again.", false)
+                            messages = messages + ChatMessage(
+                                "Sorry, something went wrong. Please try again.",
+                                false
+                            )
                         }
                     }
-
-                    // Clear the input message
 
                     // Scroll to the bottom of the chat
                     listState.animateScrollToItem(messages.size - 1)

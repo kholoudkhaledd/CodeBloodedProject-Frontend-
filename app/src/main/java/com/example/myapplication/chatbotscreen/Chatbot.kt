@@ -45,8 +45,8 @@ import androidx.compose.ui.unit.sp
 import com.example.myapplication.R
 import com.example.myapplication.Retrofit.RetrofitClient
 import com.example.myapplication.Sharedpreference
+import com.example.myapplication.ui.theme.BackgroundPagesColor
 import com.example.myapplication.ui.theme.darkerlightgrey
-import com.example.myapplication.ui.theme.lightgraycolor
 import kotlinx.coroutines.launch
 
 data class ChatMessage(val message: String, val isUserMessage: Boolean)
@@ -106,7 +106,7 @@ fun ChatScreen() {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(lightgraycolor)
+            .background(BackgroundPagesColor)
             .padding(vertical = 20.dp)
     ) {
         Card(

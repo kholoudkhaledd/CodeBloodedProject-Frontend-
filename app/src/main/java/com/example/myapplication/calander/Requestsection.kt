@@ -36,7 +36,7 @@ import com.example.myapplication.R
 import com.example.myapplication.Retrofit.CreateRequest
 import com.example.myapplication.Retrofit.RetrofitClient
 import com.example.myapplication.Sharedpreference
-import com.example.myapplication.ui.theme.Requestsectionlightgray
+import com.example.myapplication.ui.theme.LightGray
 import com.example.myapplication.ui.theme.darkerlightgrey
 import retrofit2.Call
 import retrofit2.Callback
@@ -91,7 +91,7 @@ fun RequestsSection() {
                     .padding(vertical = 10.dp, horizontal = 10.dp)
                     .wrapContentSize(Alignment.TopStart)
                     .clip(RoundedCornerShape(8.dp))
-                    .border(1.dp, Requestsectionlightgray, RoundedCornerShape(8.dp))
+                    .border(1.dp, LightGray, RoundedCornerShape(8.dp))
             ) {
                 Box(
                     modifier = Modifier

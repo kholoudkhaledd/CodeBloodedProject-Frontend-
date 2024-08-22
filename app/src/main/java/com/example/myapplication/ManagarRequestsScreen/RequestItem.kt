@@ -29,6 +29,8 @@ import com.example.myapplication.Requests.RequestStatus
 import com.example.myapplication.Requests.StatusBox
 import com.example.myapplication.Requests.formatDate
 import com.example.myapplication.Requests.timeAgo
+import com.example.myapplication.ui.theme.greennotfication2
+import com.example.myapplication.ui.theme.rednotification2
 
 @RequiresApi(Build.VERSION_CODES.S)
 @Composable
@@ -101,9 +103,9 @@ fun RequestItem(
             }
         } else {
             if (isApproved) {
-                StatusBox(text = stringResource(id = R.string.Approved), backgroundColor = Color(0xFF19C588))
+                StatusBox(text = stringResource(id = R.string.Approved), backgroundColor = greennotfication2)
             } else{
-                StatusBox(text = stringResource(id = R.string.Denied), backgroundColor = Color(0xFFFEB5757))
+                StatusBox(text = stringResource(id = R.string.Denied), backgroundColor = rednotification2)
             }
         }
     }

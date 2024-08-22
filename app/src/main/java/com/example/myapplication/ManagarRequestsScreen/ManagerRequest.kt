@@ -36,6 +36,7 @@ import com.example.myapplication.Requests.Request
 import com.example.myapplication.Requests.RequestStatus
 import com.example.myapplication.Retrofit.RetrofitClient
 import com.example.myapplication.Retrofit.UpdateStatusModel
+import com.example.myapplication.ui.theme.BackgroundPagesColor
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -99,7 +100,7 @@ fun ManagerRequest() {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFECECEC)),
+            .background(BackgroundPagesColor),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Card(

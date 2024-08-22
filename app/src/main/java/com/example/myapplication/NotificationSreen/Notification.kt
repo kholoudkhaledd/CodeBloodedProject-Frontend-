@@ -24,9 +24,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.myapplication.R
 import com.example.myapplication.Sharedpreference
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -96,7 +98,7 @@ fun NotificationScreen(isManager: Boolean) {
                 modifier = Modifier.fillMaxSize()
             ) {
                 Text(
-                    text = "Notifications",
+                    text = stringResource(id = R.string.Notifications),
                     fontSize = 22.sp,
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier

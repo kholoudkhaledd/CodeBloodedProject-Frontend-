@@ -23,7 +23,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import com.example.myapplication.Retrofit.RetrofitClient
 import com.example.myapplication.Sharedpreference
-import com.example.myapplication.ui.theme.lightgraycolor
+import com.example.myapplication.ui.theme.BackgroundPagesColor
 
 data class DayScheduleResponse(
     val day: String,
@@ -50,7 +50,7 @@ fun Finallayout(context: Context) {
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .background(lightgraycolor),
+            .background(BackgroundPagesColor),
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -58,7 +58,7 @@ fun Finallayout(context: Context) {
             // User Info Section
             Box(
                 modifier = Modifier
-                    .background(lightgraycolor)
+                    .background(BackgroundPagesColor)
                     .fillMaxWidth()
                     .padding(top = 20.dp)
                     .padding(horizontal = 25.dp)
@@ -71,7 +71,7 @@ fun Finallayout(context: Context) {
             // Display if home or office Section
             Box(
                 modifier = Modifier
-                    .background(lightgraycolor)
+                    .background(BackgroundPagesColor)
                     .fillMaxWidth()
                     .padding(vertical = 10.dp)
             ) {
@@ -83,7 +83,7 @@ fun Finallayout(context: Context) {
             // Calendar View Screen
             Box(
                 modifier = Modifier
-                    .background(lightgraycolor)
+                    .background(BackgroundPagesColor)
                     .fillMaxWidth()
                     .padding(0.dp)
                     .clip(RoundedCornerShape(25.dp))
@@ -97,7 +97,7 @@ fun Finallayout(context: Context) {
             // Requests Section
             Box(
                 modifier = Modifier
-                    .background(lightgraycolor)
+                    .background(BackgroundPagesColor)
                     .fillMaxWidth()
                     .padding(vertical = 0.dp)
             ) {

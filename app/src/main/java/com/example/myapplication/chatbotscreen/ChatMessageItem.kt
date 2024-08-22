@@ -15,7 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.example.myapplication.ui.theme.Requestsectionlightgray
+import com.example.myapplication.ui.theme.LightGray
 import com.example.myapplication.ui.theme.lightgreenchatbot
 
 @Composable
@@ -34,7 +34,7 @@ fun ChatMessageItem(message: String, isUserMessage: Boolean) {
                 )
                 .border(
                     1.dp,
-                    color = if (isUserMessage) lightgreenchatbot else Requestsectionlightgray,
+                    color = if (isUserMessage) lightgreenchatbot else LightGray,
                     shape = RoundedCornerShape(8.dp)
                 )
                 .padding(12.dp)

@@ -33,6 +33,9 @@ import retrofit2.Response
 import com.google.gson.annotations.SerializedName
 import android.util.Log
 import androidx.annotation.RequiresApi
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import java.time.Duration
 
 import java.time.Instant
@@ -129,6 +132,10 @@ fun MyRequestsPage() {
     val userId = Sharedpreference.getUserId(context) ?: return // Return early if userId is null
     var requestList by remember { mutableStateOf(listOf<Request>()) }
 
+    // State for managing the confirmation dialog
+    var showDialog by remember { mutableStateOf(false) }
+    var currentRequest by remember { mutableStateOf<Request?>(null) }
+
     LaunchedEffect(Unit) {
         fetchRequests(userId) { fetchedRequests ->
             Log.d("MyRequestsPage", "Fetched requests: $fetchedRequests")
@@ -152,9 +159,11 @@ fun MyRequestsPage() {
         ) {
             Column(
                 modifier = Modifier
-                    .fillMaxWidth(),
+                    .fillMaxWidth()
+                    .padding(32.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
+
             ) {
                 Text(
                     text = "My Requests",
@@ -177,9 +186,9 @@ fun MyRequestsPage() {
                         RequestItem(
                             request = request,
                             onCancelRequest = { requestToCancel ->
-                                deleteRequest(requestToCancel.id) {
-                                    requestList = requestList.filter { it.id != requestToCancel.id }
-                                }
+                                // Show confirmation dialog before canceling
+                                currentRequest = requestToCancel
+                                showDialog = true
                             }
                         )
                         Spacer(modifier = Modifier.height(16.dp))
@@ -188,7 +197,42 @@ fun MyRequestsPage() {
             }
         }
     }
+
+    // Confirmation Dialog
+    if (showDialog && currentRequest != null) {
+        AlertDialog(
+            onDismissRequest = { showDialog = false },
+            title = { Text(text = "Confirm Action") },
+            text = {
+                Text("Are you sure you want to cancel this request?")
+            },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        currentRequest?.let {
+                            deleteRequest(it.id) {
+                                requestList = requestList.filter { req -> req.id != it.id }
+                            }
+                        }
+                        showDialog = false
+                    },
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF76B31B))
+                ) {
+                    Text("Yes")
+                }
+            },
+            dismissButton = {
+                Button(
+                    onClick = { showDialog = false },
+                    colors = ButtonDefaults.buttonColors(containerColor = Color.Gray)
+                ) {
+                    Text("No")
+                }
+            }
+        )
+    }
 }
+
 
 
 private fun fetchRequests(userId: String, onResult: (List<Request>) -> Unit) {

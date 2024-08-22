@@ -23,6 +23,9 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -50,11 +53,8 @@ import com.example.yourapp.ui.timeAgo
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.time.Instant
-import java.time.ZoneId
-import java.time.format.DateTimeFormatter
 
-private fun fetchRequests(userId: String, onResult: (List<Request>) -> Unit) {
+private fun fetchRequests(onResult: (List<Request>) -> Unit) {
     RetrofitClient.apiService.getAllRequests().enqueue(object : Callback<List<Request>> {
         override fun onResponse(call: Call<List<Request>>, response: Response<List<Request>>) {
             if (response.isSuccessful) {
@@ -72,11 +72,15 @@ private fun fetchRequests(userId: String, onResult: (List<Request>) -> Unit) {
         }
     })
 }
+
 @RequiresApi(Build.VERSION_CODES.S)
 @Composable
 fun ManagerRequest() {
     val context = LocalContext.current
     var requestList by remember { mutableStateOf(listOf<Request>()) }
+    var showDialog by remember { mutableStateOf(false) }
+    var currentRequest by remember { mutableStateOf<Request?>(null) }
+    var isApproving by remember { mutableStateOf(true) } // true for approving, false for denying
 
     LaunchedEffect(Unit) {
         fetchRequests { fetchedRequests ->
@@ -91,8 +95,10 @@ fun ManagerRequest() {
         RetrofitClient.apiService.updateStatus(request.id, statusUpdate).enqueue(object : Callback<Void> {
             override fun onResponse(call: Call<Void>, response: Response<Void>) {
                 if (response.isSuccessful) {
-                    requestList = requestList.map {
-                        if (it.id == request.id) it.copy(status = RequestStatus.APPROVED) else it
+                    // Triggering a fetch to refresh the list
+                    fetchRequests { fetchedRequests ->
+                        Log.d("approveRequest", "Fetched updated requests: $fetchedRequests")
+                        requestList = fetchedRequests
                     }
                     Log.d("approveRequest", "Request approved successfully")
                 } else {
@@ -111,8 +117,10 @@ fun ManagerRequest() {
         RetrofitClient.apiService.updateStatus(request.id, statusUpdate).enqueue(object : Callback<Void> {
             override fun onResponse(call: Call<Void>, response: Response<Void>) {
                 if (response.isSuccessful) {
-                    requestList = requestList.map {
-                        if (it.id == request.id) it.copy(status = RequestStatus.DENIED) else it
+                    // Triggering a fetch to refresh the list
+                    fetchRequests { fetchedRequests ->
+                        Log.d("denyRequest", "Fetched updated requests: $fetchedRequests")
+                        requestList = fetchedRequests
                     }
                     Log.d("denyRequest", "Request denied successfully")
                 } else {
@@ -124,6 +132,13 @@ fun ManagerRequest() {
                 Log.e("denyRequest", "Error denying request", t)
             }
         })
+    }
+
+    // Function to show the confirmation dialog
+    fun showConfirmationDialog(request: Request, approve: Boolean) {
+        currentRequest = request
+        isApproving = approve
+        showDialog = true
     }
 
     Column(
@@ -166,38 +181,54 @@ fun ManagerRequest() {
                         )
                         RequestItem(
                             request = request,
-                            onApproveRequest = { approveRequest(request) },
-                            onDenyRequest = { denyRequest(request) }
+                            onApproveRequest = { showConfirmationDialog(request, true) },
+                            onDenyRequest = { showConfirmationDialog(request, false) }
                         )
                     }
                 }
             }
         }
     }
-}
 
-private fun fetchRequests(onResult: (List<Request>) -> Unit) {
-    RetrofitClient.apiService.getAllRequests().enqueue(object : Callback<List<Request>> {
-        @RequiresApi(Build.VERSION_CODES.O)
-        override fun onResponse(call: Call<List<Request>>, response: Response<List<Request>>) {
-            if (response.isSuccessful) {
-                response.body()?.let {
-                    Log.d("fetchRequests", "Fetched requests: $it")
-                    // Sort the requests by timestamp in descending order (newest first)
-                    val sortedRequests = it.sortedByDescending { request ->
-                        Instant.from(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").withZone(ZoneId.systemDefault()).parse(request.time))
+    // Confirmation Dialog
+    if (showDialog && currentRequest != null) {
+        AlertDialog(
+            onDismissRequest = { showDialog = false },
+            title = { Text(text = "Confirm Action") },
+            text = {
+                Text(
+                    text = if (isApproving) {
+                        "Are you sure you want to approve this request?"
+                    } else {
+                        "Are you sure you want to deny this request?"
                     }
-                    onResult(sortedRequests)
+                )
+            },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        if (isApproving) {
+                            currentRequest?.let { approveRequest(it) }
+                        } else {
+                            currentRequest?.let { denyRequest(it) }
+                        }
+                        showDialog = false
+                    },
+                    colors = ButtonDefaults.buttonColors(containerColor = if (isApproving) Color(0xFF19C588) else Color(0xFFFEB5757))
+                ) {
+                    Text("Yes")
                 }
-            } else {
-                Log.e("fetchRequests", "Failed to fetch requests: ${response.code()}")
+            },
+            dismissButton = {
+                Button(
+                    onClick = { showDialog = false },
+                    colors = ButtonDefaults.buttonColors(containerColor = Color.Gray)
+                ) {
+                    Text("No")
+                }
             }
-        }
-
-        override fun onFailure(call: Call<List<Request>>, t: Throwable) {
-            Log.e("fetchRequests", "Error fetching requests", t)
-        }
-    })
+        )
+    }
 }
 
 
@@ -216,45 +247,39 @@ fun RequestItem(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
-        ){
+        ) {
             Text(
-                text = request.username, // Display the username here
+                text = request.username,
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.Black,
                 textAlign = TextAlign.Start,
             )
             Text(
-                text = timeAgo(request.time), // Use the timeAgo function here
+                text = timeAgo(request.time),
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Medium,
                 color = Color.LightGray,
                 textAlign = TextAlign.End
-
-
             )
-
         }
         Spacer(modifier = Modifier.height(4.dp))
         Text(
-            text = "Request to swap work locations between the ${formatDate(request.changeDayFrom)} & the ${formatDate(request.changeDayTo)}",
+            text = "Request to swap work locations between ${formatDate(request.changeDayFrom)} & ${formatDate(request.changeDayTo)}",
             fontWeight = FontWeight.Medium,
             fontSize = 16.sp
         )
         Spacer(modifier = Modifier.height(12.dp))
 
-        if (!isApproved && !isDenied) {
+        if (request.status == RequestStatus.PENDING) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-
                 Icon(
                     painter = painterResource(id = R.drawable.icon_deny),
                     contentDescription = "Deny Request",
                     tint = Color.Unspecified,
                     modifier = Modifier
                         .size(40.dp)
-                        .clickable {
-                            onDenyRequest(request)
-                        }
+                        .clickable { onDenyRequest(request) }
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 Icon(
@@ -263,18 +288,16 @@ fun RequestItem(
                     tint = Color.Unspecified,
                     modifier = Modifier
                         .size(40.dp)
-                        .clickable {
-                            onApproveRequest(request)
-                        }
+                        .clickable { onApproveRequest(request) }
                 )
-
             }
         } else {
             if (isApproved) {
                 StatusBox(text = "Approved", backgroundColor = Color(0xFF19C588))
-            } else{
+            } else {
                 StatusBox(text = "Denied", backgroundColor = Color(0xFFFEB5757))
             }
         }
     }
 }
+

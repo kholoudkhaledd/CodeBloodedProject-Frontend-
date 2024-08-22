@@ -87,4 +87,7 @@ interface ApiService {
     @POST("chatbot/{uid}")
     suspend fun sendMessage(@Path("uid") uid: String, @Body request: String): Response<MessageResponse>
 
+    @POST("managerChatbot/{uid}")
+    suspend fun sendMessageManager(@Path("uid") uid: String, @Body request: String): Response<MessageResponse>
+
 }

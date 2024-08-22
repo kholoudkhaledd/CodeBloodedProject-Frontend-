@@ -2,7 +2,7 @@ package com.example.myapplication.Retrofit
 
 import com.example.myapplication.Requests.Request
 import com.example.myapplication.calander.CalendarResponse
-import com.example.myapplication.NotificationSreen.NotificationData
+import com.example.myapplication.notifications.ui.theme.NotificationData
 import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.Body
@@ -88,4 +88,11 @@ interface ApiService {
     @POST("chatbot/{uid}")
     suspend fun sendMessage(@Path("uid") uid: String, @Body request: String): Response<MessageResponse>
 
+
+    @GET("/view_schedule/{month}/{day}/{current_year}")
+    suspend fun getDaySchedule(
+        @Path("month") month: String,
+        @Path("day") day: String,
+        @Path("current_year") year: String
+    ): DayScheduleResponse
 }

@@ -24,8 +24,9 @@ fun CustomBottomNavigationBar(
     selectedScreen: String,
     onScreenSelected: (String) -> Unit,
     additionalIcon1: (@Composable () -> Unit)? = null, // Add this parameter
-    additionalIcon2: (@Composable () -> Unit)? = null, // Add this parameter
-    showNotificationIcon: Boolean = true // New parameter to control visibility
+    additionalIcon2: (@Composable () -> Unit)? = null // Add this parameter
+
+
 ) {
     Box(
         modifier = Modifier
@@ -77,26 +78,9 @@ fun CustomBottomNavigationBar(
                 }
             )
 
-            // Conditionally show the Notifications button
-            if (showNotificationIcon) {
-                BarIcon(
-                    selected = selectedScreen == Screens.Notification.screen,
-                    iconId = if (selectedScreen == Screens.Notification.screen) R.drawable.notifygreen else R.drawable.notifygray,
-                    contentDescription = "Notifications",
-                    onClick = {
-                        if (selectedScreen != Screens.Notification.screen) {
-                            onScreenSelected(Screens.Notification.screen)
-                        }
-                    }
-                )
-            }
-
             additionalIcon2?.invoke()
+
+
         }
     }
 }
-
-
-
-
-

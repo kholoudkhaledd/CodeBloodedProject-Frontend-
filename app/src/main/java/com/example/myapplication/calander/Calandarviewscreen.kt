@@ -29,9 +29,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.myapplication.R
+import com.example.myapplication.ui.theme.greenicon
 import java.time.LocalDate
 import java.time.Month
 
@@ -61,7 +64,7 @@ fun CalendarViewScreen(context: Context) {
                     .fillMaxWidth()
             ) {
                 Text(
-                    text = "Working from home/office schedule",
+                    text = stringResource(id= R.string.scheduletext),
                     fontSize = 15.sp,
                     fontWeight = FontWeight.SemiBold,
                     modifier = Modifier
@@ -115,7 +118,7 @@ fun CalendarViewScreen(context: Context) {
                     Icon(
                         imageVector = Icons.Filled.KeyboardArrowRight,
                         contentDescription = "Next month",
-                        tint = Color(0xFF76B31B),
+                        tint = greenicon,
                         modifier = Modifier
                             .size(30.dp)
                             .clickable {

@@ -1,53 +1,39 @@
-package com.example.myapplication.manager
+package com.example.myapplication.Teamschedulescreen
 
 
-import android.content.ContentValues
 import android.content.Context
 import android.os.Build
-import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Arrangement.Absolute.Center
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CheckboxDefaults.colors
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Divider
-import androidx.compose.material3.DividerDefaults.color
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.SnackbarDefaults.color
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldColors
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -59,27 +45,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.myapplication.R
-import com.example.myapplication.RetrofitClient
-import com.example.myapplication.calander.CalendarResponse
+import com.example.myapplication.Retrofit.RetrofitClient
 import com.example.myapplication.calander.CustomCalendar
 import com.example.myapplication.calander.Indication
 import com.example.myapplication.calander.getCurrentDate
-import com.example.myapplication.ui.theme.Darkblue
-import com.example.myapplication.ui.theme.GreenJC
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.time.LocalDate
 import java.time.Month
-import java.time.Year
 data class TeamsCalendarResponse(
     val calendar: Map<String, String> // Adjusted to match the JSON structure
 )
@@ -338,99 +318,6 @@ fun TeamsScheduleScreen(context: Context) {
     }
 }
 
-fun changeTeamSchedule(officeDays1:Int, officeDays2:Int){
-    RetrofitClient.apiService.updateTeamSchedule(officeDays1,officeDays2)
-        .enqueue(object:Callback<Void>{
-            override fun onResponse(
-                call: Call<Void>,
-                response: Response<Void>
-            ) {
-                if (response.isSuccessful) {
-                    println("Success")
-                } else {
-                    val errorBody = response.errorBody()?.string()
-                    println("Error: ${response.code()}, Body: $errorBody")
-                }
-            }
-
-            override fun onFailure(call: Call<Void>, t: Throwable) {
-                t.printStackTrace()
-                println("Request Failed: ${t.message}")
-            }
-        })
-}
-
-@Composable
-fun WorkDaysInput(value: Int?, onValueChange: (Int?) -> Unit, disabledContainerColor: Color = Color(0xFFECECEC)) {
-    var text by remember { mutableStateOf(value?.toString() ?: "Enter office days for first 2 weeks") }
-    var expanded by remember { mutableStateOf(false) }
-
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(40.dp)  // Make the input thinner
-            .background(Color(0xFFF6F6F6))
-            .clip(RoundedCornerShape(8.dp))
-            .clickable { expanded = true }
-            .padding(horizontal = 16.dp, vertical = 8.dp)
-    ) {
-        Text(
-            text = text,
-            fontSize = 14.sp,
-            color = if (text == "Enter office days for second 2 weeks") Color(0xFFBDBDBD) else Color(0xFFBDBDBD)
-        )
-
-        DropdownMenu(
-            expanded = expanded,
-            onDismissRequest = { expanded = false },
-            modifier = Modifier
-                .width(50.dp)
-                .background(Color.White)
-                .align(Alignment.CenterEnd)
-        ) {
-            (0..5).forEach { day ->
-                DropdownMenuItem(
-                    text = { Text(day.toString()) },
-                    onClick = {
-                        text = day.toString()
-                        onValueChange(day)
-                        expanded = false
-                    }
-                )
-            }
-        }
-    }
-}
-
-
-
-
-@RequiresApi(Build.VERSION_CODES.O)
-@Composable
-fun CalendarPerEmployee(context: Context, selectedName: String) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .clip(RoundedCornerShape(25.dp))
-            .background(Color.White)
-            .padding(vertical = 10.dp),
-        verticalArrangement = Arrangement.Top,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-
-            Box(
-                modifier = Modifier
-                    .background(Color.White)
-                    .fillMaxWidth()
-                    .padding(0.dp)
-                    .clip(RoundedCornerShape(25.dp))
-                    .height(450.dp)
-            ) {
-                CalendarViewScreenManager(context, selectedName)
-            }
-        }
-
-    }
 
 
 @RequiresApi(Build.VERSION_CODES.O)

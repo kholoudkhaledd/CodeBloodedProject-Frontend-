@@ -1,7 +1,6 @@
-package com.example.myapplication
+package com.example.myapplication.splashandlogin
 
 import SharedViewModel
-import android.app.Activity
 import android.content.ContentValues.TAG
 import android.content.Context
 import android.util.Log
@@ -23,6 +22,7 @@ import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -30,11 +30,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.OffsetMapping
@@ -42,19 +44,21 @@ import androidx.compose.ui.text.input.TransformedText
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.navigation.NavController
+import com.example.myapplication.R
+import com.example.myapplication.Retrofit.LoginRequest
+import com.example.myapplication.Retrofit.LoginResponse
+import com.example.myapplication.Retrofit.RetrofitClient
+import com.example.myapplication.Retrofit.notifTokenModel
+import com.example.myapplication.Screens
+import com.example.myapplication.Sharedpreference
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import android.view.View
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalView
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.WindowInsetsControllerCompat
 
 @Composable
 fun LoginScreen(
@@ -101,7 +105,7 @@ fun LoginScreen(
                 .padding(bottom = 32.dp)
         )
         Text(
-            text = "Login",
+            text = stringResource(id = R.string.Login),
             color = Color.White,
             style = LocalTextStyle.current.copy(fontSize = 25.sp),
             modifier = Modifier.padding(bottom = 32.dp)
@@ -111,7 +115,7 @@ fun LoginScreen(
             onValueChange = { email = it },
             singleLine = true,
             maxLines = 1,
-            label = { Text(text = "Email Address") },
+            label = { Text(text = stringResource(id = R.string.Email_Address)) },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 16.dp),
@@ -122,7 +126,7 @@ fun LoginScreen(
             onValueChange = { password = it },
             singleLine = true,
             maxLines = 1,
-            label = { Text(text = "Password") },
+            label = { Text(text = stringResource(id = R.string.Password)) },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 32.dp),
@@ -174,7 +178,7 @@ fun LoginScreen(
             )
         ) {
             Text(
-                text = "Login",
+                text = stringResource(id = R.string.Login),
                 fontSize = 16.sp
             )
         }
@@ -214,7 +218,7 @@ fun loginUser(
                     Sharedpreference.saveUserId(context, loginResponse.uid)
                     Sharedpreference.saveUserName(context, loginResponse.username)
                     Sharedpreference.saveUserToken(context, loginResponse.token_id)
-                    Sharedpreference.saveUserPosition(context,loginResponse.position)
+                    Sharedpreference.saveUserPosition(context, loginResponse.position)
                     sharedViewModel.setUserInfo(it.uid)
 
                     // Get user position from the response

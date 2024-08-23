@@ -29,7 +29,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.myapplication.RetrofitClient
+import com.example.myapplication.Retrofit.RetrofitClient
 import com.example.myapplication.Sharedpreference
 import com.example.myapplication.ui.theme.Darkblue
 import com.example.myapplication.ui.theme.GreenJC
@@ -39,11 +39,6 @@ import retrofit2.Response
 import java.time.LocalDate
 import java.time.Month
 import java.time.Year
-data class CalendarData(
-    val date: String,
-    val location: String
-)
-
 data class CalendarResponse(
     val calendar: Map<String, String> // Adjusted to match the JSON structure
 )
@@ -85,7 +80,6 @@ fun CustomCalendar(
         } else {
             apiService.getCalendarForMonth(dateString, token)
         }
-
         call.enqueue(object : Callback<CalendarResponse> {
             override fun onResponse(
                 call: Call<CalendarResponse>,

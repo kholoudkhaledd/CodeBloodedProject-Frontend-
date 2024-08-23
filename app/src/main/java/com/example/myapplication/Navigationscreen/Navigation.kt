@@ -27,24 +27,23 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.myapplication.ChatScreen
-import com.example.myapplication.LoginScreen
 import com.example.myapplication.R
 import com.example.myapplication.Screens
 import com.example.myapplication.Sharedpreference
-import com.example.myapplication.SplashScreen
 import com.example.myapplication.calander.Finallayout
-import com.example.myapplication.manager.ManagerRequest
-import com.example.myapplication.manager.TeamsScheduleScreen
-import com.example.myapplication.notifications.ui.theme.NotificationScreen
 import com.example.yourapp.ui.MyRequestsPage
 import android.content.Intent
 import com.example.myapplication.MainActivity // Adjust the package name as needed
 import android.app.Activity
-
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.height
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.example.myapplication.ManagarRequestsScreen.ManagerRequest
+import com.example.myapplication.NotificationSreen.NotificationScreen
+import com.example.myapplication.Teamschedulescreen.TeamsScheduleScreen
+import com.example.myapplication.splashandlogin.LoginScreen
+import com.example.myapplication.splashandlogin.SplashScreen
 
 
 @RequiresApi(Build.VERSION_CODES.S)
@@ -64,7 +63,9 @@ fun NavigationScreen() {
     Scaffold(
         topBar = {
             if (selectedScreen in Screens.Home.screen) {
-                Row {
+
+                Row(
+                ){
                     TopAppBar(
                         modifier = Modifier.height(70.dp),
                         title = {
@@ -78,11 +79,15 @@ fun NavigationScreen() {
                                 context.startActivity(intent)
                                 (context as Activity).finish()
                             }) {
+
                                 Icon(imageVector = Icons.Default.ExitToApp, contentDescription = "Logout", tint = Color(0xFF76B31B))
                             }
                         }
                     )
+
                 }
+
+
             }
         },
         bottomBar = {
@@ -115,13 +120,14 @@ fun NavigationScreen() {
                                 }
                             )
                         }
+
                     },
                     additionalIcon2 = {
                         if (isManager) {
                             BarIcon(
                                 selected = selectedScreen == Screens.Analytics.screen,
                                 iconId = if (selectedScreen == Screens.Analytics.screen) R.drawable.analyticsicon else R.drawable.analyticsicon,
-                                contentDescription = "Analytics",
+                                contentDescription = "Teams Schedule",
                                 onClick = {
                                     if (selectedScreen != Screens.Analytics.screen) {
                                         selectedScreen = Screens.Analytics.screen
@@ -133,8 +139,25 @@ fun NavigationScreen() {
                                 }
                             )
                         }
-                    },
-                    showNotificationIcon = !isManager // Pass this flag to the CustomBottomNavigationBar
+                        else{
+                            // Notifications button
+                            BarIcon(
+                                selected = selectedScreen == Screens.Notification.screen,
+                                iconId = if (selectedScreen == Screens.Notification.screen) R.drawable.notifygreen else R.drawable.notifygray,
+                                contentDescription = "Notifications",
+                                onClick = {
+                                    if (selectedScreen != Screens.Notification.screen) {
+                                        selectedScreen = Screens.Notification.screen
+                                        navController.navigate(Screens.Notification.screen) {
+                                            launchSingleTop = true
+                                            restoreState = true
+                                        }
+                                    }
+                                }
+                            )
+                        }
+                    }
+
                 )
             }
         }
@@ -167,6 +190,11 @@ fun NavigationScreen() {
                 selectedScreen = Screens.Chatbot.screen
                 ChatScreen()
             }
+            composable(Screens.Notification.screen) {
+                selectedScreen = Screens.Notification.screen
+                NotificationScreen(isManager = isManager)
+            }
+
             composable(Screens.Requests.screen) {
                 selectedScreen = Screens.Requests.screen
                 if (isManager)
@@ -178,23 +206,13 @@ fun NavigationScreen() {
                 selectedScreen = Screens.TeamsSchedule.screen
                 TeamsScheduleScreen(context)
             }
+
             composable(Screens.Analytics.screen) {
                 selectedScreen = Screens.Analytics.screen
                 AnalyticsScreen(context)
             }
 
-            if (!isManager) {
-                composable(Screens.Notification.screen) {
-                    selectedScreen = Screens.Notification.screen
-                    NotificationScreen(isManager = isManager)
-                }
-            }
         }
     }
+
 }
-
-
-
-
-
-

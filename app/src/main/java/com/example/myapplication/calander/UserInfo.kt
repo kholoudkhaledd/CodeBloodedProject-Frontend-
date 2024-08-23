@@ -13,9 +13,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.myapplication.R
 import com.example.myapplication.Sharedpreference
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -29,7 +31,7 @@ fun UserInfo(context: Context) {
     val currentDay = currentDate.dayOfMonth.toString()
     val currentDayName = currentDate.format(DateTimeFormatter.ofPattern("E")) // Short day name
     val currentMonthAndYear = "${currentDate.month.name.lowercase().capitalize().substring(0, 3)} ${currentDate.year}" // Short month name
-    val username = Sharedpreference.getUserName(context) ?: "Guest" // Default to "Guest" if username is null
+    val username = Sharedpreference.getUserName(context) ?: stringResource(id = R.string.Guest) // Default to "Guest" if username is null
 
     Column(
         modifier = Modifier
@@ -43,7 +45,7 @@ fun UserInfo(context: Context) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = "Welcome Back",
+                text = stringResource(id = R.string.Welcome_Back),
                 color = Color.Gray,
                 modifier = Modifier.align(Alignment.CenterVertically)
             )

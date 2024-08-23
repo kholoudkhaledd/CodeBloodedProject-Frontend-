@@ -1,3 +1,4 @@
+
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
@@ -27,20 +28,23 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.myapplication.CreateRequest
 import com.example.myapplication.R
-import com.example.myapplication.RetrofitClient
+import com.example.myapplication.Retrofit.CreateRequest
+import com.example.myapplication.Retrofit.RetrofitClient
 import com.example.myapplication.Sharedpreference
+import com.example.myapplication.ui.theme.LightGray
+import com.example.myapplication.ui.theme.darkerlightgrey
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Calendar
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import java.time.DayOfWeek
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -79,7 +83,7 @@ fun RequestsSection() {
         ) {
             // First row with text at the start
             Text(
-                text = "Schedule change requests",
+                text = stringResource(id = R.string.Schedule_change_requests),
                 fontWeight = FontWeight.SemiBold,
                 fontSize = 14.sp,
                 modifier = Modifier.padding(vertical = 10.dp, horizontal = 10.dp)
@@ -92,7 +96,7 @@ fun RequestsSection() {
                     .padding(vertical = 10.dp, horizontal = 10.dp)
                     .wrapContentSize(Alignment.TopStart)
                     .clip(RoundedCornerShape(8.dp))
-                    .border(1.dp, Color(0xFFE8E8E8), RoundedCornerShape(8.dp))
+                    .border(1.dp, LightGray, RoundedCornerShape(8.dp))
             ) {
                 Box(
                     modifier = Modifier
@@ -107,9 +111,9 @@ fun RequestsSection() {
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         Text(
-                            text = selectedDate?.toString() ?: "Select day",
+                            text = selectedDate?.toString() ?: stringResource(id = R.string.Select_day),
                             fontSize = 14.sp,
-                            color = Color(0xFFBDBDBD),
+                            color = darkerlightgrey,
                             modifier = Modifier
                                 .weight(1f)
                                 .padding(end = 8.dp, start = 8.dp)
@@ -155,7 +159,7 @@ fun RequestsSection() {
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         Text(
-                            text = changeDate?.toString() ?: "Change to",
+                            text = changeDate?.toString() ?: stringResource(id = R.string.Change_to),
                             fontSize = 14.sp,
                             color = Color(0xFFBDBDBD),
                             modifier = Modifier
@@ -211,7 +215,7 @@ fun RequestsSection() {
                         .clip(RoundedCornerShape(100.dp))
                         .padding(vertical = 10.dp, horizontal = 10.dp)
                 ) {
-                    Text(text = "Submit", fontSize = 16.sp)
+                    Text(text = stringResource(id = R.string.Submit), fontSize = 16.sp)
                 }
             }
             // Display error message below the submit button

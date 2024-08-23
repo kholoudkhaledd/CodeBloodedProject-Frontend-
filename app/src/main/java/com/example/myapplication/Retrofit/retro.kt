@@ -1,8 +1,10 @@
-package com.example.myapplication
+package com.example.myapplication.Retrofit
 
+import com.example.myapplication.NotificationSreen.NotificationData
+import com.example.myapplication.Requests.Request
+import com.example.myapplication.Requests.RequestStatus
 import com.example.myapplication.calander.CalendarResponse
-import com.example.myapplication.notifications.ui.theme.NotificationData
-import com.example.yourapp.ui.Request
+import com.example.myapplication.calander.DayScheduleResponse
 import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.Body
@@ -21,6 +23,15 @@ data class LoginResponse(
     val position: String,
     val token_id: String
 
+)
+
+data class Request(
+    val id: String,
+    val username: String,
+    val time: String, // e.g., "2024-08-23 14:30:00"
+    val changeDayFrom: String, // e.g., "2024-08-25 09:00:00"
+    val changeDayTo: String, // e.g., "2024-08-26 17:00:00"
+    val status: RequestStatus
 )
 
 
@@ -54,7 +65,8 @@ interface ApiService {
 
     @PUT("update_notif_token/{uid}")
     fun update_notif_token(
-        @Path("uid") userId: String, @Body notifToken: notifTokenModel)
+        @Path("uid") userId: String, @Body notifToken: notifTokenModel
+    )
     : Call<Void>
 
 
@@ -90,6 +102,14 @@ interface ApiService {
     @POST("chatbot/{uid}")
     suspend fun sendMessage(@Path("uid") uid: String, @Body request: String): Response<MessageResponse>
 
+
+    @GET("/view_schedule/{month}/{day}/{current_year}")
+    suspend fun getDaySchedule(
+        @Path("month") month: String,
+        @Path("day") day: String,
+        @Path("current_year") year: String,
+        @Header("Authorization") token: String
+    ): DayScheduleResponse
     @GET("/most_requested_day")
     fun getMostRequestedDay(): Call<Map<String, Int>>  // Map of day names to counts
 

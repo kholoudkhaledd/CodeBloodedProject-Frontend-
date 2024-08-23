@@ -32,6 +32,7 @@ firebaseDatabaseKtx = "21.0.0"
 playServicesCast = "21.5.0"
 firebaseMessagingKtx = "24.0.0"
 uiToolingVersion = "1.4.3"
+coreSplashscreen = "1.0.1"
 
 [libraries]
 accompanist-glide = { module = "com.google.accompanist:accompanist-glide", version.ref = "accompanistGlide" }
@@ -73,6 +74,7 @@ firebase-database-ktx = { group = "com.google.firebase", name = "firebase-databa
 play-services-cast = { group = "com.google.android.gms", name = "play-services-cast", version.ref = "playServicesCast" }
 firebase-messaging-ktx = { group = "com.google.firebase", name = "firebase-messaging-ktx", version.ref = "firebaseMessagingKtx" }
 ui-v143 = { module = "androidx.compose.ui:ui", version.ref = "androidxUiVersion" }
+androidx-core-splashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "coreSplashscreen" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

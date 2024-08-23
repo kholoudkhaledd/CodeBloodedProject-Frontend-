@@ -12,6 +12,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Divider
@@ -27,27 +30,24 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.myapplication.R
 import com.example.myapplication.Requests.Request
-import com.example.myapplication.Requests.RequestStatus
 import com.example.myapplication.Retrofit.RetrofitClient
 import com.example.myapplication.Retrofit.UpdateStatusModel
-import com.example.myapplication.ui.theme.BackgroundPagesColor
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-
-
 
 @RequiresApi(Build.VERSION_CODES.S)
 @Composable
 fun ManagerRequest() {
     val context = LocalContext.current
     var requestList by remember { mutableStateOf(listOf<Request>()) }
+    var showDialog by remember { mutableStateOf(false) }
+    var currentRequest by remember { mutableStateOf<Request?>(null) }
+    var isApproving by remember { mutableStateOf(true) } // true for approving, false for denying
 
     LaunchedEffect(Unit) {
         fetchRequests { fetchedRequests ->
@@ -62,8 +62,10 @@ fun ManagerRequest() {
         RetrofitClient.apiService.updateStatus(request.id, statusUpdate).enqueue(object : Callback<Void> {
             override fun onResponse(call: Call<Void>, response: Response<Void>) {
                 if (response.isSuccessful) {
-                    requestList = requestList.map {
-                        if (it.id == request.id) it.copy(status = RequestStatus.APPROVED) else it
+                    // Triggering a fetch to refresh the list
+                    fetchRequests { fetchedRequests ->
+                        Log.d("approveRequest", "Fetched updated requests: $fetchedRequests")
+                        requestList = fetchedRequests
                     }
                     Log.d("approveRequest", "Request approved successfully")
                 } else {
@@ -82,8 +84,10 @@ fun ManagerRequest() {
         RetrofitClient.apiService.updateStatus(request.id, statusUpdate).enqueue(object : Callback<Void> {
             override fun onResponse(call: Call<Void>, response: Response<Void>) {
                 if (response.isSuccessful) {
-                    requestList = requestList.map {
-                        if (it.id == request.id) it.copy(status = RequestStatus.DENIED) else it
+                    // Triggering a fetch to refresh the list
+                    fetchRequests { fetchedRequests ->
+                        Log.d("denyRequest", "Fetched updated requests: $fetchedRequests")
+                        requestList = fetchedRequests
                     }
                     Log.d("denyRequest", "Request denied successfully")
                 } else {
@@ -97,10 +101,17 @@ fun ManagerRequest() {
         })
     }
 
+    // Function to show the confirmation dialog
+    fun showConfirmationDialog(request: Request, approve: Boolean) {
+        currentRequest = request
+        isApproving = approve
+        showDialog = true
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(BackgroundPagesColor),
+            .background(Color(0xFFECECEC)),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Card(
@@ -118,7 +129,7 @@ fun ManagerRequest() {
                 verticalArrangement = Arrangement.Center
             ) {
                 Text(
-                    text = stringResource(id = R.string.Requests),
+                    text = "Requests",
                     fontSize = 24.sp,
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier
@@ -137,18 +148,52 @@ fun ManagerRequest() {
                         )
                         RequestItem(
                             request = request,
-                            onApproveRequest = { approveRequest(request) },
-                            onDenyRequest = { denyRequest(request) }
+                            onApproveRequest = { showConfirmationDialog(request, true) },
+                            onDenyRequest = { showConfirmationDialog(request, false) }
                         )
                     }
                 }
             }
         }
     }
+
+    // Confirmation Dialog
+    if (showDialog && currentRequest != null) {
+        AlertDialog(
+            onDismissRequest = { showDialog = false },
+            title = { Text(text = "Confirm Action") },
+            text = {
+                Text(
+                    text = if (isApproving) {
+                        "Are you sure you want to approve this request?"
+                    } else {
+                        "Are you sure you want to deny this request?"
+                    }
+                )
+            },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        if (isApproving) {
+                            currentRequest?.let { approveRequest(it) }
+                        } else {
+                            currentRequest?.let { denyRequest(it) }
+                        }
+                        showDialog = false
+                    },
+                    colors = ButtonDefaults.buttonColors(containerColor = if (isApproving) Color(0xFF19C588) else Color(0xFFFEB5757))
+                ) {
+                    Text("Yes")
+                }
+            },
+            dismissButton = {
+                Button(
+                    onClick = { showDialog = false },
+                    colors = ButtonDefaults.buttonColors(containerColor = Color.Gray)
+                ) {
+                    Text("No")
+                }
+            }
+        )
+    }
 }
-
-
-
-
-
-

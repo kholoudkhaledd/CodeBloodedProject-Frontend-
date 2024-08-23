@@ -29,18 +29,21 @@ import com.example.myapplication.R
 fun RequestItem(request: Request, onCancelRequest: (Request) -> Unit) {
     Column(modifier = Modifier.fillMaxWidth()) {
         Text(
-            text = timeAgo(request.time), // Use the timeAgo function here
+            text = timeAgo(request.time),
             fontSize = 16.sp,
             fontWeight = FontWeight.Medium,
             color = Color.LightGray
         )
         Spacer(modifier = Modifier.height(4.dp))
         Text(
-            //text = "Request to swap your scheduled work locations between the ${formatDate(request.changeDayFrom)} & the ${formatDate(request.changeDayTo)}",
-            text= stringResource(id = R.string.Request_to_swap_your_scheduled_work_locations_between_the)+{formatDate(request.changeDayFrom)}+ stringResource(
-                id = R.string.and_the
-            )+{formatDate(request.changeDayTo)},
-            fontWeight = FontWeight.Normal,
+            text =stringResource(id = R.string.Request_to_swap_work_locations_between_the)+
+                    " " +
+                    formatDate(request.changeDayFrom) +
+                    " " +
+                    stringResource(id = R.string.and_the)+
+                    " " +
+                    formatDate(request.changeDayTo),
+            fontWeight = FontWeight.Medium,
             fontSize = 16.sp
         )
 

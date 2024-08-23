@@ -76,6 +76,7 @@ dependencies {
     implementation(libs.firebase.database.ktx)
     implementation(libs.play.services.cast)
     implementation(libs.firebase.messaging.ktx)
+    implementation(libs.androidx.core.splashscreen)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

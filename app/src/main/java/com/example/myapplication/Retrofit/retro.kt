@@ -2,6 +2,7 @@ package com.example.myapplication.Retrofit
 
 import com.example.myapplication.NotificationSreen.NotificationData
 import com.example.myapplication.Requests.Request
+import com.example.myapplication.Requests.RequestStatus
 import com.example.myapplication.calander.CalendarResponse
 import com.example.myapplication.calander.DayScheduleResponse
 import retrofit2.Call
@@ -22,6 +23,15 @@ data class LoginResponse(
     val position: String,
     val token_id: String
 
+)
+
+data class Request(
+    val id: String,
+    val username: String,
+    val time: String, // e.g., "2024-08-23 14:30:00"
+    val changeDayFrom: String, // e.g., "2024-08-25 09:00:00"
+    val changeDayTo: String, // e.g., "2024-08-26 17:00:00"
+    val status: RequestStatus
 )
 
 

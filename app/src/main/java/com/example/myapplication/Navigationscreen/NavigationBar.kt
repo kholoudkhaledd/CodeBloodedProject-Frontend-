@@ -17,7 +17,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.myapplication.R
 import com.example.myapplication.Screens
-import com.example.myapplication.ui.theme.BackgroundPagesColor
 
 
 @Composable
@@ -32,7 +31,7 @@ fun CustomBottomNavigationBar(
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .background(BackgroundPagesColor)
+            .background(Color(0xFFECECEC))
             .height(90.dp)
             .clip(RoundedCornerShape(32.dp))
     ) {
@@ -78,17 +77,6 @@ fun CustomBottomNavigationBar(
                     }
                 }
             )
-            // Notifications button
-            BarIcon(
-                selected = selectedScreen == Screens.Notification.screen,
-                iconId = if (selectedScreen == Screens.Notification.screen) R.drawable.notifygreen else R.drawable.notifygray,
-                contentDescription = "Notifications",
-                onClick = {
-                    if (selectedScreen != Screens.Notification.screen) {
-                        onScreenSelected(Screens.Notification.screen)
-                    }
-                }
-            )
 
             additionalIcon2?.invoke()
 
@@ -96,7 +84,3 @@ fun CustomBottomNavigationBar(
         }
     }
 }
-
-
-
-

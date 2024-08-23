@@ -39,66 +39,9 @@ import com.example.myapplication.Requests.Request
 import com.example.myapplication.Requests.RequestItem
 import com.example.myapplication.Requests.fetchRequests
 import com.example.myapplication.Sharedpreference
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import com.google.gson.annotations.SerializedName
-import android.util.Log
-import androidx.annotation.RequiresApi
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import java.time.Duration
-
-import java.time.Instant
-import java.time.LocalDate
-import java.time.LocalDateTime
-
-import java.time.ZoneId
-
-import java.time.format.DateTimeFormatter
-import java.time.format.DateTimeParseException
-
-import java.time.temporal.ChronoUnit
-import java.util.Locale
-
-@RequiresApi(Build.VERSION_CODES.S)
-fun formatDate(dateString: String): String {
-    // Define possible date formats
-    val possibleDateFormats = listOf(
-        "yyyy-MM-dd", // Expected format
-        "dd-MM-yyyy"  // Alternate format
-    )
-
-    for (format in possibleDateFormats) {
-        try {
-            // Parse the date from the format
-            val formatter = DateTimeFormatter.ofPattern(format, Locale.ENGLISH)
-            val date = LocalDate.parse(dateString, formatter)
-
-            // Extract the day, month, and year
-            val day = date.dayOfMonth
-            val month = date.month.name.lowercase().replaceFirstChar { it.uppercase() }
-
-            // Determine the correct suffix for the day
-            val suffix = when (day) {
-                1, 21, 31 -> "st"
-                2, 22 -> "nd"
-                3, 23 -> "rd"
-                else -> "th"
-            }
-
-            // Return the formatted date as "21st of August"
-            return "$day$suffix of $month"
-        } catch (e: Exception) {
-            // If parsing fails, continue to the next format
-        }
-    }
-
-    // If none of the formats work, return the original date string
-    return dateString
-}
-
 
 
 @RequiresApi(Build.VERSION_CODES.S)
@@ -186,7 +129,7 @@ fun MyRequestsPage() {
                 Button(
                     onClick = {
                         currentRequest?.let {
-                            deleteRequest(it.id) {
+                            DeleteRequest(it.id) {
                                 requestList = requestList.filter { req -> req.id != it.id }
                             }
                         }
@@ -208,20 +151,3 @@ fun MyRequestsPage() {
         )
     }
 }
-
-
-
-private fun fetchRequests(userId: String, onResult: (List<Request>) -> Unit) {
-    RetrofitClient.apiService.getRequests(userId).enqueue(object : Callback<List<Request>> {
-        @RequiresApi(Build.VERSION_CODES.O)
-        override fun onResponse(call: Call<List<Request>>, response: Response<List<Request>>) {
-            if (response.isSuccessful) {
-                response.body()?.let { requests ->
-                    val sortedRequests = requests.sortedByDescending { request ->
-                        // Check if the timestamp is not empty or null
-                        if (request.time.isNotEmpty()) {
-                            try {
-                                // Parse the timestamp string into a LocalDateTime object
-                                val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
-                                val dateTime = LocalDateTime.parse(request.time, formatter)
-

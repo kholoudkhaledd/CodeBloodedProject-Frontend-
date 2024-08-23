@@ -118,7 +118,8 @@ fun ManagerRequest() {
             shape = RoundedCornerShape(40.dp),
             modifier = Modifier
                 .fillMaxWidth()
-                .background(Color.Transparent),
+                .background(Color.Transparent)
+                .padding(bottom = 20.dp),
             colors = CardDefaults.cardColors(containerColor = Color.White),
         ) {
             Column(

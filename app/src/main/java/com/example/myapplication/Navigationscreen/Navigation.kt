@@ -64,9 +64,7 @@ fun NavigationScreen() {
     Scaffold(
         topBar = {
             if (selectedScreen in Screens.Home.screen) {
-
-                Row(
-                    ){
+                Row {
                     TopAppBar(
                         modifier = Modifier.height(70.dp),
                         title = {
@@ -80,15 +78,11 @@ fun NavigationScreen() {
                                 context.startActivity(intent)
                                 (context as Activity).finish()
                             }) {
-
                                 Icon(imageVector = Icons.Default.ExitToApp, contentDescription = "Logout", tint = Color(0xFF76B31B))
                             }
                         }
                     )
-
                 }
-
-
             }
         },
         bottomBar = {
@@ -127,7 +121,7 @@ fun NavigationScreen() {
                             BarIcon(
                                 selected = selectedScreen == Screens.Analytics.screen,
                                 iconId = if (selectedScreen == Screens.Analytics.screen) R.drawable.analyticsicon else R.drawable.analyticsicon,
-                                contentDescription = "Teams Schedule",
+                                contentDescription = "Analytics",
                                 onClick = {
                                     if (selectedScreen != Screens.Analytics.screen) {
                                         selectedScreen = Screens.Analytics.screen
@@ -139,8 +133,8 @@ fun NavigationScreen() {
                                 }
                             )
                         }
-                    }
-
+                    },
+                    showNotificationIcon = !isManager // Pass this flag to the CustomBottomNavigationBar
                 )
             }
         }
@@ -173,11 +167,6 @@ fun NavigationScreen() {
                 selectedScreen = Screens.Chatbot.screen
                 ChatScreen()
             }
-            composable(Screens.Notification.screen) {
-                selectedScreen = Screens.Notification.screen
-                NotificationScreen(isManager = isManager)
-            }
-
             composable(Screens.Requests.screen) {
                 selectedScreen = Screens.Requests.screen
                 if (isManager)
@@ -189,15 +178,22 @@ fun NavigationScreen() {
                 selectedScreen = Screens.TeamsSchedule.screen
                 TeamsScheduleScreen(context)
             }
-
             composable(Screens.Analytics.screen) {
                 selectedScreen = Screens.Analytics.screen
                 AnalyticsScreen(context)
             }
 
+            if (!isManager) {
+                composable(Screens.Notification.screen) {
+                    selectedScreen = Screens.Notification.screen
+                    NotificationScreen(isManager = isManager)
+                }
+            }
         }
     }
 }
+
+
 
 
 

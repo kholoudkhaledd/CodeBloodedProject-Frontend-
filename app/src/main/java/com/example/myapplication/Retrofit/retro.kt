@@ -30,6 +30,7 @@ data class UpdateStatusModel(val Status: String)
 data class notifTokenModel (val notifToken: String)
 data class MessageRequest(val message: String)
 data class MessageResponse(val message: String)
+data class OfficeCapacityResponse(val date: String, val office_capacity: Int)
 
 
 interface ApiService {
@@ -75,6 +76,8 @@ interface ApiService {
         @Path("date") date: String
     ): Call<CalendarResponse>
 
+
+
     @GET("get_all_usernames") // Replace with your actual endpoint
     fun getAllUsernames(): Call<List<String>>
     @POST("/checktoken/")
@@ -106,6 +109,11 @@ interface ApiService {
     @GET("/most_active_users")
     fun getMostActiveUsers(): Call<List<Map<String, Any>>>  // List of users with counts
 
+    @GET("/todays_office_capacity")
+    fun getTodaysOfficeCapacity(): Call<OfficeCapacityResponse>
+
+    @GET("/most_swapped_day")
+    fun getMostSwappedDay(): Call<Map<String, String>>
 
     @POST("managerChatbot/{uid}")
     suspend fun sendMessageManager(@Path("uid") uid: String, @Body request: String): Response<MessageResponse>
